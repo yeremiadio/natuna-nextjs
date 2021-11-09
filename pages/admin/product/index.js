@@ -172,7 +172,6 @@ export async function getServerSideProps(context) {
     },
   });
   const products = res.data.data;
-  console.log(context.query.search);
   const resCategory = await instance.get("api/category");
   const category = resCategory.data.data;
   return {
