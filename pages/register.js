@@ -3,6 +3,7 @@ import { Formik, Field, Form } from "formik";
 import instance from "../utils/instance";
 import Link from "next/link";
 import Image from "next/image";
+import { Transition } from "@headlessui/react";
 
 const Register = () => {
   const initialValues = {
@@ -14,11 +15,15 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const FormikRef = useRef();
   useEffect(() => {
+    const ac = new AbortController();
     if (Object.keys(errors).length > 0) {
       setTimeout(() => {
         setErrors({});
       }, 3000);
     }
+    return () => {
+      ac.abort();
+    };
   }, [errors]);
   const onSubmit = async (values) => {
     values.password_confirmation = values.password;
@@ -29,7 +34,8 @@ const Register = () => {
         FormikRef.current.resetForm();
       })
       .catch((err) => {
-        setErrors(err.response.data.data);
+        let errorRes = err.response.data.data;
+        errorRes !== undefined && setErrors(errorRes);
       });
   };
   return (
@@ -40,8 +46,8 @@ const Register = () => {
             <a>
               <Image
                 src="/example-logo.png"
-                width={140}
-                height={140}
+                width={100}
+                height={100}
                 objectFit="contain"
                 alt="logo"
                 className="cursor-pointer transition-all delay-75 hover:-translate-y-1"
@@ -78,7 +84,17 @@ const Register = () => {
                         placeholder="Masukkan Username..."
                       />
                       {errors?.name && (
-                        <span className="text-red-500">{errors.name}</span>
+                        <Transition
+                          show={errors?.name && true}
+                          enter="transition-opacity duration-75"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <span className="text-red-500">{errors.name}</span>
+                        </Transition>
                       )}
                       <div className="mt-4">
                         <label htmlFor="email">Email</label>
@@ -91,7 +107,17 @@ const Register = () => {
                         />
                       </div>
                       {errors?.email && (
-                        <span className="text-red-500">{errors.email}</span>
+                        <Transition
+                          show={errors?.email && true}
+                          enter="transition-opacity duration-75"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <span className="text-red-500">{errors.email}</span>
+                        </Transition>
                       )}
                       <div className="mt-4">
                         <label htmlFor="password">Password</label>
@@ -104,7 +130,19 @@ const Register = () => {
                         />
                       </div>
                       {errors?.password && (
-                        <span className="text-red-500">{errors.password}</span>
+                        <Transition
+                          show={errors?.password && true}
+                          enter="transition-opacity duration-75"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <span className="text-red-500">
+                            {errors.password}
+                          </span>
+                        </Transition>
                       )}
                       <div className="my-4 text-right">
                         <span className="text-gray-500">

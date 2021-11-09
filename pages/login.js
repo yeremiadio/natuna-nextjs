@@ -3,6 +3,7 @@ import { Formik, Field, Form } from "formik";
 import instance from "../utils/instance";
 import Link from "next/link";
 import Image from "next/image";
+import { Transition } from "@headlessui/react";
 
 const Login = () => {
   const initialValues = {
@@ -27,7 +28,10 @@ const Login = () => {
           console.log(res.data.data);
         })
         .catch((err) => {
-          setErrors(err.response.data.errors);
+          // setErrors(err.response.data.errors);
+          let errorRes = err.response.data.errors;
+          errorRes !== undefined && setErrors(errorRes);
+          console.log(err.response.data.message);
         });
     });
   };
@@ -39,8 +43,8 @@ const Login = () => {
             <a>
               <Image
                 src="/example-logo.png"
-                width={140}
-                height={140}
+                width={100}
+                height={100}
                 objectFit="contain"
                 alt="logo"
                 className="cursor-pointer transition-all delay-75 hover:-translate-y-1"
@@ -78,7 +82,17 @@ const Login = () => {
                         />
                       </div>
                       {errors?.email && (
-                        <span className="text-red-500">{errors.email}</span>
+                        <Transition
+                          show={errors?.email && true}
+                          enter="transition-opacity duration-75"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <span className="text-red-500">{errors.email}</span>
+                        </Transition>
                       )}
                       <div className="mt-4">
                         <label htmlFor="password">Password</label>
@@ -91,7 +105,19 @@ const Login = () => {
                         />
                       </div>
                       {errors?.password && (
-                        <span className="text-red-500">{errors.password}</span>
+                        <Transition
+                          show={errors?.password && true}
+                          enter="transition-opacity duration-75"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <span className="text-red-500">
+                            {errors.password}
+                          </span>
+                        </Transition>
                       )}
                       <div className="my-4 text-right">
                         <span className="text-gray-500">
