@@ -1,3 +1,11 @@
 * {
   scroll-behavior: smooth;
 }
+
+.btn {
+  @apply mt-2 py-2 px-4 rounded text-white transition-all delay-75 w-full sm:w-auto;
+}
+
+.btn-primary {
+  @apply text-white bg-green-600 hover:bg-green-700;
+}

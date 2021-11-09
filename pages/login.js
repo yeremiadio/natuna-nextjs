@@ -1,39 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Formik, Field, Form } from "formik";
-import instance from "../utils/instance";
 import Link from "next/link";
 import Image from "next/image";
 import { Transition } from "@headlessui/react";
+import { loginUser } from "../actions/auth/authAction";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
-const Login = () => {
+function Login() {
   const initialValues = {
     email: "",
     password: "",
   };
-  const [errors, setErrors] = useState({});
   const FormikRef = useRef();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const auth = useSelector((state) => state.auth);
+  const errors = useSelector((state) => state.errors);
+  const [errorEntries, setErrorEntries] = useState({});
+
+  //Check if authenticated with role
+  auth.isAuthenticated
+    ? auth.data.user.role_id === 1 && router.replace("/admin/dashboard")
+    : "";
+
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      setTimeout(() => {
-        setErrors({});
-      }, 3000);
+    if (errors.isError == true) {
+      setErrorEntries(errors.entries.errors);
+
+      //Kalau errornya banyak
+      Object.keys(errors.entries.errors).length > 0 &&
+        setTimeout(() => {
+          setErrorEntries({});
+        }, 3000);
     }
   }, [errors]);
   const onSubmit = async (values) => {
-    await instance.get("/sanctum/csrf-cookie").then(async () => {
-      values.password_confirmation = values.password;
-      await instance
-        .post("api/login", values)
-        .then((res) => {
-          console.log(res.data.data);
-        })
-        .catch((err) => {
-          // setErrors(err.response.data.errors);
-          let errorRes = err.response.data.errors;
-          errorRes !== undefined && setErrors(errorRes);
-          console.log(err.response.data.message);
-        });
-    });
+    dispatch(loginUser(values));
   };
   return (
     <>
@@ -81,9 +84,9 @@ const Login = () => {
                           placeholder="Masukkan Email..."
                         />
                       </div>
-                      {errors?.email && (
+                      {errorEntries?.email && (
                         <Transition
-                          show={errors?.email && true}
+                          show={errorEntries?.email && true}
                           enter="transition-opacity duration-75"
                           enterFrom="opacity-0"
                           enterTo="opacity-100"
@@ -91,7 +94,9 @@ const Login = () => {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <span className="text-red-500">{errors.email}</span>
+                          <span className="text-red-500">
+                            {errorEntries.email}
+                          </span>
                         </Transition>
                       )}
                       <div className="mt-4">
@@ -104,9 +109,9 @@ const Login = () => {
                           placeholder="Masukkan password..."
                         />
                       </div>
-                      {errors?.password && (
+                      {errorEntries?.password && (
                         <Transition
-                          show={errors?.password && true}
+                          show={errorEntries?.password && true}
                           enter="transition-opacity duration-75"
                           enterFrom="opacity-0"
                           enterTo="opacity-100"
@@ -115,7 +120,7 @@ const Login = () => {
                           leaveTo="opacity-0"
                         >
                           <span className="text-red-500">
-                            {errors.password}
+                            {errorEntries.password}
                           </span>
                         </Transition>
                       )}
@@ -130,7 +135,7 @@ const Login = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full mt-2 py-3 rounded text-white bg-green-600 hover:bg-green-700 transition-all delay-75"
+                        className="btn btn-primary"
                       >
                         Login
                       </button>
@@ -144,6 +149,6 @@ const Login = () => {
       </div>
     </>
   );
-};
+}
 
 export default Login;

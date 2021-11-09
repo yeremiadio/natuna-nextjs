@@ -4,6 +4,8 @@ import instance from "../utils/instance";
 import Link from "next/link";
 import Image from "next/image";
 import { Transition } from "@headlessui/react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const Register = () => {
   const initialValues = {
@@ -14,6 +16,11 @@ const Register = () => {
   };
   const [errors, setErrors] = useState({});
   const FormikRef = useRef();
+  const auth = useSelector((state) => state.auth);
+  const router = useRouter();
+  auth.isAuthenticated
+    ? auth.data.user.role_id === 1 && router.replace("/admin/dashboard")
+    : "";
   useEffect(() => {
     const ac = new AbortController();
     if (Object.keys(errors).length > 0) {
