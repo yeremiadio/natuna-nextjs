@@ -7,16 +7,16 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-const UNAUTHORIZED = 401;
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const { status } = error.response;
-    if (status === UNAUTHORIZED || status === 419) {
-      store.dispatch(logoutUser);
-      window.location = "/login";
-    }
-  }
-);
+// const UNAUTHORIZED = 401;
+// instance.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     const { status } = error.response;
+//     if (status === UNAUTHORIZED || status === 419) {
+//       store.dispatch(logoutUser);
+//       window.location = "/login";
+//     }
+//   }
+// );
 
 export default instance;

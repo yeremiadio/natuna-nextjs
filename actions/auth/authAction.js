@@ -41,8 +41,9 @@ export const loginUser = (data) => async (dispatch) => {
       .catch((error) => {
         dispatch({
           type: GET_ERRORS,
-          payload: error.response.data,
+          payload: error.response.data.errors,
         });
+        // console.log(error.response.data.errors);
       });
   });
 };

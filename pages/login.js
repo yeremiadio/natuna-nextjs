@@ -26,10 +26,10 @@ function Login() {
 
   useEffect(() => {
     if (errors.isError == true) {
-      setErrorEntries(errors.entries.errors);
+      setErrorEntries(errors.entries);
 
       //Kalau errornya banyak
-      Object.keys(errors.entries.errors).length > 0 &&
+      Object.keys(errors.entries).length > 0 &&
         setTimeout(() => {
           setErrorEntries({});
         }, 3000);
