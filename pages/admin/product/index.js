@@ -22,7 +22,8 @@ export default function Product({ products, category }) {
     search: query.search || "",
     category: query.category || "",
   };
-  const [selectCategory, setselectCategory] = useState(category[3]);
+  const [selectCategory, setselectCategory] = useState(category[0]);
+  console.log(products);
 
   const getMoreProducts = async () => {
     const res = await instance.get(`api/products?limit=12&page=${page}`);
@@ -45,33 +46,38 @@ export default function Product({ products, category }) {
 
   return (
     <>
+      <h3 className="font-bold text-xl text-gray-800">Product</h3>
+      <p className="font-base tracking-wide text-gray-400">
+        Kelola semua produk kamu disini.
+      </p>
       <div>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          innerRef={FormikRef}
-        >
-          {({ values }) => (
-            <Form>
-              <div className="mt-4 grid grid-cols-2 items-center">
-                <div className="flex flex-col">
-                  <Field
-                    id="search"
-                    className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-                    type="search"
-                    name="search"
-                    placeholder="Search Products..."
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <Listbox value={selectCategory} onChange={setselectCategory}>
-                    {({ open }) => (
-                      <>
-                        <Listbox.Label className="block text-sm font-medium text-gray-700">
-                          Category
-                        </Listbox.Label>
-                        <div className="mt-1 relative">
-                          <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+        <div className="my-4">
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            innerRef={FormikRef}
+          >
+            {({ values }) => (
+              <Form>
+                <div className="grid grid-cols-1 lg:grid-cols-3 space-y-2 lg:space-y-0 lg:space-x-2 items-center mb-2">
+                  {/* Search Input */}
+                  <div className="flex flex-col">
+                    <Field
+                      className="w-full h-12 px-4 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                      name="search"
+                      placeholder="Cari..."
+                    />
+                  </div>
+
+                  {/* Dropdown Input */}
+                  <div>
+                    <Listbox
+                      value={selectCategory}
+                      onChange={setselectCategory}
+                    >
+                      {({ open }) => (
+                        <>
+                          <Listbox.Button className="relative w-full lg:w-1/2 bg-white border border-gray-300 rounded shadow-sm p-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm">
                             <span className="flex items-center">
                               <span className="ml-3 block truncate">
                                 {selectCategory.category_name}
@@ -84,7 +90,6 @@ export default function Product({ products, category }) {
                               />
                             </span>
                           </Listbox.Button>
-
                           <Transition
                             show={open}
                             as={Fragment}
@@ -92,7 +97,7 @@ export default function Product({ products, category }) {
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                           >
-                            <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                            <Listbox.Options className="absolute z-10 mt-1 w-11/12 lg:w-1/6 bg-white shadow-lg rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                               {category.map((item) => (
                                 <Listbox.Option
                                   key={item.id}
@@ -142,18 +147,20 @@ export default function Product({ products, category }) {
                               ))}
                             </Listbox.Options>
                           </Transition>
-                        </div>
-                      </>
-                    )}
-                  </Listbox>
+                        </>
+                      )}
+                    </Listbox>
+                  </div>
                 </div>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Search
-              </button>
-            </Form>
-          )}
-        </Formik>
+                <button type="submit" className="btn btn-primary">
+                  Filter
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+
+        {/* Products */}
         <div>
           {data.length === 0 ? (
             "Data not found"
@@ -163,7 +170,7 @@ export default function Product({ products, category }) {
               next={getMoreProducts}
               hasMore={hasMore}
               loader={
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center p-6">
                   <Loader
                     type="TailSpin"
                     color="#059669"
@@ -172,36 +179,94 @@ export default function Product({ products, category }) {
                   />
                 </div>
               }
-              endMessage={<h4 className="text-center">Nothing more to show</h4>}
+              endMessage={
+                <div className="p-6">
+                  <h4 className="text-center">Nothing more to show</h4>
+                </div>
+              }
             >
-              <div className="grid grid-cols-1 lg:grid-cols-3">
-                {query?.search || query?.category
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6">
+                {query?.search || (query.category !== "None" && query?.category)
                   ? products.data.map((item, index) => (
                       <div
                         key={index}
-                        className="hover:shadow-lg cursor-pointer transition-all delay-75 bg-white border border-gray-200 p-4 my-4 lg:m-4 rounded"
+                        className="hover:shadow-lg overflow-hidden my-4 lg:m-4 transition-all delay-75 bg-white border border-gray-200 rounded-lg"
                       >
-                        <h3 className="text-gray-800 font-bold">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-600">{item.description}</p>
-                        <p className="text-gray-600 text-right">
-                          {item.category.category_name}
-                        </p>
+                        <div>
+                          <img
+                            src={
+                              item.thumbnail === "" || item.thumbnail === null
+                                ? "/imgPlaceholder.jpg"
+                                : item.thumbnail
+                            }
+                            alt=""
+                            className="w-full h-1/4 lg:h-1/2 object-cover"
+                          />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="text-gray-800 text-3xl font-bold">
+                            {item.title}
+                          </h3>
+                          <p className="text-gray-600 text-base line-clamp-4">
+                            {item.description}
+                          </p>
+                          <div className="text-right py-4">
+                            <span className="text-yellow-700 font-bold">
+                              Rp. {item.price},00
+                            </span>
+                            <p className="text-gray-600">
+                              {item.category.category_name}
+                            </p>
+                          </div>
+                          <div className="flex gap-2 py-2">
+                            <button className="btn btn-secondary">
+                              Update
+                            </button>
+                            <button className="btn btn-default-border">
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     ))
                   : data.map((item, index) => (
                       <div
                         key={index}
-                        className="hover:shadow-lg cursor-pointer transition-all delay-75 bg-white border border-gray-200 p-4 my-4 lg:m-4 rounded"
+                        className="hover:shadow-lg h-full overflow-hidden my-4 lg:m-4 transition-all delay-75 bg-white border border-gray-200 rounded-lg"
                       >
-                        <h3 className="text-gray-800 font-bold">
-                          {item.title}
-                        </h3>
-                        <p className="text-gray-600">{item.description}</p>
-                        <p className="text-gray-600 text-right">
-                          {item.category.category_name}
-                        </p>
+                        <img
+                          src={
+                            item.thumbnail === "" || item.thumbnail === null
+                              ? "/imgPlaceholder.jpg"
+                              : item.thumbnail
+                          }
+                          alt=""
+                          className="w-full h-1/3 lg:h-1/2 object-cover"
+                        />
+                        <div className="p-4">
+                          <h3 className="text-gray-800 text-3xl font-bold">
+                            {item.title}
+                          </h3>
+                          <p className="text-gray-600 text-base line-clamp-4">
+                            {item.description}
+                          </p>
+                          <div className="text-right py-4">
+                            <span className="text-yellow-700 font-bold">
+                              Rp. {item.price},00
+                            </span>
+                            <p className="text-gray-600">
+                              {item.category.category_name}
+                            </p>
+                          </div>
+                          <div className="flex gap-2 py-2">
+                            <button className="btn btn-secondary">
+                              Update
+                            </button>
+                            <button className="btn btn-default-border">
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     ))}
               </div>

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminSidebar from "../components/Siderbars/AdminSidebar";
 
-function Admin({ children }) {
+function Admin({ children, pageName }) {
   const auth = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const router = useRouter();
