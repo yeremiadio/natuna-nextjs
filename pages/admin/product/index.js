@@ -143,7 +143,7 @@ export default function Product({ products, category }) {
             </Form>
           )}
         </Formik>
-        <div className="grid grid-cols-1 lg:grid-cols-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3">
           {products.data.length === 0
             ? "Data not found"
             : products.data.map((item) => (

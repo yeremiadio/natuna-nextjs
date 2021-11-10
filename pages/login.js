@@ -25,6 +25,7 @@ function Login() {
     : "";
 
   useEffect(() => {
+    const ac = new AbortController();
     if (errors.isError == true) {
       setErrorEntries(errors.entries);
 
@@ -34,6 +35,9 @@ function Login() {
           setErrorEntries({});
         }, 3000);
     }
+    return () => {
+      ac.abort();
+    };
   }, [errors]);
   const onSubmit = async (values) => {
     dispatch(loginUser(values));

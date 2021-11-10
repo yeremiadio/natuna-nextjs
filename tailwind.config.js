@@ -7,6 +7,9 @@ module.exports = {
       fontFamily: {
         sans: ["Inter"],
       },
+      colors: {
+        whiteboard: "#F8F9FA",
+      },
     },
   },
   variants: {

@@ -14,6 +14,9 @@ module.exports = (phase, { defaultConfig }) => {
         };
         return config;
       },
+      // images: {
+      //   domains: ["example.com", "example2.com"],
+      // },
     };
   }
 
@@ -29,5 +32,8 @@ module.exports = (phase, { defaultConfig }) => {
       };
       return config;
     },
+    // images: {
+    //   domains: ["example.com", "example2.com"],
+    // },
   };
 };

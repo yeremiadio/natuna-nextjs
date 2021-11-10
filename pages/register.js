@@ -162,7 +162,7 @@ const Register = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full mt-2 py-3 rounded text-white bg-green-600 hover:bg-green-700 transition-all delay-75"
+                        className="btn btn-primary"
                       >
                         Register
                       </button>

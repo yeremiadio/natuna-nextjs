@@ -1,4 +1,4 @@
-import store from "../store";
+import { store } from "../store";
 
 export function token() {
   const state = store.getState();
