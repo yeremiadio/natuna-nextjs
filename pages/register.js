@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Formik, Field, Form } from "formik";
-import instance from "../utils/instance";
 import Link from "next/link";
 import Image from "next/image";
 import { Transition } from "@headlessui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { registerUser } from "../actions/auth/authAction";
 
 const Register = () => {
   const initialValues = {
@@ -14,8 +14,10 @@ const Register = () => {
     password: "",
     password_confirmation: "",
   };
-  const [errors, setErrors] = useState({});
+  const errors = useSelector((state) => state.errors);
+  const [errorEntries, setErrorEntries] = useState({});
   const FormikRef = useRef();
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const router = useRouter();
   auth.isAuthenticated
@@ -23,27 +25,32 @@ const Register = () => {
     : "";
   useEffect(() => {
     const ac = new AbortController();
-    if (Object.keys(errors).length > 0) {
-      setTimeout(() => {
-        setErrors({});
-      }, 3000);
+    if (errors.isError == true) {
+      setErrorEntries(errors.entries);
+      //Kalau errornya banyak
+      Object.keys(errors.entries).length > 0 &&
+        setTimeout(() => {
+          setErrorEntries({});
+        }, 3000);
+    } else {
+      return () => {
+        ac.abort();
+      };
     }
-    return () => {
-      ac.abort();
-    };
   }, [errors]);
   const onSubmit = async (values) => {
     values.password_confirmation = values.password;
-    await instance
-      .post("api/register", values)
-      .then((res) => {
-        FormikRef.current.setSubmitting(false);
-        FormikRef.current.resetForm();
-      })
-      .catch((err) => {
-        let errorRes = err.response.data.data;
-        errorRes !== undefined && setErrors(errorRes);
-      });
+    await dispatch(registerUser(values));
+    // await instance
+    //   .post("api/register", values)
+    //   .then((res) => {
+    //     FormikRef.current.setSubmitting(false);
+    //     FormikRef.current.resetForm();
+    //   })
+    //   .catch((err) => {
+    //     let errorRes = err.response.data.data;
+    //     errorRes !== undefined && setErrors(errorRes);
+    //   });
   };
   return (
     <>
@@ -63,7 +70,7 @@ const Register = () => {
           </Link>
 
           {/* Card */}
-          <div className="bg-white border border-gray-100 p-4 rounded shadow-lg w-full sm:w-3/5 md:w-3/5 lg:w-4/12">
+          <div className="bg-white border border-gray-100 p-4 rounded shadow w-full sm:w-3/5 md:w-3/5 lg:w-4/12">
             <div className="text-center">
               <h3 className="text-gray-800 text-lg font-bold tracking-wide">
                 Register
@@ -90,9 +97,9 @@ const Register = () => {
                         name="name"
                         placeholder="Masukkan Username..."
                       />
-                      {errors?.name && (
+                      {errorEntries?.name && (
                         <Transition
-                          show={errors?.name && true}
+                          show={errorEntries?.name && true}
                           enter="transition-opacity duration-75"
                           enterFrom="opacity-0"
                           enterTo="opacity-100"
@@ -100,7 +107,9 @@ const Register = () => {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <span className="text-red-500">{errors.name}</span>
+                          <span className="text-red-500">
+                            {errorEntries.name}
+                          </span>
                         </Transition>
                       )}
                       <div className="mt-4">
@@ -113,9 +122,9 @@ const Register = () => {
                           placeholder="Masukkan Email..."
                         />
                       </div>
-                      {errors?.email && (
+                      {errorEntries?.email && (
                         <Transition
-                          show={errors?.email && true}
+                          show={errorEntries?.email && true}
                           enter="transition-opacity duration-75"
                           enterFrom="opacity-0"
                           enterTo="opacity-100"
@@ -123,7 +132,9 @@ const Register = () => {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <span className="text-red-500">{errors.email}</span>
+                          <span className="text-red-500">
+                            {errorEntries.email}
+                          </span>
                         </Transition>
                       )}
                       <div className="mt-4">
@@ -136,9 +147,9 @@ const Register = () => {
                           placeholder="Masukkan password..."
                         />
                       </div>
-                      {errors?.password && (
+                      {errorEntries?.password && (
                         <Transition
-                          show={errors?.password && true}
+                          show={errorEntries?.password && true}
                           enter="transition-opacity duration-75"
                           enterFrom="opacity-0"
                           enterTo="opacity-100"
@@ -147,7 +158,7 @@ const Register = () => {
                           leaveTo="opacity-0"
                         >
                           <span className="text-red-500">
-                            {errors.password}
+                            {errorEntries.password}
                           </span>
                         </Transition>
                       )}

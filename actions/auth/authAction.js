@@ -16,13 +16,10 @@ export const registerUser = (data) => async (dispatch) => {
       console.log(res);
     })
     .catch((error) => {
-      const status = error.response.status;
-      if (status === 401 || status === 422) {
-        dispatch({
-          type: GET_ERRORS,
-          payload: error.response.data,
-        });
-      }
+      dispatch({
+        type: GET_ERRORS,
+        payload: error.response.data.data,
+      });
     });
 };
 

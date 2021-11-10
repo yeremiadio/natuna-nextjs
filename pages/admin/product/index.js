@@ -1,25 +1,36 @@
 import Admin from "../../../layouts/Admin";
-import Link from "next/link";
-import { useRouter, withRouter } from "next/router";
+// import Link from "next/link";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+import { useRouter } from "next/router";
 import { useRef, useState, Fragment } from "react";
 import instance from "../../../utils/instance";
 import { Field, Form, Formik } from "formik";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import InfiniteScroll from "react-infinite-scroll-component";
+import classNames from "../../../utils/classNamesTailwind";
 
 export default function Product({ products, category }) {
   const router = useRouter();
   const { query } = useRouter();
   const FormikRef = useRef();
+  const [data, setData] = useState(products.data);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const initialValues = {
     search: query.search || "",
     category: query.category || "",
   };
   const [selectCategory, setselectCategory] = useState(category[3]);
+
+  const getMoreProducts = async () => {
+    const res = await instance.get(`api/products?limit=12&page=${page}`);
+    const newProducts = await res.data.data.data;
+    setPage((prev) => prev + 1);
+    page > products.last_page && setHasMore(false);
+    setData((product) => [...product, ...newProducts]);
+  };
 
   const onSubmit = async (values) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -143,21 +154,59 @@ export default function Product({ products, category }) {
             </Form>
           )}
         </Formik>
-        <div className="grid grid-cols-1 lg:grid-cols-3">
-          {products.data.length === 0
-            ? "Data not found"
-            : products.data.map((item) => (
-                <div
-                  key={item.id}
-                  className="hover:shadow-lg cursor-pointer transition-all delay-75 bg-white border border-gray-200 p-4 my-4 lg:m-4 rounded"
-                >
-                  <h3 className="text-gray-800 font-bold">{item.title}</h3>
-                  <p className="text-gray-600">{item.description}</p>
-                  <p className="text-gray-600 text-right">
-                    {item.category.category_name}
-                  </p>
+        <div>
+          {data.length === 0 ? (
+            "Data not found"
+          ) : (
+            <InfiniteScroll
+              dataLength={data.length}
+              next={getMoreProducts}
+              hasMore={hasMore}
+              loader={
+                <div className="flex flex-col justify-center items-center">
+                  <Loader
+                    type="TailSpin"
+                    color="#059669"
+                    height={40}
+                    width={40}
+                  />
                 </div>
-              ))}
+              }
+              endMessage={<h4 className="text-center">Nothing more to show</h4>}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                {query?.search || query?.category
+                  ? products.data.map((item, index) => (
+                      <div
+                        key={index}
+                        className="hover:shadow-lg cursor-pointer transition-all delay-75 bg-white border border-gray-200 p-4 my-4 lg:m-4 rounded"
+                      >
+                        <h3 className="text-gray-800 font-bold">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-600">{item.description}</p>
+                        <p className="text-gray-600 text-right">
+                          {item.category.category_name}
+                        </p>
+                      </div>
+                    ))
+                  : data.map((item, index) => (
+                      <div
+                        key={index}
+                        className="hover:shadow-lg cursor-pointer transition-all delay-75 bg-white border border-gray-200 p-4 my-4 lg:m-4 rounded"
+                      >
+                        <h3 className="text-gray-800 font-bold">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-600">{item.description}</p>
+                        <p className="text-gray-600 text-right">
+                          {item.category.category_name}
+                        </p>
+                      </div>
+                    ))}
+              </div>
+            </InfiniteScroll>
+          )}
         </div>
       </div>
     </>
@@ -165,7 +214,7 @@ export default function Product({ products, category }) {
 }
 
 export async function getServerSideProps(context) {
-  const res = await instance.get(`api/products`, {
+  const res = await instance.get(`api/products?limit=12&page=1`, {
     params: {
       search: context.query.search,
       category: context.query.category,
