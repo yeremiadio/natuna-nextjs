@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminSidebar from "../components/Siderbars/AdminSidebar";
 
-function Admin({ children, pageName }) {
+function Admin({ children }) {
   const auth = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -14,10 +14,10 @@ function Admin({ children, pageName }) {
   return (
     <>
       <div className="flex min-h-screen">
-        <AdminSidebar open={open} setOpen={setOpen} user={auth.data?.user} />
+        <AdminSidebar open={open} setOpen={setOpen} />
         <div className="overflow-y-auto flex-1">
           <AdminNavbar
-            user={auth.data?.user?.name}
+            user={auth.user?.name}
             setOpen={setOpen}
             open={open}
           />

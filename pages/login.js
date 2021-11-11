@@ -6,6 +6,11 @@ import { Transition } from "@headlessui/react";
 import { loginUser } from "../actions/auth/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { useToast } from "@chakra-ui/toast";
+import { Button } from "@chakra-ui/button";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/media-query";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 
 function Login() {
   const initialValues = {
@@ -15,25 +20,29 @@ function Login() {
   const FormikRef = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const auth = useSelector((state) => state.auth);
   const errors = useSelector((state) => state.errors);
   const [errorEntries, setErrorEntries] = useState({});
+  const toast = useToast();
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
 
   //Check if authenticated with role
   auth.isAuthenticated
-    ? auth.data.user.role_id === 1 && router.replace("/admin/dashboard")
+    ? auth.user.role_id === 1 && router.replace("/admin/dashboard")
     : "";
 
   useEffect(() => {
     const ac = new AbortController();
     if (errors.isError == true) {
-      setErrorEntries(errors.entries);
-
-      //Kalau errornya banyak
-      Object.keys(errors.entries).length > 0 &&
-        setTimeout(() => {
-          setErrorEntries({});
-        }, 3000);
+      // Kalau errornya banyak
+      if (errors?.entries?.errors !== undefined) {
+        setErrorEntries(errors.entries);
+        Object.keys(errors.entries).length > 0 &&
+          setTimeout(() => {
+            setErrorEntries({});
+          }, 3000);
+      }
     } else {
       return () => {
         ac.abort();
@@ -41,30 +50,25 @@ function Login() {
     }
   }, [errors]);
   const onSubmit = async (values) => {
-    dispatch(loginUser(values));
+    dispatch(loginUser(values, toast));
   };
   return (
     <>
-      <div className="bg-white h-screen">
+      <div className="bg-white border border-black h-full">
         <Link href="/">
-          <a className="block text-center lg:absolute lg:right-10">
-            <Image
+          <a className="lg:absolute lg:right-10 lg:top-6 flex flex-col justify-center items-center mt-20 lg:mt-0">
+            <img
               src="/example-logo.png"
-              width={100}
-              height={100}
-              objectFit="contain"
               alt="logo"
-              className="cursor-pointer transition-all delay-75 hover:-translate-y-1"
+              className="object-cover w-40 cursor-pointer transition-all delay-75 hover:-translate-y-1"
             />
           </a>
         </Link>
-        <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-          <div className="bg-green-500 hidden lg:flex flex-col items-center text-white">
-            test
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 h-screen">
+          <div className="bg-green-500 hidden lg:flex flex-col items-center text-white"></div>
           <div className="mx-2 mt-16 flex flex-col lg:justify-center items-center">
             {/* Card */}
-            <div className="p-4 rounded w-full sm:w-8/12">
+            <div className="p-4 rounded w-full border border-gray-100 sm:w-8/12">
               <div className="text-center">
                 <h3 className="text-gray-800 text-lg font-bold tracking-wide">
                   Login
@@ -83,10 +87,17 @@ function Login() {
                     <Form>
                       <>
                         <div className="mt-4">
-                          <label htmlFor="email">Email</label>
+                          <label
+                            className={errorEntries?.email && "text-red-500"}
+                          >
+                            Email
+                          </label>
                           <Field
-                            id="email"
-                            className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                            as={Input}
+                            isInvalid={errorEntries?.email && true}
+                            size="lg"
+                            variant="outline"
+                            focusBorderColor="green.600" // className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
                             type="email"
                             name="email"
                             placeholder="Masukkan Email..."
@@ -108,14 +119,37 @@ function Login() {
                           </Transition>
                         )}
                         <div className="mt-4">
-                          <label htmlFor="password">Password</label>
-                          <Field
-                            id="password"
-                            className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-                            type="password"
-                            name="password"
-                            placeholder="Masukkan password..."
-                          />
+                          <label
+                            className={errorEntries?.password && "text-red-500"}
+                          >
+                            Password
+                          </label>
+                          <InputGroup>
+                            <Field
+                              as={Input}
+                              size="lg"
+                              isInvalid={errorEntries?.password && true}
+                              variant="outline"
+                              focusBorderColor="green.600"
+                              pr="4.5rem"
+                              type={showPassword ? "text" : "password"}
+                              name="password"
+                              placeholder="Masukkan password..."
+                            />
+                            <InputRightElement width="4.5rem">
+                              <button
+                                type="button"
+                                className="absolute top-3"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? (
+                                  <EyeIcon className="w-5 h-5 text-gray-500" />
+                                ) : (
+                                  <EyeOffIcon className="w-5 h-5 text-gray-500" />
+                                )}
+                              </button>
+                            </InputRightElement>
+                          </InputGroup>
                         </div>
                         {errorEntries?.password && (
                           <Transition
@@ -137,16 +171,22 @@ function Login() {
                             Belum memiliki akun? Klik{" "}
                           </span>
                           <Link href="/register">
-                            <a className="text-green-600">register</a>
+                            <a className="text-green-600 font-medium">
+                              Register
+                            </a>
                           </Link>
                         </div>
-                        <button
+                        <Button
+                          colorScheme="green"
+                          isLoading={auth.isFetching}
+                          loadingText="Checking"
+                          px="6"
+                          isFullWidth={isSmallestThan768 && true}
                           type="submit"
-                          disabled={isSubmitting}
-                          className="btn btn-primary"
+                          size="md"
                         >
                           Login
-                        </button>
+                        </Button>
                       </>
                     </Form>
                   )}

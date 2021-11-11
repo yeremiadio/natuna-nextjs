@@ -1,7 +1,8 @@
-import { LOGOUT, SET_USER } from "../constants/types";
+import { LOGOUT, SET_IS_FETCHING, SET_USER } from "../constants/types";
 
 const initialState = {
-  data: {},
+  user: {},
+  isFetching: false,
   isAuthenticated: false,
 };
 
@@ -10,14 +11,19 @@ export default function authReducer(state = initialState, action) {
     case SET_USER:
       return {
         ...state,
-        data: action.payload,
+        user: action.payload,
         isAuthenticated: true,
       };
     case LOGOUT:
       return {
         ...state,
-        data: {},
+        user: {},
         isAuthenticated: false,
+      };
+    case SET_IS_FETCHING:
+      return {
+        ...state,
+        isFetching: action.payload,
       };
     default:
       return state;

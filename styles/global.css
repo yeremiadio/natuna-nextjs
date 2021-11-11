@@ -3,7 +3,7 @@
 }
 
 body {
-  @apply bg-whiteboard;
+  background-color: #f8f9fa !important;
 }
 
 .btn {

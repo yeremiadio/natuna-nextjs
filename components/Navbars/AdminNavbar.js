@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 
 import { Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
@@ -11,14 +11,17 @@ import {
   MenuIcon,
 } from "@heroicons/react/solid";
 import { logoutUser } from "../../actions/auth/authAction";
+import { createStandaloneToast } from "@chakra-ui/toast";
 
 const AdminNavbar = ({ setOpen, open, user }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const errors = useSelector((state) => state.errors);
+  const toast = createStandaloneToast();
 
   const logOut = () => {
-    if (window !== undefined) {
-      dispatch(logoutUser);
+    if (window !== undefined || errors.entries.status === 401) {
+      dispatch(logoutUser(toast));
       router.replace("/login");
     }
   };

@@ -1,21 +1,45 @@
 import {
   SET_USER,
   GET_ERRORS,
-  // SAVE_ACCESS,
+  SET_IS_FETCHING,
   REMOVE_ACCESS,
   LOGOUT,
 } from "../../constants/types";
-import { token } from "../../config/token";
+// import { token } from "../../config/token";
 import instance from "../../utils/instance";
+import Cookies from "js-cookie";
 
-export const registerUser = (data) => async (dispatch) => {
+export const setIsFetching = (payload) => {
+  return {
+    type: SET_IS_FETCHING,
+    payload,
+  };
+};
+
+export const registerUser = (data, toast) => async (dispatch) => {
+  dispatch(setIsFetching(true));
   await instance
     .post(`api/register`, data)
     .then((response) => {
       const res = response.data;
-      console.log(res);
+      dispatch(setIsFetching(false));
+      toast({
+        title: "Success",
+        description: response.data.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     })
     .catch((error) => {
+      dispatch(setIsFetching(false));
+      toast({
+        title: "Error",
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       dispatch({
         type: GET_ERRORS,
         payload: error.response.data.data,
@@ -23,37 +47,55 @@ export const registerUser = (data) => async (dispatch) => {
     });
 };
 
-export const loginUser = (data) => async (dispatch) => {
+export const loginUser = (data, toast) => async (dispatch) => {
+  dispatch(setIsFetching(true));
   await instance.get("sanctum/csrf-cookie").then(() => {
     instance
       .post("api/login", data)
       .then((response) => {
         const res = response.data;
+        Cookies.set("access_token", res.data.token);
         dispatch({
           type: SET_USER,
-          payload: res.data,
+          payload: res.data.user,
         });
-        console.log(res);
+        dispatch(setIsFetching(false));
+        toast({
+          title: "Success",
+          description: response.data.message,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
       })
       .catch((error) => {
+        dispatch(setIsFetching(false));
+        toast({
+          title: "Error",
+          description: error.response.data.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         dispatch({
           type: GET_ERRORS,
-          payload: error.response.data.errors,
+          payload: error.response.data,
         });
         // console.log(error.response.data.errors);
       });
   });
 };
 
-export const logoutUser = async (dispatch) => {
+export const logoutUser = (toast) => async (dispatch) => {
   await instance({
     url: "api/logout",
     method: "post",
     headers: {
-      Authorization: "Bearer " + token(),
+      Authorization: "Bearer " + Cookies.get("access_token"),
     },
   })
     .then((response) => {
+      Cookies.remove("access_token");
       dispatch({
         type: LOGOUT,
         payload: {},
@@ -62,15 +104,28 @@ export const logoutUser = async (dispatch) => {
         type: REMOVE_ACCESS,
         payload: {},
       });
+      dispatch(setIsFetching(false));
+      toast({
+        title: "Success",
+        description: response.data.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       console.log(response);
     })
     .catch((error) => {
-      const status = error.response.status;
-      if (status === 401 || status === 422) {
-        dispatch({
-          type: GET_ERRORS,
-          payload: error.response.data,
-        });
-      }
+      dispatch(setIsFetching(false));
+      toast({
+        title: "Error",
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch({
+        type: GET_ERRORS,
+        payload: error.response,
+      });
     });
 };

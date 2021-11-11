@@ -3,7 +3,8 @@ import { persistReducer } from "redux-persist";
 import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import { encryptTransform } from "redux-persist-transform-encrypt";
-import storage from "redux-persist/lib/storage";
+// import storage from "redux-persist/lib/storage";
+import session from "redux-persist/lib/storage/session";
 
 const encryptor = encryptTransform({
   secretKey: "myKey",
@@ -11,7 +12,7 @@ const encryptor = encryptTransform({
 
 const authPersistConfig = {
   key: "root",
-  storage: storage,
+  storage: session,
   transforms: [encryptor],
   blacklist: ["auth"],
 };

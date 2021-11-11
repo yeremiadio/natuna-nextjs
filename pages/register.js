@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Formik, Field, Form } from "formik";
 import Link from "next/link";
-import Image from "next/image";
 import { Transition } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { registerUser } from "../actions/auth/authAction";
+import { useMediaQuery } from "@chakra-ui/media-query";
+import { Button } from "@chakra-ui/button";
+import { Input } from "@chakra-ui/input";
+import { useToast } from "@chakra-ui/toast";
+import { InputGroup, InputRightElement } from "@chakra-ui/react";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 
 const Register = () => {
   const initialValues = {
@@ -20,8 +25,11 @@ const Register = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const router = useRouter();
+  const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   auth.isAuthenticated
-    ? auth.data.user.role_id === 1 && router.replace("/admin/dashboard")
+    ? auth.user.role_id === 1 && router.replace("/admin/dashboard")
     : "";
   useEffect(() => {
     const ac = new AbortController();
@@ -40,17 +48,7 @@ const Register = () => {
   }, [errors]);
   const onSubmit = async (values) => {
     values.password_confirmation = values.password;
-    await dispatch(registerUser(values));
-    // await instance
-    //   .post("api/register", values)
-    //   .then((res) => {
-    //     FormikRef.current.setSubmitting(false);
-    //     FormikRef.current.resetForm();
-    //   })
-    //   .catch((err) => {
-    //     let errorRes = err.response.data.data;
-    //     errorRes !== undefined && setErrors(errorRes);
-    //   });
+    await dispatch(registerUser(values, toast));
   };
   return (
     <>
@@ -58,19 +56,16 @@ const Register = () => {
         <div className="mx-4 flex flex-col justify-center items-center h-full">
           <Link href="/">
             <a>
-              <Image
+              <img
                 src="/example-logo.png"
-                width={100}
-                height={100}
-                objectFit="contain"
                 alt="logo"
-                className="cursor-pointer transition-all delay-75 hover:-translate-y-1"
+                className="object-cover w-40 mb-6 cursor-pointer transition-all delay-75 hover:-translate-y-1"
               />
             </a>
           </Link>
 
           {/* Card */}
-          <div className="bg-white border border-gray-100 p-4 rounded shadow w-full sm:w-3/5 md:w-3/5 lg:w-4/12">
+          <div className="bg-white border border-gray-100 p-4 rounded lg:shadow w-full sm:w-3/5 md:w-3/5 lg:w-4/12">
             <div className="text-center">
               <h3 className="text-gray-800 text-lg font-bold tracking-wide">
                 Register
@@ -88,35 +83,48 @@ const Register = () => {
                 {({ isSubmitting }) => (
                   <Form>
                     <>
-                      <div className="mt-4"></div>
-                      <label htmlFor="name">Username</label>
-                      <Field
-                        id="name"
-                        className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-                        type="text"
-                        name="name"
-                        placeholder="Masukkan Username..."
-                      />
-                      {errorEntries?.name && (
-                        <Transition
-                          show={errorEntries?.name && true}
-                          enter="transition-opacity duration-75"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-100"
-                          leave="transition-opacity duration-150"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <span className="text-red-500">
-                            {errorEntries.name}
-                          </span>
-                        </Transition>
-                      )}
                       <div className="mt-4">
-                        <label htmlFor="email">Email</label>
+                        <label className={errorEntries?.name && "text-red-500"}>
+                          Username
+                        </label>
                         <Field
-                          id="email"
-                          className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                          as={Input}
+                          isInvalid={errorEntries?.name && true}
+                          size="lg"
+                          variant="outline"
+                          focusBorderColor="green.600"
+                          type="text"
+                          name="name"
+                          placeholder="Masukkan Username..."
+                        />
+                        {errorEntries?.name && (
+                          <Transition
+                            show={errorEntries?.name && true}
+                            enter="transition-opacity duration-75"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity duration-150"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <span className="text-red-500">
+                              {errorEntries.name}
+                            </span>
+                          </Transition>
+                        )}
+                      </div>
+                      <div className="mt-4">
+                        <label
+                          className={errorEntries?.email && "text-red-500"}
+                        >
+                          Email
+                        </label>
+                        <Field
+                          as={Input}
+                          isInvalid={errorEntries?.email && true}
+                          size="lg"
+                          variant="outline"
+                          focusBorderColor="green.600"
                           type="email"
                           name="email"
                           placeholder="Masukkan Email..."
@@ -138,14 +146,37 @@ const Register = () => {
                         </Transition>
                       )}
                       <div className="mt-4">
-                        <label htmlFor="password">Password</label>
-                        <Field
-                          id="password"
-                          className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-                          type="password"
-                          name="password"
-                          placeholder="Masukkan password..."
-                        />
+                        <label
+                          className={errorEntries?.password && "text-red-500"}
+                        >
+                          Password
+                        </label>
+                        <InputGroup>
+                          <Field
+                            as={Input}
+                            size="lg"
+                            isInvalid={errorEntries?.password && true}
+                            variant="outline"
+                            focusBorderColor="green.600"
+                            pr="4.5rem"
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Masukkan password..."
+                          />
+                          <InputRightElement width="4.5rem">
+                            <button
+                              type="button"
+                              className="absolute top-3"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <EyeIcon className="w-5 h-5 text-gray-500" />
+                              ) : (
+                                <EyeOffIcon className="w-5 h-5 text-gray-500" />
+                              )}
+                            </button>
+                          </InputRightElement>
+                        </InputGroup>
                       </div>
                       {errorEntries?.password && (
                         <Transition
@@ -167,16 +198,20 @@ const Register = () => {
                           Sudah memiliki akun? Klik{" "}
                         </span>
                         <Link href="/login">
-                          <a className="text-green-600">login</a>
+                          <a className="text-green-600 font-medium">Login</a>
                         </Link>
                       </div>
-                      <button
+                      <Button
+                        colorScheme="green"
+                        isLoading={auth.isFetching}
+                        loadingText="Checking"
+                        isFullWidth={isSmallestThan768 && true}
                         type="submit"
-                        disabled={isSubmitting}
-                        className="btn btn-primary"
+                        size="md"
+                        px="6"
                       >
                         Register
-                      </button>
+                      </Button>
                     </>
                   </Form>
                 )}

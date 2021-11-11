@@ -7,9 +7,25 @@ import { useRef, useState, Fragment } from "react";
 import instance from "../../../utils/instance";
 import { Field, Form, Formik } from "formik";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import {
+  CheckIcon,
+  PencilIcon,
+  SearchIcon,
+  SelectorIcon,
+  TrashIcon,
+} from "@heroicons/react/solid";
 import InfiniteScroll from "react-infinite-scroll-component";
 import classNames from "../../../utils/classNamesTailwind";
+import { Badge, Box } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { useMediaQuery } from "@chakra-ui/media-query";
+import {
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+} from "@chakra-ui/input";
+import { Select } from "@chakra-ui/select";
 
 export default function Product({ products, category }) {
   const router = useRouter();
@@ -18,11 +34,11 @@ export default function Product({ products, category }) {
   const [data, setData] = useState(products.data);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const initialValues = {
     search: query.search || "",
     category: query.category || "",
   };
-  const [selectCategory, setselectCategory] = useState(category[0]);
   console.log(products);
 
   const getMoreProducts = async () => {
@@ -39,7 +55,7 @@ export default function Product({ products, category }) {
       href: "admin/product",
       query: {
         search: values.search,
-        category: selectCategory.category_name,
+        category: values.category,
       },
     });
   };
@@ -57,104 +73,58 @@ export default function Product({ products, category }) {
             onSubmit={onSubmit}
             innerRef={FormikRef}
           >
-            {({ values }) => (
+            {({ values, handleChange, handleBlur }) => (
               <Form>
                 <div className="grid grid-cols-1 lg:grid-cols-3 space-y-2 lg:space-y-0 lg:space-x-2 items-center mb-2">
                   {/* Search Input */}
                   <div className="flex flex-col">
-                    <Field
-                      className="w-full h-12 px-4 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
-                      name="search"
-                      placeholder="Cari..."
-                    />
+                    <Field as={InputGroup}>
+                      <InputRightElement
+                        pointerEvents="none"
+                        children={
+                          <SearchIcon className="text-gray-300 w-5 h-5 absolute top-3" />
+                        }
+                      />
+                      <Input
+                        size="lg"
+                        variant="outline"
+                        focusBorderColor="green.600"
+                        name="search"
+                        placeholder="Cari..."
+                      />
+                    </Field>
                   </div>
 
                   {/* Dropdown Input */}
                   <div>
-                    <Listbox
-                      value={selectCategory}
-                      onChange={setselectCategory}
+                    <Select
+                      placeholder="Kategori"
+                      size="lg"
+                      variant="outline"
+                      focusBorderColor="green.600"
+                      name="category"
+                      onChange={handleChange}
+                      value={values.category}
+                      onBlur={handleBlur}
                     >
-                      {({ open }) => (
-                        <>
-                          <Listbox.Button className="relative w-full lg:w-1/2 bg-white border border-gray-300 rounded shadow-sm p-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                            <span className="flex items-center">
-                              <span className="ml-3 block truncate">
-                                {selectCategory.category_name}
-                              </span>
-                            </span>
-                            <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                              <SelectorIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Listbox.Button>
-                          <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Listbox.Options className="absolute z-10 mt-1 w-11/12 lg:w-1/6 bg-white shadow-lg rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                              {category.map((item) => (
-                                <Listbox.Option
-                                  key={item.id}
-                                  className={({ active }) =>
-                                    classNames(
-                                      active
-                                        ? "text-white bg-green-600"
-                                        : "text-gray-900",
-                                      "cursor-default select-none relative py-2 pl-3 pr-9"
-                                    )
-                                  }
-                                  value={item}
-                                >
-                                  {({ selectCategory, active }) => (
-                                    <>
-                                      <div className="flex items-center">
-                                        <span
-                                          className={classNames(
-                                            selectCategory
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "ml-3 block truncate"
-                                          )}
-                                        >
-                                          {item.category_name}
-                                        </span>
-                                      </div>
-
-                                      {selectCategory ? (
-                                        <span
-                                          className={classNames(
-                                            active
-                                              ? "text-white"
-                                              : "text-green-600",
-                                            "absolute inset-y-0 right-0 flex items-center pr-4"
-                                          )}
-                                        >
-                                          <CheckIcon
-                                            className="h-5 w-5"
-                                            aria-hidden="true"
-                                          />
-                                        </span>
-                                      ) : null}
-                                    </>
-                                  )}
-                                </Listbox.Option>
-                              ))}
-                            </Listbox.Options>
-                          </Transition>
-                        </>
-                      )}
-                    </Listbox>
+                      {category.map((item, i) => (
+                        <option key={i} value={item.category_name}>
+                          {item.category_name}
+                        </option>
+                      ))}
+                    </Select>
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <Button
+                  colorScheme="green"
+                  isFullWidth={isSmallestThan768 && true}
+                  type="submit"
+                  size="md"
+                  px="6"
+                  mt="2"
+                >
                   Filter
-                </button>
+                </Button>
               </Form>
             )}
           </Formik>
@@ -188,51 +158,13 @@ export default function Product({ products, category }) {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6">
                 {query?.search || (query.category !== "None" && query?.category)
                   ? products.data.map((item, index) => (
-                      <div
+                      <Box
                         key={index}
-                        className="hover:shadow-lg overflow-hidden my-4 lg:m-4 transition-all delay-75 bg-white border border-gray-200 rounded-lg"
-                      >
-                        <div>
-                          <img
-                            src={
-                              item.thumbnail === "" || item.thumbnail === null
-                                ? "/imgPlaceholder.jpg"
-                                : item.thumbnail
-                            }
-                            alt=""
-                            className="w-full h-1/4 lg:h-1/2 object-cover"
-                          />
-                        </div>
-                        <div className="p-4">
-                          <h3 className="text-gray-800 text-3xl font-bold">
-                            {item.title}
-                          </h3>
-                          <p className="text-gray-600 text-base line-clamp-4">
-                            {item.description}
-                          </p>
-                          <div className="text-right py-4">
-                            <span className="text-yellow-700 font-bold">
-                              Rp. {item.price},00
-                            </span>
-                            <p className="text-gray-600">
-                              {item.category.category_name}
-                            </p>
-                          </div>
-                          <div className="flex gap-2 py-2">
-                            <button className="btn btn-secondary">
-                              Update
-                            </button>
-                            <button className="btn btn-default-border">
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  : data.map((item, index) => (
-                      <div
-                        key={index}
-                        className="hover:shadow-lg h-full overflow-hidden my-4 lg:m-4 transition-all delay-75 bg-white border border-gray-200 rounded-lg"
+                        maxW="sm"
+                        borderWidth="1px"
+                        className="rounded-lg hover:shadow-lg transition-all delay-75"
+                        overflow="hidden"
+                        m={{ lg: "2" }}
                       >
                         <img
                           src={
@@ -241,33 +173,103 @@ export default function Product({ products, category }) {
                               : item.thumbnail
                           }
                           alt=""
-                          className="w-full h-1/3 lg:h-1/2 object-cover"
+                          className="w-full h-auto lg:h-1/2 object-cover"
                         />
                         <div className="p-4">
                           <h3 className="text-gray-800 text-3xl font-bold">
                             {item.title}
                           </h3>
-                          <p className="text-gray-600 text-base line-clamp-4">
+                          <p className="text-gray-600 text-base line-clamp-3">
                             {item.description}
                           </p>
-                          <div className="text-right py-4">
-                            <span className="text-yellow-700 font-bold">
+                          <div className="py-4 space-x-2">
+                            <Badge
+                              borderRadius="base"
+                              p="1"
+                              colorScheme="green"
+                            >
+                              {item.category.category_name}
+                            </Badge>
+                            <span className="text-green-600 font-bold">
                               Rp. {item.price},00
                             </span>
-                            <p className="text-gray-600">
-                              {item.category.category_name}
-                            </p>
                           </div>
-                          <div className="flex gap-2 py-2">
-                            <button className="btn btn-secondary">
+                          <div className="grid grid-cols-2 gap-1">
+                            <Button
+                              colorScheme="red"
+                              variant="ghost"
+                              leftIcon={<PencilIcon className="w-5 h-5" />}
+                              size="md"
+                            >
                               Update
-                            </button>
-                            <button className="btn btn-default-border">
+                            </Button>
+                            <Button
+                              size="md"
+                              variant="ghost"
+                              leftIcon={<TrashIcon className="w-5 h-5" />}
+                            >
                               Delete
-                            </button>
+                            </Button>
                           </div>
                         </div>
-                      </div>
+                      </Box>
+                    ))
+                  : data.map((item, index) => (
+                      <Box
+                        key={index}
+                        maxW="sm"
+                        borderWidth="1px"
+                        className="rounded-lg hover:shadow-lg transition-all delay-75"
+                        overflow="hidden"
+                        m={{ lg: "2" }}
+                      >
+                        <img
+                          src={
+                            item.thumbnail === "" || item.thumbnail === null
+                              ? "/imgPlaceholder.jpg"
+                              : item.thumbnail
+                          }
+                          alt=""
+                          className="w-full h-auto lg:h-1/2 object-cover"
+                        />
+                        <div className="p-4">
+                          <h3 className="text-gray-800 text-3xl font-bold">
+                            {item.title}
+                          </h3>
+                          <p className="text-gray-600 text-base line-clamp-3">
+                            {item.description}
+                          </p>
+                          <div className="py-4 space-x-2 ">
+                            <Badge
+                              borderRadius="base"
+                              p="1"
+                              colorScheme="green"
+                            >
+                              {item.category.category_name}
+                            </Badge>
+                            <span className="text-green-600 font-bold">
+                              Rp. {item.price},00
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1">
+                            <Button
+                              colorScheme="red"
+                              variant="ghost"
+                              leftIcon={<PencilIcon className="w-5 h-5" />}
+                              size="md"
+                            >
+                              Update
+                            </Button>
+                            <Button
+                              size="md"
+                              variant="ghost"
+                              leftIcon={<TrashIcon className="w-5 h-5" />}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </Box>
                     ))}
               </div>
             </InfiniteScroll>

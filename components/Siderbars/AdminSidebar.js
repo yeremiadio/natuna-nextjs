@@ -5,11 +5,12 @@ import {
   CubeIcon,
   HomeIcon,
   TemplateIcon,
+  UserGroupIcon,
   XIcon,
 } from "@heroicons/react/solid";
 import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
-const AdminSidebar = ({ setOpen, open, user }) => {
+const AdminSidebar = ({ setOpen, open }) => {
   const router = useRouter();
 
   return (
@@ -44,7 +45,10 @@ const AdminSidebar = ({ setOpen, open, user }) => {
               <div className="mb-10 mt-8">
                 <ul className="md:flex-col md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
                   <li className="items-center">
-                    <Link href="/admin/dashboard">
+                    <Link
+                      href="/admin/dashboard"
+                      onClick={() => setOpen(false)}
+                    >
                       <span
                         className={
                           "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
@@ -66,7 +70,7 @@ const AdminSidebar = ({ setOpen, open, user }) => {
                       </span>
                     </Link>
                   </li>
-                  <li className="items-center">
+                  <li className="items-center" onClick={() => setOpen(false)}>
                     <Link href="/admin/product">
                       <span
                         className={
@@ -80,12 +84,35 @@ const AdminSidebar = ({ setOpen, open, user }) => {
                           style={{
                             width: 24,
                             color:
-                              router.pathname.indexOf("/dashboard") !== -1
+                              router.pathname.indexOf("/product") !== -1
                                 ? "text-white"
                                 : "text-gray-600",
                           }}
                         />
                         <span>Product</span>
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="items-center" onClick={() => setOpen(false)}>
+                    <Link href="/admin/user">
+                      <span
+                        className={
+                          "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                          (router.pathname.indexOf("/user") !== -1
+                            ? "bg-green-600 text-white font-medium"
+                            : "font-normal text-gray-600")
+                        }
+                      >
+                        <UserGroupIcon
+                          style={{
+                            width: 24,
+                            color:
+                              router.pathname.indexOf("/user") !== -1
+                                ? "text-white"
+                                : "text-gray-600",
+                          }}
+                        />
+                        <span>User</span>
                       </span>
                     </Link>
                   </li>
@@ -118,7 +145,7 @@ const AdminSidebar = ({ setOpen, open, user }) => {
         <div className="my-10">
           <ul className="md:flex-col md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
             <li className="items-center">
-              <Link href="/admin/dashboard">
+              <Link href="/admin/dashboard" as="/admin/dashboard">
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
@@ -141,7 +168,7 @@ const AdminSidebar = ({ setOpen, open, user }) => {
               </Link>
             </li>
             <li className="items-center">
-              <Link href="/admin/product">
+              <Link href="/admin/product" as="/admin/product">
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
@@ -154,12 +181,35 @@ const AdminSidebar = ({ setOpen, open, user }) => {
                     style={{
                       width: 24,
                       color:
-                        router.pathname.indexOf("/dashboard") !== -1
+                        router.pathname.indexOf("/product") !== -1
                           ? "text-white"
                           : "text-gray-600",
                     }}
                   />
                   <span>Product</span>
+                </span>
+              </Link>
+            </li>
+            <li className="items-center" onClick={() => setOpen(false)}>
+              <Link href="/admin/user" as="/admin/user">
+                <span
+                  className={
+                    "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                    (router.pathname.indexOf("/user") !== -1
+                      ? "bg-green-600 text-white font-medium"
+                      : "font-normal text-gray-600")
+                  }
+                >
+                  <UserGroupIcon
+                    style={{
+                      width: 24,
+                      color:
+                        router.pathname.indexOf("/user") !== -1
+                          ? "text-white"
+                          : "text-gray-600",
+                    }}
+                  />
+                  <span>User</span>
                 </span>
               </Link>
             </li>

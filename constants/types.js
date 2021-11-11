@@ -4,3 +4,4 @@ export const RESET_ERRORS = "RESET_ERRORS";
 export const SAVE_ACCESS = "SAVE_ACCESS";
 export const REMOVE_ACCESS = "REMOVE_ACCESS";
 export const LOGOUT = "LOGOUT";
+export const SET_IS_FETCHING = "SET_IS_FETCHING";
