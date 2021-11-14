@@ -6,7 +6,7 @@ import { useMediaQuery } from "@chakra-ui/media-query";
 
 import DataTable from "react-data-table-component";
 import { Badge, Box } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
 import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
 
 const index = ({ users }) => {
@@ -43,11 +43,7 @@ const index = ({ users }) => {
       <div className="mt-4">
         {isSmallestThan562 ? (
           users.map((item, i) => (
-            <Box
-              className="border border-gray-200 rounded"
-              padding="4"
-              key={i}
-            >
+            <Box className="border border-gray-200 rounded" padding="4" key={i}>
               <h3 className="text-lg text-gray-700 font-bold">{item.name}</h3>
               <p className="text-base text-gray-500">{item.email}</p>
               <Badge
@@ -59,20 +55,18 @@ const index = ({ users }) => {
               >
                 {item.role.role_name}
               </Badge>
-              <div className="grid grid-cols-2 gap-1 mt-2">
-                <Button
-                  colorScheme="red"
-                  variant="ghost"
-                  leftIcon={<PencilIcon className="w-4 h-4" />}
-                >
-                  Update
-                </Button>
-                <Button
-                  variant="ghost"
-                  leftIcon={<TrashIcon className="w-4 h-4" />}
-                >
-                  Delete
-                </Button>
+              <div className="block space-x-2 mt-4">
+                <IconButton
+                  aria-label="Update"
+                  color="white"
+                  bgColor="blue.500"
+                  _hover={{ bgColor: "blue.600" }}
+                  icon={<PencilIcon className="w-5 h-5" />}
+                />
+                <IconButton
+                  aria-label="Delete"
+                  icon={<TrashIcon className="w-5 h-5" />}
+                />
               </div>
             </Box>
           ))

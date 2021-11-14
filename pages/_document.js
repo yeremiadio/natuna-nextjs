@@ -25,6 +25,7 @@ class MyDocument extends Document {
         </Head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <div id="portal" />
           <Main />
           <NextScript />
         </body>

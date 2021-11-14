@@ -1,4 +1,9 @@
-import { LOGOUT, SET_IS_FETCHING, SET_USER } from "../constants/types";
+import {
+  LOGOUT,
+  SET_IS_FETCHING,
+  SET_USER,
+  RESET_USER,
+} from "../constants/types";
 
 const initialState = {
   user: {},
@@ -15,6 +20,12 @@ export default function authReducer(state = initialState, action) {
         isAuthenticated: true,
       };
     case LOGOUT:
+      return {
+        ...state,
+        user: {},
+        isAuthenticated: false,
+      };
+    case RESET_USER:
       return {
         ...state,
         user: {},
