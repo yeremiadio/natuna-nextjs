@@ -143,11 +143,10 @@ export default function Product({ products, category }) {
                       focusBorderColor="green.600"
                       name="category"
                       onChange={handleChange}
-                      value={values.category}
                       onBlur={handleBlur}
                     >
                       {category.map((item, i) => (
-                        <option key={i} value={item.category_name}>
+                        <option key={i} value={item.category_slug}>
                           {item.category_name}
                         </option>
                       ))}

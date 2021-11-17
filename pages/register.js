@@ -35,16 +35,14 @@ const Register = () => {
     const ac = new AbortController();
     if (errors.isError == true) {
       setErrorEntries(errors.entries);
-      //Kalau errornya banyak
       Object.keys(errors.entries).length > 0 &&
         setTimeout(() => {
           setErrorEntries({});
         }, 3000);
-    } else {
-      return () => {
-        ac.abort();
-      };
     }
+    return () => {
+      ac.abort();
+    };
   }, [errors]);
   const onSubmit = async (values) => {
     values.password_confirmation = values.password;

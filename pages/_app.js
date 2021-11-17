@@ -11,9 +11,8 @@ import {
 } from "@chakra-ui/react";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../tailwind.config";
-
+import { motion } from "framer-motion";
 const tailwind = resolveConfig(tailwindConfig);
-
 chakraTheme.colors = tailwind.theme.colors;
 
 const themeProvider = extendTheme({
@@ -47,7 +46,7 @@ const themeProvider = extendTheme({
   },
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router  }) {
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
     <Provider store={store}>
@@ -60,7 +59,21 @@ function MyApp({ Component, pageProps }) {
           <title>Natuna</title>
           <Layout>
             <ChakraProvider theme={themeProvider}>
-              <Component {...pageProps} />
+              <motion.div
+                key={router.route}
+                initial="initial"
+                animate="animate"
+                variants={{
+                  initial: {
+                    opacity: 0,
+                  },
+                  animate: {
+                    opacity: 1,
+                  },
+                }}
+              >
+                <Component {...pageProps} />
+              </motion.div>
             </ChakraProvider>
           </Layout>
         </React.Fragment>

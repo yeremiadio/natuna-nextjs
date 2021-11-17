@@ -37,17 +37,16 @@ function Login() {
     if (errors.isError == true) {
       // Kalau errornya banyak
       if (errors?.entries?.errors !== undefined) {
-        setErrorEntries(errors.entries);
+        setErrorEntries(errors.entries.errors);
         Object.keys(errors.entries).length > 0 &&
           setTimeout(() => {
             setErrorEntries({});
           }, 3000);
       }
-    } else {
-      return () => {
-        ac.abort();
-      };
     }
+    return () => {
+      ac.abort();
+    };
   }, [errors]);
   const onSubmit = async (values) => {
     dispatch(loginUser(values, toast));
