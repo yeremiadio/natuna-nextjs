@@ -4,11 +4,10 @@ import { useRouter } from "next/router";
 import {
   CubeIcon,
   HomeIcon,
-  TemplateIcon,
   UserGroupIcon,
   XIcon,
 } from "@heroicons/react/solid";
-import Image from "next/image";
+// import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
 const AdminSidebar = ({ setOpen, open }) => {
   const router = useRouter();
