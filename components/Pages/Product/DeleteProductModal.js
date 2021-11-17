@@ -2,9 +2,14 @@ import { Button } from "@chakra-ui/button";
 import { ExclamationIcon } from "@heroicons/react/solid";
 import Cookies from "js-cookie";
 import instance from "../../../utils/instance";
+import { sleep } from "../../../config/sleepAsync";
+import { useState, useCallback } from "react";
 
 function DeleteProductModal({ parent, id, title, toast }) {
-  const deleteProduct = async () => {
+  const [isLoading, setLoading] = useState(false);
+  const deleteProduct = useCallback(async () => {
+    setLoading(true);
+    await sleep(1000);
     instance
       .delete(`api/admin/products/${id}/delete`, {
         headers: {
@@ -19,6 +24,7 @@ function DeleteProductModal({ parent, id, title, toast }) {
           duration: 3000,
           isClosable: true,
         });
+        setLoading(false);
         parent.current.close();
         window.location.reload();
       })
@@ -31,7 +37,7 @@ function DeleteProductModal({ parent, id, title, toast }) {
           isClosable: true,
         });
       });
-  };
+  }, []);
   return (
     <>
       <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 sm:flex sm:items-start">
@@ -56,7 +62,12 @@ function DeleteProductModal({ parent, id, title, toast }) {
         <Button colorScheme="gray" onClick={() => parent.current.close()}>
           Cancel
         </Button>
-        <Button colorScheme="red" onClick={deleteProduct}>
+        <Button
+          colorScheme="red"
+          isLoading={isLoading}
+          loadingText="Deleting..."
+          onClick={deleteProduct}
+        >
           Delete
         </Button>
       </div>

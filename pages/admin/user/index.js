@@ -35,7 +35,7 @@ const index = ({ users }) => {
     console.log("Selected Rows: ", selectedRows);
   };
   return (
-    <div>
+    <div className="bg-section">
       <h3 className="font-bold text-xl text-gray-800">User</h3>
       <p className="font-base tracking-wide text-gray-400">
         Lihat List Pengguna disini.

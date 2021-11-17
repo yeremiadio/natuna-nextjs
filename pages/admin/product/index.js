@@ -5,7 +5,12 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import instance from "../../../utils/instance";
 import { Field, Form, Formik } from "formik";
-import { PencilIcon, SearchIcon, TrashIcon } from "@heroicons/react/solid";
+import {
+  PencilIcon,
+  PlusIcon,
+  SearchIcon,
+  TrashIcon,
+} from "@heroicons/react/solid";
 import InfiniteScroll from "react-infinite-scroll-component";
 // import classNames from "../../../utils/classNamesTailwind";
 import { Badge, Box } from "@chakra-ui/layout";
@@ -20,6 +25,7 @@ import { Modal } from "../../../components/Modals/Modal";
 import AddProductModal from "../../../components/Pages/Product/AddProductModal";
 import { useToast } from "@chakra-ui/toast";
 import DeleteProductModal from "../../../components/Pages/Product/DeleteProductModal";
+import CardAdmin from "../../../components/Pages/Product/CardAdmin";
 export default function Product({ products, category }) {
   const router = useRouter();
   const [idProduct, setIdProduct] = useState(0);
@@ -30,7 +36,7 @@ export default function Product({ products, category }) {
   const FormikRef = useRef();
   const [page, setPage] = useState(1);
   const toast = useToast();
-  // const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const initialValues = {
     search: query.search || "",
     category: query.category || "",
@@ -55,7 +61,7 @@ export default function Product({ products, category }) {
   };
 
   return (
-    <>
+    <div className="bg-section">
       <Modal ref={addProductModalRef}>
         <AddProductModal
           parent={addProductModalRef}
@@ -71,17 +77,22 @@ export default function Product({ products, category }) {
           title={titleProduct}
         />
       </Modal>
-      <h3 className="font-bold text-xl text-gray-800">Product</h3>
-      <p className="font-base tracking-wide text-gray-400">
-        Kelola semua produk kamu disini.
-      </p>
-      <Button
-        colorScheme="green"
-        className="mt-2"
-        onClick={() => addProductModalRef.current.open()}
-      >
-        Tambah
-      </Button>
+      <Box display={{ lg: "flex" }} alignItems="center">
+        <div>
+          <h3 className="font-bold text-xl text-gray-800">Product</h3>
+          <p className="font-base tracking-wide text-gray-400">
+            Kelola semua produk kamu disini.
+          </p>
+        </div>
+        <Button
+          colorScheme="green"
+          className="mt-2 ml-auto"
+          leftIcon={<PlusIcon className="w-4 h-4" />}
+          onClick={() => addProductModalRef.current.open()}
+        >
+          Tambah
+        </Button>
+      </Box>
       <div>
         <div className="py-4 bg-white sticky lg:block z-10 top-16 lg:top-auto">
           <Formik
@@ -166,63 +177,27 @@ export default function Product({ products, category }) {
         {/* Products */}
         <div>
           {products.data.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6">
               {products.data.map((item, i) => (
-                <Box
+                <CardAdmin
                   key={i}
-                  maxW="sm"
-                  borderWidth="1px"
-                  className="rounded-md hover:shadow-lg transition-all delay-75"
-                  overflow="hidden"
-                  m={{ lg: "2" }}
-                  minHeight={{ lg: "lg", sm: "xl" }}
-                >
-                  <img
-                    src={
-                      item.thumbnail === "" || item.thumbnail === null
-                        ? "/imgPlaceholder.jpg"
-                        : process.env.baseUrl +
-                          "/assets/images/thumbnail/products/" +
-                          item.thumbnail
-                    }
-                    alt=""
-                    className="w-full h-auto lg:h-1/2 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-gray-800 text-3xl font-bold">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 text-base line-clamp-3">
-                      {item.description}
-                    </p>
-                    <div className="py-4 space-x-2">
-                      <Badge borderRadius="base" p="1" colorScheme="green">
-                        {item.category.category_name}
-                      </Badge>
-                      <span className="text-green-600 font-bold">
-                        {currencyFormat(item.price)}
-                      </span>
-                    </div>
-                    <div className="block space-x-2">
-                      <IconButton
-                        aria-label="Update"
-                        color="white"
-                        bgColor="blue.500"
-                        _hover={{ bgColor: "blue.600" }}
-                        icon={<PencilIcon className="w-5 h-5" />}
-                        onClick={() => router.push(`product/${item.slug}`)}
-                      />
-                      <IconButton
-                        aria-label="Delete"
-                        onClick={() => {
-                          onDeleteProduct(item);
-                          deleteProductModalRef.current.open();
-                        }}
-                        icon={<TrashIcon className="w-5 h-5" />}
-                      />
-                    </div>
-                  </div>
-                </Box>
+                  description={item.description}
+                  title={item.title}
+                  thumbnail={
+                    item.thumbnail === "" || item.thumbnail === null
+                      ? "/imgPlaceholder.jpg"
+                      : process.env.baseUrl +
+                        "/assets/images/thumbnail/products/" +
+                        item.thumbnail
+                  }
+                  categoryName={item.category.category_name}
+                  price={item.price}
+                  slug={item.slug}
+                  deleteProductItem={() => {
+                    onDeleteProduct(item);
+                    deleteProductModalRef.current.open();
+                  }}
+                />
               ))}
             </div>
           ) : (
@@ -230,7 +205,7 @@ export default function Product({ products, category }) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

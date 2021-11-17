@@ -10,6 +10,9 @@ module.exports = {
       colors: {
         whiteboard: "#F8F9FA",
       },
+      boxShadow: {
+        "default-natuna": "rgb(0 0 0 / 2%) 0px 3.5px 5.5px",
+      },
       backgroundImage: {
         "hero-pattern": "url('/img/hero-pattern.svg')",
         dropzone:

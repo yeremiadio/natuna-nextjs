@@ -1,3 +1,4 @@
+import { useState, useRef, useCallback } from "react";
 import Cookies from "js-cookie";
 import instance from "../../../utils/instance";
 import { FormControl, FormLabel } from "@chakra-ui/react";
@@ -7,8 +8,7 @@ import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
-import { useState, useRef } from "react";
-import { CameraIcon } from "@heroicons/react/solid";
+import { CameraIcon, PaperAirplaneIcon } from "@heroicons/react/solid";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import { Select } from "@chakra-ui/select";
 import Dropzone from "react-dropzone";
@@ -20,7 +20,7 @@ function AddProductModal({ category, parent, toast }) {
     price: "",
     thumbnail: "",
     category_id: "",
-    product_images: null,
+    product_images: "",
   };
   const FormikRef = useRef();
   const thumbnailRef = useRef();
@@ -30,42 +30,51 @@ function AddProductModal({ category, parent, toast }) {
     if (!files.length) return;
     FormikRef.current.setFieldValue(index, files[0]);
   };
-
   const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
 
-  const onSubmit = async (values) => {
-    const formData = jsonToFormData(values);
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-    await instance
-      .post("api/admin/products/create", formData, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("access_token")}`,
-        },
-      })
-      .then((res) => {
-        toast({
-          title: "Success",
-          description: res.data.message,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
+  const onSubmit = useCallback(
+    async (values) => {
+      const formData = jsonToFormData(values);
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
+      await instance
+        .post("api/admin/products/create", formData, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("access_token")}`,
+          },
+        })
+        .then((res) => {
+          toast({
+            title: "Success",
+            description: res.data.message,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          parent.current.close();
+          window.location.reload();
+        })
+        .catch((err) => {
+          toast({
+            title: "Error",
+            description: err.response.data.message,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          setErrors(err.response.data.data);
+          setTimeout(() => {
+            setErrors();
+          }, 3000);
         });
-        parent.current.close();
-        window.location.reload();
-      })
-      .catch((err) => {
-        toast({
-          title: "Error",
-          description: err.response.data.message,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        setErrors(err.response.data.data);
-      });
-  };
+    },
+    [errors]
+  );
+
+  // const onSubmit = async (values) => {
+
+  // };
   return (
     <div className="p-4">
       <h3 className="font-bold text-xl text-gray-800">Tambah Produk</h3>
@@ -93,6 +102,7 @@ function AddProductModal({ category, parent, toast }) {
                     <FormLabel>Nama Produk</FormLabel>
                     <Field
                       as={Input}
+                      isInvalid={errors?.title}
                       focusBorderColor="green.600"
                       name="title"
                     />
@@ -104,6 +114,7 @@ function AddProductModal({ category, parent, toast }) {
                     <FormLabel>Deskripsi</FormLabel>
                     <Field
                       as={Textarea}
+                      isInvalid={errors?.description}
                       focusBorderColor="green.600"
                       name="description"
                       rows="4"
@@ -115,6 +126,7 @@ function AddProductModal({ category, parent, toast }) {
                   <FormLabel>Kategori</FormLabel>
                   <Select
                     placeholder="Kategori"
+                    isInvalid={errors?.category_id}
                     size="lg"
                     variant="outline"
                     focusBorderColor="green.600"
@@ -131,11 +143,12 @@ function AddProductModal({ category, parent, toast }) {
                   </Select>
                   <p className="text-red-500">{errors?.category_id}</p>
                 </div>
-                <div className="w-full lg:w-1/6 mt-2">
+                <div className="w-full lg:w-3/6 mt-2">
                   <FormControl id="price">
                     <FormLabel>Price</FormLabel>
                     <Field
                       as={Input}
+                      isInvalid={errors?.price}
                       focusBorderColor="green.600"
                       name="price"
                       type="number"
@@ -174,6 +187,7 @@ function AddProductModal({ category, parent, toast }) {
                   </FormControl>
                 </div>
                 <div className="mt-2">
+                  <FormLabel>Product Images</FormLabel>
                   <Dropzone
                     onDrop={(acceptedFiles) => {
                       console.log(acceptedFiles);
@@ -184,7 +198,7 @@ function AddProductModal({ category, parent, toast }) {
                       <>
                         <div
                           {...getRootProps()}
-                          className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-96 p-4 flex justify-center items-center"
+                          className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-72 p-4 flex justify-center items-center"
                         >
                           <input
                             {...getInputProps()}
@@ -204,18 +218,30 @@ function AddProductModal({ category, parent, toast }) {
                         {`File:${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
                       </li>
                     ))}
+                  {errors?.product_images}
                 </div>
               </div>
-              <Button
-                isLoading={isSubmitting}
-                loadingText="Submitting"
-                size="md"
-                mt="4"
-                colorScheme="green"
-                type="submit"
-              >
-                Tambah
-              </Button>
+              <Box className="flex justify-end gap-2">
+                <Button
+                  isLoading={isSubmitting}
+                  loadingText="Checking..."
+                  size="md"
+                  leftIcon={<PaperAirplaneIcon className="w-4 h-4 rotate-90" />}
+                  mt="4"
+                  colorScheme="green"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+                <Button
+                  size="md"
+                  onClick={() => parent.current.close()}
+                  mt="4"
+                  type="button"
+                >
+                  Cancel
+                </Button>
+              </Box>
             </Form>
           )}
         </Formik>

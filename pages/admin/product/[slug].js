@@ -2,25 +2,21 @@ import Cookies from "js-cookie";
 import Admin from "../../../layouts/Admin";
 import instance from "../../../utils/instance";
 import Image from "next/image";
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-} from "@chakra-ui/react";
+import { FormControl, FormLabel, FormHelperText } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
-// import { currencyFormat } from "../../../config/currencyFormat";
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
 import { useRef, useState } from "react";
-import { CameraIcon } from "@heroicons/react/solid";
+import { CameraIcon, PencilIcon } from "@heroicons/react/solid";
 import Dropzone from "react-dropzone";
 import { useToast } from "@chakra-ui/toast";
 import { useRouter } from "next/router";
-function DetailProduct({ product }) {
+import { Select } from "@chakra-ui/select";
+import { FormErrorMessage } from "@chakra-ui/form-control";
+function DetailProduct({ product, category }) {
   const initialValues = {
     title: product.title || "",
     description: product.description || "",
@@ -31,16 +27,15 @@ function DetailProduct({ product }) {
   };
   const FormikRef = useRef();
   const thumbnailRef = useRef();
+  const [errors, setErrors] = useState();
   const router = useRouter();
   const toast = useToast();
-  const [productImages, setProductImages] = useState(product.product_images);
-  console.log(productImages);
+  const [productImages] = useState(product.product_images);
   const onChangeImage = (e, index) => {
     let files = e.target.files || e.dataTransfer.files;
     if (!files.length) return;
     FormikRef.current.setFieldValue(index, files[0]);
   };
-  console.log(product);
   const onSubmit = async (values) => {
     const formData = jsonToFormData(values);
     formData.append("_method", "put");
@@ -63,10 +58,16 @@ function DetailProduct({ product }) {
         });
         // parent.current.close();
         router.replace("/admin/product");
+      })
+      .catch((err) => {
+        setErrors(err.response.data.data);
+        setTimeout(() => {
+          setErrors();
+        }, 3000);
       });
   };
   return (
-    <>
+    <div className="bg-section">
       <h3 className="font-bold text-xl text-gray-800">Detail</h3>
       <p className="font-base tracking-wide text-gray-400">
         Kelola item produk disini.
@@ -78,21 +79,38 @@ function DetailProduct({ product }) {
           innerRef={FormikRef}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, values, setFieldValue }) => (
+          {({
+            isSubmitting,
+            handleChange,
+            handleBlur,
+            values,
+            setFieldValue,
+            touched,
+          }) => (
             <Form>
               <div>
                 <div className="mt-2">
-                  <FormControl id="title">
+                  <FormControl
+                    id="title"
+                    isInvalid={errors?.title && touched.title}
+                  >
                     <FormLabel>Nama Produk</FormLabel>
                     <Field
                       as={Input}
                       focusBorderColor="green.600"
                       name="title"
                     />
+                    {errors?.title && (
+                      <FormErrorMessage>{errors?.title}</FormErrorMessage>
+                    )}
                   </FormControl>
                 </div>
+                <p className="text-red-500">{errors?.title}</p>
                 <div className="mt-2">
-                  <FormControl id="description">
+                  <FormControl
+                    id="description"
+                    isInvalid={errors?.description && touched.description}
+                  >
                     <FormLabel>Deskripsi</FormLabel>
                     <Field
                       as={Textarea}
@@ -100,10 +118,16 @@ function DetailProduct({ product }) {
                       name="description"
                       rows="4"
                     />
+                    {errors?.description && (
+                      <FormErrorMessage>{errors?.description}</FormErrorMessage>
+                    )}
                   </FormControl>
                 </div>
                 <div className="w-full lg:w-1/6 mt-2">
-                  <FormControl id="price">
+                  <FormControl
+                    id="price"
+                    isInvalid={errors?.price && touched.price}
+                  >
                     <FormLabel>Price</FormLabel>
                     <Field
                       as={Input}
@@ -111,10 +135,45 @@ function DetailProduct({ product }) {
                       name="price"
                       type="number"
                     />
+                    {errors?.price ? (
+                      <FormErrorMessage>{errors?.price}</FormErrorMessage>
+                    ) : (
+                      <FormHelperText>Example: 4000</FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+                <div className="mt-2 w-full md:w-2/6">
+                  <FormControl
+                    isInvalid={errors?.category_id && touched.category_id}
+                  >
+                    <FormLabel>Kategori</FormLabel>
+                    <Select
+                      placeholder="Kategori"
+                      isInvalid={errors?.category_id}
+                      size="lg"
+                      variant="outline"
+                      focusBorderColor="green.600"
+                      name="category_id"
+                      onChange={handleChange}
+                      value={values.category_id}
+                      onBlur={handleBlur}
+                    >
+                      {category.map((item, i) => (
+                        <option key={i} value={item.id}>
+                          {item.category_name}
+                        </option>
+                      ))}
+                    </Select>
+                    {errors?.category_id && (
+                      <FormErrorMessage>{errors?.category_id}</FormErrorMessage>
+                    )}
                   </FormControl>
                 </div>
                 <div className="mt-2">
-                  <FormControl id="thumbnail">
+                  <FormControl
+                    id="thumbnail"
+                    isInvalid={errors?.thumbnail && touched.thumbnail}
+                  >
                     <FormLabel>Thumbnail</FormLabel>
                     <div className="flex flex-row w-full items-center gap-2">
                       <Button
@@ -135,13 +194,15 @@ function DetailProduct({ product }) {
                         />
                       </Button>
                     </div>
-                    {/* <p className="text-red-500">{errors?.thumbnail}</p> */}
+                    {errors?.thumbnail && (
+                      <FormErrorMessage>{errors?.thumbnail}</FormErrorMessage>
+                    )}
                   </FormControl>
                 </div>
                 <div className="mt-2">
                   {values?.thumbnail &&
                   typeof values?.thumbnail !== "object" ? (
-                    <Box>
+                    <Box className="w-full md:w-5/6">
                       <img
                         src={
                           process.env.baseUrl +
@@ -149,7 +210,7 @@ function DetailProduct({ product }) {
                           values.thumbnail
                         }
                         alt=""
-                        className="w-full lg:w-3/12 lg:h-1/2 rounded-md shadow-md scale-90 transition-all delay-100 hover:scale-100"
+                        className="w-full lg:w-3/12 lg:h-1/2 rounded-md shadow-md"
                       />
                     </Box>
                   ) : (
@@ -160,32 +221,37 @@ function DetailProduct({ product }) {
                     </Box>
                   )}
                 </div>
-                <FormLabel>Product Images</FormLabel>
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    console.log(acceptedFiles);
-                    setFieldValue("product_images", acceptedFiles);
-                  }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <>
-                      <div
-                        {...getRootProps()}
-                        className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-96 p-4 flex justify-center items-center"
-                      >
-                        <input
-                          {...getInputProps()}
-                          name="product_images"
-                          // multiple
-                        />
-                        <p>
-                          Drag 'n' drop some files here, or click to select
-                          files
-                        </p>
-                      </div>
-                    </>
+                <div className="mt-2">
+                  <FormLabel>Product Images</FormLabel>
+                  <Dropzone
+                    onDrop={(acceptedFiles) => {
+                      console.log(acceptedFiles);
+                      setFieldValue("product_images", acceptedFiles);
+                    }}
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <>
+                        <div
+                          {...getRootProps()}
+                          className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-96 p-4 flex justify-center items-center"
+                        >
+                          <input
+                            {...getInputProps()}
+                            name="product_images"
+                            // multiple
+                          />
+                          <p>
+                            Drag 'n' drop some files here, or click to select
+                            files
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </Dropzone>
+                  {errors?.product_images && (
+                    <p className="text-red-500">{errors?.product_images}</p>
                   )}
-                </Dropzone>
+                </div>
               </div>
               <div className="mt-2">
                 {values.product_images &&
@@ -195,7 +261,7 @@ function DetailProduct({ product }) {
                     </li>
                   ))}
               </div>
-              <div className="mt-2 flex gap-4">
+              <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {productImages &&
                   productImages.map((item, i) => (
                     <Box key={i}>
@@ -210,15 +276,25 @@ function DetailProduct({ product }) {
                       />
                     </Box>
                   ))}
+                <p className="text-red-500">{errors?.product_images}</p>
               </div>
-              <Button size="md" mt="4" colorScheme="green" type="submit">
+              <Button
+                disabled={isSubmitting}
+                size="md"
+                loadingText="Checking..."
+                isLoading={isSubmitting}
+                mt="4"
+                colorScheme="green"
+                type="submit"
+                leftIcon={<PencilIcon className="w-4 h-4" />}
+              >
                 Update
               </Button>
             </Form>
           )}
         </Formik>
       </Box>
-    </>
+    </div>
   );
 }
 
@@ -242,8 +318,10 @@ export async function getStaticProps(context) {
   const slug = context.params.slug;
   const res = await instance.get(`api/products/${slug}`);
   const product = await res.data.data;
+  const resCategory = await instance.get("api/category");
+  const category = resCategory.data.data;
 
-  return { props: { product } };
+  return { props: { product, category } };
 }
 
 export default DetailProduct;

@@ -3,7 +3,15 @@
 }
 
 body {
-  background-color: #f8f9fa !important;
+  background-color: #f7fafc !important;
+}
+
+.bg-section {
+  @apply bg-white p-6 rounded-lg shadow-default-natuna;
+}
+
+.wrapper {
+  @apply relative md:ml-72 md:mr-8 p-4 z-20 mt-28;
 }
 
 .btn {
@@ -24,8 +32,4 @@ body {
 
 .btn-secondary {
   @apply text-white bg-red-600 hover:bg-red-700;
-}
-
-.wrapper {
-  @apply relative md:ml-72 md:mr-8 lg:border border-gray-200 p-4 z-20 mt-28 bg-white;
 }
