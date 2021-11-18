@@ -1,16 +1,27 @@
 import Admin from "../../../layouts/Admin";
-import instance from "../../../utils/instance";
-import { useMediaQuery } from "@chakra-ui/media-query";
+// import { useMediaQuery } from "@chakra-ui/media-query";
 import DataTable from "react-data-table-component";
-import { Badge, Box } from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
-import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
+// import { DotsVerticalIcon } from "@heroicons/react/solid";
 import useSWR from "swr";
-import { fetcher, fetchWithToken } from "../../../utils/fetcher";
+import { fetchWithToken } from "../../../utils/fetcher";
 import CustomSpinner from "../../../components/Spinners/CustomSpinner";
+import moment from "moment";
+import { useRef, useMemo, useState } from "react";
+import { useToast } from "@chakra-ui/toast";
+import DeleteUserModal from "../../../components/Pages/User/DeleteUserModal";
+import { Modal } from "../../../components/Modals/Modal";
+import ActionsButtonTable from "../../../components/Actions/ActionsButtonTable";
+import UpdateUserModal from "../../../components/Pages/User/UpdateUserModal";
+import { CSVLink } from "react-csv";
 
 const index = () => {
   const { data: users, error } = useSWR("/api/users", fetchWithToken);
+  const updateUserModalRef = useRef();
+  const deleteUserModalRef = useRef();
+  const exportCSVRef = useRef();
+  const [selectedData, setSelectedData] = useState();
+  const toast = useToast();
   const columns = [
     {
       name: "Name",
@@ -27,66 +38,92 @@ const index = () => {
       selector: (row) => row.role.role_name,
       sortable: true,
     },
+    {
+      name: "Created At",
+      selector: (row) => moment(row.created_at).format("L"),
+      sortable: true,
+    },
+    {
+      name: "Updated At",
+      selector: (row) => moment(row.updated_at).format("L"),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      selector: (row) => (
+        <ActionsButtonTable
+          row={row}
+          updateParent={updateUserModalRef}
+          setData={setSelectedData}
+          deleteParent={deleteUserModalRef}
+        />
+      ),
+    },
   ];
-  const [isSmallestThan562] = useMediaQuery("(max-width: 562px)");
+
+  const headers = [
+    {
+      label: "Nama",
+      key: "name",
+    },
+    {
+      label: "Email",
+      key: "email",
+    },
+    {
+      label: "Role",
+      key: "role.role_name",
+    },
+  ];
+
+  const exportCSVProps = {
+    filename: "export.csv",
+    headers: headers,
+    data: users,
+  };
+
   const handleChangeSelectRows = ({ selectedRows }) => {
     console.log("Selected Rows: ", selectedRows);
   };
   return (
-    <div className="bg-section">
-      <h3 className="font-bold text-xl text-gray-800">User</h3>
-      <p className="font-base tracking-wide text-gray-400">
-        Lihat List Pengguna disini.
-      </p>
-      {!users ? (
-        <CustomSpinner />
-      ) : (
-        <div className="mt-4">
-          {isSmallestThan562 ? (
-            users.map((item, i) => (
-              <Box
-                className="border border-gray-200 rounded"
-                padding="4"
-                key={i}
-              >
-                <h3 className="text-lg text-gray-700 font-bold">{item.name}</h3>
-                <p className="text-base text-gray-500">{item.email}</p>
-                <Badge
-                  p="1"
-                  mt="2"
-                  className="rounded-full"
-                  variant="outline"
-                  colorScheme="green"
-                >
-                  {item.role.role_name}
-                </Badge>
-                <div className="block space-x-2 mt-4">
-                  <IconButton
-                    aria-label="Update"
-                    color="white"
-                    bgColor="blue.500"
-                    _hover={{ bgColor: "blue.600" }}
-                    icon={<PencilIcon className="w-5 h-5" />}
-                  />
-                  <IconButton
-                    aria-label="Delete"
-                    icon={<TrashIcon className="w-5 h-5" />}
-                  />
-                </div>
-              </Box>
-            ))
-          ) : (
+    <>
+      <Modal ref={deleteUserModalRef}>
+        <DeleteUserModal
+          id={selectedData?.id}
+          userName={selectedData?.name}
+          parent={deleteUserModalRef}
+          toast={toast}
+        />
+      </Modal>
+      <Modal ref={updateUserModalRef}>
+        <UpdateUserModal
+          user={selectedData}
+          parent={updateUserModalRef}
+          toast={toast}
+        />
+      </Modal>
+      <div className="bg-section">
+        <h3 className="font-bold text-xl text-gray-800">User</h3>
+        <p className="font-base tracking-wide text-gray-400">
+          Lihat List Pengguna disini.
+        </p>
+        {!users && !error ? (
+          <CustomSpinner />
+        ) : (
+          <div className="mt-4">
+            <CSVLink {...exportCSVProps}>
+              <Button variant="ghost">Export to CSV</Button>
+            </CSVLink>
             <DataTable
-              className="pr-40"
               columns={columns}
               data={users}
               pagination
               onSelectedRowsChange={handleChangeSelectRows}
             />
-          )}
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

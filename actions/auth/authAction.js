@@ -74,14 +74,14 @@ export const loginUser = (data, toast) => async (dispatch) => {
           dispatch(setIsFetching(false));
           toast({
             title: "Error",
-            description: error.response.data.message,
+            description: error?.response?.data?.message,
             status: "error",
             duration: 3000,
             isClosable: true,
           });
           dispatch({
             type: GET_ERRORS,
-            payload: error.response.data,
+            payload: error?.response?.data,
           });
           // console.log(error.response.data.errors);
         });
