@@ -10,7 +10,7 @@ function DeleteProductModal({ parent, id, title, toast }) {
   const deleteProduct = useCallback(async () => {
     setLoading(true);
     await sleep(1000);
-    instance
+    instance()
       .delete(`api/admin/products/${id}/delete`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("access_token")}`,

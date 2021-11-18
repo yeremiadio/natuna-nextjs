@@ -18,7 +18,7 @@ export const setIsFetching = (payload) => {
 
 export const registerUser = (data, toast) => async (dispatch) => {
   dispatch(setIsFetching(true));
-  await instance
+  await instance()
     .post(`api/register`, data)
     .then((response) => {
       const res = response.data;
@@ -49,45 +49,47 @@ export const registerUser = (data, toast) => async (dispatch) => {
 
 export const loginUser = (data, toast) => async (dispatch) => {
   dispatch(setIsFetching(true));
-  await instance.get("sanctum/csrf-cookie").then(() => {
-    instance
-      .post("api/login", data)
-      .then((response) => {
-        const res = response.data;
-        Cookies.set("access_token", res.data.token);
-        dispatch({
-          type: SET_USER,
-          payload: res.data.user,
+  await instance()
+    .get("sanctum/csrf-cookie")
+    .then(() => {
+      instance()
+        .post("api/login", data)
+        .then((response) => {
+          const res = response.data;
+          Cookies.set("access_token", res.data.token);
+          dispatch({
+            type: SET_USER,
+            payload: res.data.user,
+          });
+          dispatch(setIsFetching(false));
+          toast({
+            title: "Success",
+            description: response.data.message,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        })
+        .catch((error) => {
+          dispatch(setIsFetching(false));
+          toast({
+            title: "Error",
+            description: error.response.data.message,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          dispatch({
+            type: GET_ERRORS,
+            payload: error.response.data,
+          });
+          // console.log(error.response.data.errors);
         });
-        dispatch(setIsFetching(false));
-        toast({
-          title: "Success",
-          description: response.data.message,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        dispatch(setIsFetching(false));
-        toast({
-          title: "Error",
-          description: error.response.data.message,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        dispatch({
-          type: GET_ERRORS,
-          payload: error.response.data,
-        });
-        // console.log(error.response.data.errors);
-      });
-  });
+    });
 };
 
 export const logoutUser = (toast) => async (dispatch) => {
-  await instance({
+  await instance()({
     url: "api/logout",
     method: "post",
     headers: {

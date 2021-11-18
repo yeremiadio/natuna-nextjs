@@ -38,7 +38,7 @@ function AddProductModal({ category, parent, toast }) {
       for (let pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
       }
-      await instance
+      await instance()
         .post("api/admin/products/create", formData, {
           headers: {
             Authorization: `Bearer ${Cookies.get("access_token")}`,

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { currencyFormat } from "../../../config/currencyFormat";
 
-const CardAdmin = ({
+const CardAdminProducts = ({
   deleteProductItem,
   thumbnail,
   title,
@@ -22,7 +22,7 @@ const CardAdmin = ({
       className="rounded-md hover:shadow-lg transition-all delay-75"
       overflow="hidden"
       m={{ lg: "2" }}
-      minHeight={'md'}
+      minHeight={{ sm: "sm", lg: "lg" }}
     >
       <img
         src={thumbnail}
@@ -60,4 +60,4 @@ const CardAdmin = ({
   );
 };
 
-export default CardAdmin;
+export default CardAdminProducts;

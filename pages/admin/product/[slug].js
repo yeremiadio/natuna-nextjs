@@ -42,7 +42,7 @@ function DetailProduct({ product, category }) {
     for (let pair of formData.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
-    await instance
+    await instance()
       .post("api/admin/products/" + product.slug + "/update", formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("access_token")}`,
@@ -299,7 +299,7 @@ function DetailProduct({ product, category }) {
 }
 
 export async function getStaticPaths() {
-  const res = await instance.get(`api/products`);
+  const res = await instance().get(`api/products`);
   const data = await res.data.data.data;
 
   const paths = data.map((item) => {
@@ -316,9 +316,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const slug = context.params.slug;
-  const res = await instance.get(`api/products/${slug}`);
+  const res = await instance().get(`api/products/${slug}`);
   const product = await res.data.data;
-  const resCategory = await instance.get("api/category");
+  const resCategory = await instance().get("api/category");
   const category = resCategory.data.data;
 
   return { props: { product, category } };

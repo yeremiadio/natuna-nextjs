@@ -1,32 +1,29 @@
 import Admin from "../../../layouts/Admin";
-// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-// import Loader from "react-loader-spinner";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import instance from "../../../utils/instance";
 import { Field, Form, Formik } from "formik";
 import {
-  PencilIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   PlusIcon,
   SearchIcon,
-  TrashIcon,
 } from "@heroicons/react/solid";
-import InfiniteScroll from "react-infinite-scroll-component";
-// import classNames from "../../../utils/classNamesTailwind";
-import { Badge, Box } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/button";
+import { Box } from "@chakra-ui/layout";
+import { Button, IconButton } from "@chakra-ui/button";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Select } from "@chakra-ui/select";
-import { Spinner } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
 import { currencyFormat } from "../../../config/currencyFormat";
 import { Modal } from "../../../components/Modals/Modal";
 import AddProductModal from "../../../components/Pages/Product/AddProductModal";
 import { useToast } from "@chakra-ui/toast";
 import DeleteProductModal from "../../../components/Pages/Product/DeleteProductModal";
-import CardAdmin from "../../../components/Pages/Product/CardAdmin";
-export default function Product({ products, category }) {
+import CardAdminProducts from "../../../components/Pages/Product/CardAdminProducts";
+import useSWR from "swr";
+import { fetcher, fetcherwithParams } from "../../../utils/fetcher";
+import CustomSpinner from "../../../components/Spinners/CustomSpinner";
+export default function Product({ category }) {
   const router = useRouter();
   const [idProduct, setIdProduct] = useState(0);
   const [titleProduct, setTitleProduct] = useState("");
@@ -36,20 +33,22 @@ export default function Product({ products, category }) {
   const FormikRef = useRef();
   const [page, setPage] = useState(1);
   const toast = useToast();
-  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
+  // const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const initialValues = {
     search: query.search || "",
     category: query.category || "",
     sort: query.sort || "",
   };
-
+  const { data: products, error } = useSWR(
+    [`api/products`, query.category, query.sort, query.search, page],
+    (url) =>
+      fetcherwithParams(query.category, query.sort, query.search, page, 6, url)
+  );
   const onDeleteProduct = (item) => {
     setIdProduct(item.id);
     setTitleProduct(item.title);
   };
-
   const onSubmit = async (values) => {
-    await new Promise((r) => setTimeout(r, 1000));
     router.push({
       href: "admin/product",
       query: {
@@ -175,20 +174,16 @@ export default function Product({ products, category }) {
 
         {/* Products */}
         <div>
-          {products.data.length > 0 ? (
+          {!products && !error ? (
+            <CustomSpinner />
+          ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6">
               {products.data.map((item, i) => (
-                <CardAdmin
+                <CardAdminProducts
                   key={i}
                   description={item.description}
                   title={item.title}
-                  thumbnail={
-                    item.thumbnail === "" || item.thumbnail === null
-                      ? "/imgPlaceholder.jpg"
-                      : process.env.baseUrl +
-                        "/assets/images/thumbnail/products/" +
-                        item.thumbnail
-                  }
+                  thumbnail={"/imgPlaceholder.jpg"}
                   categoryName={item.category.category_name}
                   price={item.price}
                   slug={item.slug}
@@ -199,28 +194,33 @@ export default function Product({ products, category }) {
                 />
               ))}
             </div>
-          ) : (
-            <p className="text-center">Nothing more to show</p>
           )}
+          <Box
+            display="flex"
+            className="mt-12 gap-4"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <IconButton
+              icon={<ChevronLeftIcon className="w-5 h-5" />}
+              onClick={() => setPage((prev) => prev - 1)}
+            />
+            <IconButton
+              icon={<ChevronRightIcon className="w-5 h-5" />}
+              onClick={() => setPage((prev) => prev + 1)}
+            />
+          </Box>
         </div>
       </div>
     </div>
   );
 }
 
-export async function getServerSideProps(context) {
-  const res = await instance.get(`api/products?limit=12&page=1`, {
-    params: {
-      search: context.query.search,
-      category: context.query.category,
-      sort: context.query.sort,
-    },
-  });
-  const products = res.data.data;
-  const resCategory = await instance.get("api/category");
+export async function getStaticProps() {
+  const resCategory = await instance().get("api/category");
   const category = resCategory.data.data;
   return {
-    props: { products, category }, // will be passed to the page component as props
+    props: { category }, // will be passed to the page component as props
   };
 }
 

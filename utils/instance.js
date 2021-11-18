@@ -1,22 +1,30 @@
 import axios from "axios";
-import { logoutUser } from "../actions/auth/authAction";
-import { store } from "../store";
+import { logOut } from "./auth";
 
-const instance = axios.create({
-  baseURL: process.env.baseUrl,
-  withCredentials: true,
-});
+// const instance = axios.create({
+//   baseURL: process.env.baseUrl,
+//   withCredentials: true,
+// });
 
-// const UNAUTHORIZED = 401;
-// instance.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     const { status } = error.response;
-//     if (status === UNAUTHORIZED || status === 419) {
-//       store.dispatch(logoutUser);
-//       window.location = "/login";
-//     }
-//   }
-// );
+// export default instance;
 
-export default instance;
+export default function instance() {
+  const instance = axios.create({
+    baseURL: process.env.baseUrl,
+    withCredentials: true,
+  });
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response.status === 401) {
+        logOut();
+        return Promise.reject();
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
+}
