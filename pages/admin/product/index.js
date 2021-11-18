@@ -23,6 +23,7 @@ import CardAdminProducts from "../../../components/Pages/Product/CardAdminProduc
 import useSWR from "swr";
 import { fetcher, fetcherwithParams } from "../../../utils/fetcher";
 import CustomSpinner from "../../../components/Spinners/CustomSpinner";
+import EmptyDataComponent from "../../../components/EmptyData/EmptyDataComponent";
 export default function Product({ category }) {
   const router = useRouter();
   const [idProduct, setIdProduct] = useState(0);
@@ -121,9 +122,9 @@ export default function Product({ category }) {
                     </Field>
                   </div>
                   <Button
-                    colorScheme="blue"
+                    color="blue.500"
                     size="md"
-                    variant="outline"
+                    variant="ghost"
                     py="6"
                     paddingX="6"
                     className="bottom-1"
@@ -194,6 +195,9 @@ export default function Product({ category }) {
                 />
               ))}
             </div>
+          )}
+          {products?.data?.length === 0 && (
+            <EmptyDataComponent label="Produk" />
           )}
           <Box
             display="flex"
