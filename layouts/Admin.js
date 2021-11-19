@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminSidebar from "../components/Siderbars/AdminSidebar";
 import { RESET_USER, RESET_ERRORS } from "../constants/types";
+import { motion } from "framer-motion";
 
 function Admin({ children }) {
   const auth = useSelector((state) => state.auth);
@@ -31,7 +32,22 @@ function Admin({ children }) {
         <AdminSidebar open={open} setOpen={setOpen} />
         <div className="overflow-y-auto flex-1">
           <AdminNavbar user={auth.user?.name} setOpen={setOpen} open={open} />
-          <main className="wrapper">{children}</main>
+          <main className="wrapper">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={{
+                initial: {
+                  opacity: 0,
+                },
+                animate: {
+                  opacity: 1,
+                },
+              }}
+            >
+              {children}
+            </motion.div>
+          </main>
         </div>
       </div>
     </>

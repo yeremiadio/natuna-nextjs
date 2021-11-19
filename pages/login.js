@@ -53,18 +53,18 @@ function Login() {
   };
   return (
     <>
-      <div className="bg-white border border-black h-full">
+      <div className="bg-white h-full">
         <Link href="/">
           <a className="lg:absolute lg:right-10 lg:top-6 flex flex-col justify-center items-center mt-20 lg:mt-0">
             <img
-              src="/example-logo.png"
+              src="/logo.jpeg"
               alt="logo"
-              className="object-cover w-40 cursor-pointer transition-all delay-75 hover:-translate-y-1"
+              className="object-cover w-24 cursor-pointer transition-all delay-75 hover:-translate-y-1"
             />
           </a>
         </Link>
         <div className="grid grid-cols-1 lg:grid-cols-2 h-screen">
-          <div className="bg-green-500 hidden lg:flex flex-col items-center text-white"></div>
+          <div className="bg-blue-500 hidden lg:flex flex-col items-center text-white"></div>
           <div className="mx-2 mt-16 flex flex-col lg:justify-center items-center">
             {/* Card */}
             <div className="p-4 rounded w-full border border-gray-100 sm:w-8/12">
@@ -96,7 +96,7 @@ function Login() {
                             isInvalid={errorEntries?.email && true}
                             size="lg"
                             variant="outline"
-                            focusBorderColor="green.600" // className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                            focusBorderColor="blue.600" // className="w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                             type="email"
                             name="email"
                             placeholder="Masukkan Email..."
@@ -129,7 +129,7 @@ function Login() {
                               size="lg"
                               isInvalid={errorEntries?.password && true}
                               variant="outline"
-                              focusBorderColor="green.600"
+                              focusBorderColor="blue.600"
                               pr="4.5rem"
                               type={showPassword ? "text" : "password"}
                               name="password"
@@ -170,13 +170,13 @@ function Login() {
                             Belum memiliki akun? Klik{" "}
                           </span>
                           <Link href="/register">
-                            <a className="text-green-600 font-medium">
+                            <a className="text-blue-600 font-medium">
                               Register
                             </a>
                           </Link>
                         </div>
                         <Button
-                          colorScheme="green"
+                          colorScheme="blue"
                           isLoading={auth.isFetching}
                           loadingText="Checking"
                           px="6"

@@ -97,7 +97,7 @@ function DetailProduct({ product, category }) {
                     <FormLabel>Nama Produk</FormLabel>
                     <Field
                       as={Input}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="title"
                     />
                     {errors?.title && (
@@ -114,7 +114,7 @@ function DetailProduct({ product, category }) {
                     <FormLabel>Deskripsi</FormLabel>
                     <Field
                       as={Textarea}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="description"
                       rows="4"
                     />
@@ -131,7 +131,7 @@ function DetailProduct({ product, category }) {
                     <FormLabel>Price</FormLabel>
                     <Field
                       as={Input}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="price"
                       type="number"
                     />
@@ -152,7 +152,7 @@ function DetailProduct({ product, category }) {
                       isInvalid={errors?.category_id}
                       size="lg"
                       variant="outline"
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="category_id"
                       onChange={handleChange}
                       value={values.category_id}
@@ -284,7 +284,7 @@ function DetailProduct({ product, category }) {
                 loadingText="Checking..."
                 isLoading={isSubmitting}
                 mt="4"
-                colorScheme="green"
+                colorScheme="blue"
                 type="submit"
                 leftIcon={<PencilIcon className="w-4 h-4" />}
               >

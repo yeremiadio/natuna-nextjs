@@ -4,49 +4,11 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../store";
 import React from "react";
-import {
-  ChakraProvider,
-  extendTheme,
-  theme as chakraTheme,
-} from "@chakra-ui/react";
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../tailwind.config";
-import { motion } from "framer-motion";
-const tailwind = resolveConfig(tailwindConfig);
-chakraTheme.colors = tailwind.theme.colors;
+import { ChakraProvider } from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { themeProvider } from "../utils/theme";
 
-const themeProvider = extendTheme({
-  components: { Button: { baseStyle: { _focus: { boxShadow: "none" } } } },
-  fonts: {
-    heading: "Inter",
-    body: "Inter",
-  },
-  colors: {
-    ...chakraTheme.colors,
-    green: {
-      ...chakraTheme.colors.green,
-    },
-    red: {
-      ...chakraTheme.colors.red,
-    },
-    blue: {
-      ...chakraTheme.colors.blue,
-    },
-  },
-  radii: {
-    none: "0",
-    sm: "0.3rem",
-    base: "0.3rem",
-    md: "0.3rem",
-    lg: "0.3rem",
-    xl: "0.3rem",
-    "2xl": "0.3rem",
-    "3xl": "0.3rem",
-    full: "0.3rem",
-  },
-});
-
-function MyApp({ Component, pageProps, router  }) {
+function MyApp({ Component, pageProps, router }) {
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
     <Provider store={store}>
@@ -59,21 +21,9 @@ function MyApp({ Component, pageProps, router  }) {
           <title>Natuna</title>
           <Layout>
             <ChakraProvider theme={themeProvider}>
-              <motion.div
-                key={router.route}
-                initial="initial"
-                animate="animate"
-                variants={{
-                  initial: {
-                    opacity: 0,
-                  },
-                  animate: {
-                    opacity: 1,
-                  },
-                }}
-              >
-                <Component {...pageProps} />
-              </motion.div>
+              <AnimatePresence exitBeforeEnter>
+                <Component {...pageProps} key={router.route} />
+              </AnimatePresence>
             </ChakraProvider>
           </Layout>
         </React.Fragment>

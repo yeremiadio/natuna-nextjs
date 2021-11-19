@@ -33,10 +33,10 @@ const CardAdminProducts = ({
         <h3 className="text-gray-800 text-3xl font-bold">{title}</h3>
         <p className="text-gray-600 text-base line-clamp-3">{description}</p>
         <div className="py-4 space-x-2">
-          <Badge borderRadius="base" p="1" colorScheme="green">
+          <Badge borderRadius="base" p="1" colorScheme="blue">
             {categoryName}
           </Badge>
-          <span className="text-green-600 font-bold">
+          <span className="text-blue-600 font-bold">
             {currencyFormat(price)}
           </span>
         </div>

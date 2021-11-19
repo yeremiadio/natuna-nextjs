@@ -39,7 +39,7 @@ body {
 }
 
 .btn-primary {
-  @apply text-white bg-green-600 hover:bg-green-700;
+  @apply text-white bg-blue-600 hover:bg-blue-700;
 }
 
 .btn-default {

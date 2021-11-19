@@ -24,6 +24,8 @@ import useSWR from "swr";
 import { fetcher, fetcherwithParams } from "../../../utils/fetcher";
 import CustomSpinner from "../../../components/Spinners/CustomSpinner";
 import EmptyDataComponent from "../../../components/EmptyData/EmptyDataComponent";
+import { motion } from "framer-motion";
+import { fadeInUp, stagger } from "../../../utils/transitionProps";
 export default function Product({ category }) {
   const router = useRouter();
   const [idProduct, setIdProduct] = useState(0);
@@ -85,7 +87,7 @@ export default function Product({ category }) {
           </p>
         </div>
         <Button
-          colorScheme="green"
+          colorScheme="blue"
           className="mt-2 ml-auto"
           leftIcon={<PlusIcon className="w-4 h-4" />}
           onClick={() => addProductModalRef.current.open()}
@@ -115,14 +117,14 @@ export default function Product({ category }) {
                       <Input
                         size="lg"
                         variant="outline"
-                        focusBorderColor="green.600"
+                        focusBorderColor="blue.600"
                         name="search"
                         placeholder="Cari..."
                       />
                     </Field>
                   </div>
                   <Button
-                    color="blue.500"
+                    color="green.500"
                     size="md"
                     variant="ghost"
                     py="6"
@@ -140,7 +142,7 @@ export default function Product({ category }) {
                       placeholder="Kategori"
                       size="lg"
                       variant="outline"
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="category"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -157,7 +159,7 @@ export default function Product({ category }) {
                       placeholder="Urutkan"
                       size="lg"
                       variant="outline"
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="sort"
                       onChange={handleChange}
                       value={values.sort}
@@ -178,26 +180,36 @@ export default function Product({ category }) {
           {!products && !error ? (
             <CustomSpinner />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6">
+            <motion.div
+              variants={stagger}
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6"
+            >
               {products.data.map((item, i) => (
-                <CardAdminProducts
-                  key={i}
-                  description={item.description}
-                  title={item.title}
-                  thumbnail={"/imgPlaceholder.jpg"}
-                  categoryName={item.category.category_name}
-                  price={item.price}
-                  slug={item.slug}
-                  deleteProductItem={() => {
-                    onDeleteProduct(item);
-                    deleteProductModalRef.current.open();
-                  }}
-                />
+                <motion.div variants={fadeInUp} key={i}>
+                  <CardAdminProducts
+                    description={item.description}
+                    title={item.title}
+                    thumbnail={"/imgPlaceholder.jpg"}
+                    categoryName={item.category.category_name}
+                    price={item.price}
+                    slug={item.slug}
+                    deleteProductItem={() => {
+                      onDeleteProduct(item);
+                      deleteProductModalRef.current.open();
+                    }}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
           {products?.data?.length === 0 && (
-            <EmptyDataComponent label="Produk" />
+            <motion.div
+              variants={fadeInUp}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <EmptyDataComponent />
+            </motion.div>
           )}
           <Box
             display="flex"

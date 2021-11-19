@@ -103,7 +103,7 @@ function AddProductModal({ category, parent, toast }) {
                     <Field
                       as={Input}
                       isInvalid={errors?.title}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="title"
                     />
                     <p className="text-red-500">{errors?.title}</p>
@@ -115,7 +115,7 @@ function AddProductModal({ category, parent, toast }) {
                     <Field
                       as={Textarea}
                       isInvalid={errors?.description}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="description"
                       rows="4"
                     />
@@ -129,7 +129,7 @@ function AddProductModal({ category, parent, toast }) {
                     isInvalid={errors?.category_id}
                     size="lg"
                     variant="outline"
-                    focusBorderColor="green.600"
+                    focusBorderColor="blue.600"
                     name="category_id"
                     onChange={handleChange}
                     value={values.category_id}
@@ -149,7 +149,7 @@ function AddProductModal({ category, parent, toast }) {
                     <Field
                       as={Input}
                       isInvalid={errors?.price}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="price"
                       type="number"
                     />
@@ -228,7 +228,7 @@ function AddProductModal({ category, parent, toast }) {
                   size="md"
                   leftIcon={<PaperAirplaneIcon className="w-4 h-4 rotate-90" />}
                   mt="4"
-                  colorScheme="green"
+                  colorScheme="blue"
                   type="submit"
                 >
                   Submit

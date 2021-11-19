@@ -12,6 +12,7 @@ import { PaperAirplaneIcon } from "@heroicons/react/solid";
 // import { useMediaQuery } from "@chakra-ui/media-query";
 import { Select } from "@chakra-ui/select";
 // import Dropzone from "react-dropzone";
+import CustomSpinner from "../../../components/Spinners/CustomSpinner";
 import useSWR from "swr";
 import { fetchWithToken } from "../../../utils/fetcher";
 
@@ -87,7 +88,7 @@ function UpdateUserModal({ parent, user, toast }) {
                     <Field
                       as={Input}
                       isInvalid={errors?.name}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="name"
                     />
                     <p className="text-red-500">{errors?.name}</p>
@@ -99,35 +100,39 @@ function UpdateUserModal({ parent, user, toast }) {
                     <Field
                       as={Input}
                       isInvalid={errors?.email}
-                      focusBorderColor="green.600"
+                      focusBorderColor="blue.600"
                       name="email"
                       type="email"
                     />
                     <p className="text-red-500">{errors?.email}</p>
                   </FormControl>
                 </div>
-                <div className="mt-2">
-                  <FormLabel>Role</FormLabel>
-                  <Select
-                    placeholder="Role"
-                    isInvalid={errors?.role_id}
-                    size="lg"
-                    variant="outline"
-                    focusBorderColor="green.600"
-                    name="role_id"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    {!roles &&
-                      !error &&
-                      roles?.map((item, i) => (
-                        <option key={i} value={item.id}>
-                          {item.role_name}
-                        </option>
-                      ))}
-                  </Select>
-                  <p className="text-red-500">{errors?.role_id}</p>
-                </div>
+                {!roles && !error ? (
+                  <CustomSpinner />
+                ) : (
+                  <div className="mt-2">
+                    <FormControl id="role">
+                      <FormLabel>Role</FormLabel>
+                      <Select
+                        placeholder="Role"
+                        isInvalid={errors?.role_id}
+                        size="lg"
+                        variant="outline"
+                        focusBorderColor="blue.600"
+                        name="role_id"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        {roles?.map((item, i) => (
+                          <option key={i} value={item.id}>
+                            {item.role_name}
+                          </option>
+                        ))}
+                      </Select>
+                      <p className="text-red-500">{errors?.role_id}</p>
+                    </FormControl>
+                  </div>
+                )}
               </div>
               <Box className="flex justify-end gap-2">
                 <Button
@@ -136,7 +141,7 @@ function UpdateUserModal({ parent, user, toast }) {
                   size="md"
                   leftIcon={<PaperAirplaneIcon className="w-4 h-4 rotate-90" />}
                   mt="4"
-                  colorScheme="green"
+                  colorScheme="blue"
                   type="submit"
                 >
                   Submit

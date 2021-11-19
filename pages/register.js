@@ -55,9 +55,9 @@ const Register = () => {
           <Link href="/">
             <a>
               <img
-                src="/example-logo.png"
+                src="/logo.jpeg"
                 alt="logo"
-                className="object-cover w-40 mb-6 cursor-pointer transition-all delay-75 hover:-translate-y-1"
+                className="object-cover w-24 mb-6 cursor-pointer transition-all delay-75 hover:-translate-y-1"
               />
             </a>
           </Link>
@@ -90,7 +90,7 @@ const Register = () => {
                           isInvalid={errorEntries?.name && true}
                           size="lg"
                           variant="outline"
-                          focusBorderColor="green.600"
+                          focusBorderColor="blue.600"
                           type="text"
                           name="name"
                           placeholder="Masukkan Username..."
@@ -122,7 +122,7 @@ const Register = () => {
                           isInvalid={errorEntries?.email && true}
                           size="lg"
                           variant="outline"
-                          focusBorderColor="green.600"
+                          focusBorderColor="blue.600"
                           type="email"
                           name="email"
                           placeholder="Masukkan Email..."
@@ -155,7 +155,7 @@ const Register = () => {
                             size="lg"
                             isInvalid={errorEntries?.password && true}
                             variant="outline"
-                            focusBorderColor="green.600"
+                            focusBorderColor="blue.600"
                             pr="4.5rem"
                             type={showPassword ? "text" : "password"}
                             name="password"
@@ -196,11 +196,11 @@ const Register = () => {
                           Sudah memiliki akun? Klik{" "}
                         </span>
                         <Link href="/login">
-                          <a className="text-green-600 font-medium">Login</a>
+                          <a className="text-blue-600 font-medium">Login</a>
                         </Link>
                       </div>
                       <Button
-                        colorScheme="green"
+                        colorScheme="blue"
                         isLoading={auth.isFetching}
                         loadingText="Checking"
                         isFullWidth={isSmallestThan768 && true}

@@ -5,7 +5,7 @@ const CustomSpinner = ({ ...rest }) => {
   return (
     <div className="my-4 flex justify-center items-center">
       <Spinner
-        color="green.500"
+        color="blue.500"
         thickness="3px"
         {...rest}
         emptyColor="gray.200"

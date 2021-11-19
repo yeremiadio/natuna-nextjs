@@ -4,7 +4,7 @@ module.exports = (phase, { defaultConfig }) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
       env: {
-        baseUrl: "http://192.168.0.9:8000",
+        baseUrl: "http://192.168.100.14:8000",
       },
       trailingSlash: true,
       webpackDevMiddleware: (config) => {
