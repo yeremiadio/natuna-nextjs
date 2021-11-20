@@ -11,15 +11,16 @@ const Navbar = () => {
     { href: "/contact", name: "Contact Us" },
   ];
   return (
-    <header>
-      <nav className="w-full z-40 top-0 border-b border-gray-200 py-2 px-4 lg:px-8">
+    <header className="fixed top-0 z-10 w-full bg-white">
+      <nav className="w-full z-40 top-0 border-b border-gray-200 p-4 lg:px-8">
         <div className="flex items-center justify-between flex-1 container mx-auto">
           <div>
             <Link href="/">
               <div className="flex items-center cursor-pointer">
                 <img src="/logo.jpeg" className="object-cover w-14 mr-3" />
                 <div className="text-sm hidden sm:flex flex-col">
-                  <b className="mb-0">BUMDes</b> Laut Sakti Daratan Bertuah
+                  <p className="mb-0 font-semibold">Bumi Desa</p> Laut Sakti
+                  Daratan Bertuah
                 </div>
               </div>
             </Link>
@@ -33,14 +34,12 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
-          <div className="hidden lg:flex gap-2">
-            <Button size="md" variant="ghost">
-              Login
-            </Button>
-            <Button colorScheme="blue" size="md" variant="solid">
+          {/* <div className="hidden lg:flex gap-1">
+            <Button variant="ghost">Login</Button>
+            <Button colorScheme="blue" variant="solid">
               Register
             </Button>
-          </div>
+          </div> */}
         </div>
       </nav>
     </header>

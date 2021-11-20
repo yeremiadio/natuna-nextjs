@@ -15,7 +15,7 @@ module.exports = (phase, { defaultConfig }) => {
         return config;
       },
       images: {
-        domains: ["http://192.168.0.10:8000", "https://via.placeholder.com"],
+        domains: ["*"],
       },
     };
   }
@@ -33,7 +33,7 @@ module.exports = (phase, { defaultConfig }) => {
       return config;
     },
     images: {
-      domains: ["http://192.168.0.10:8000", "https://via.placeholder.com"],
+      domains: ["*"],
     },
   };
 };

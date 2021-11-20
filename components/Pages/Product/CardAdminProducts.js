@@ -1,10 +1,11 @@
 import { IconButton } from "@chakra-ui/button";
 import { Badge, Box } from "@chakra-ui/layout";
+import { Tag, TagLabel } from "@chakra-ui/tag";
 import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import React from "react";
 import { currencyFormat } from "../../../config/currencyFormat";
-
+import Image from "next/image";
 const CardAdminProducts = ({
   deleteProductItem,
   thumbnail,
@@ -24,16 +25,23 @@ const CardAdminProducts = ({
       m={{ lg: "2" }}
       minHeight={{ sm: "md" }}
     >
+      {/* <Image
+        layout="responsive"
+        src={thumbnail}
+        objectFit="cover"
+        height={60}
+        width="100%"
+      /> */}
       <img src={thumbnail} alt="" className="w-full h-52 object-cover" />
       <div className="p-4">
         <h3 className="text-gray-800 text-3xl font-bold line-clamp-2">
           {title}
         </h3>
         <p className="text-gray-600 text-base line-clamp-3">{description}</p>
-        <div className="py-4 space-x-2">
-          <Badge borderRadius="base" p="1" colorScheme="blue">
-            {categoryName}
-          </Badge>
+        <div className="py-4 space-x-2 flex items-center">
+          <Tag colorScheme="green" style={{ borderRadius: "3rem" }} p="2">
+            <TagLabel>{categoryName}</TagLabel>
+          </Tag>
           <span className="text-blue-600 font-bold">
             {currencyFormat(price)}
           </span>

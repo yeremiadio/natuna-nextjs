@@ -2,9 +2,9 @@
   scroll-behavior: smooth;
 }
 
-body {
+/* body {
   background-color: #f7fafc !important;
-}
+} */
 
 /* custom scrollbar */
 ::-webkit-scrollbar {

@@ -32,7 +32,7 @@ function Admin({ children }) {
       <Head>
         <title>BUMDes Laut Sakti Daratan Bertuah</title>
       </Head>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen" style={{ background: "#f7fafc" }}>
         <AdminSidebar open={open} setOpen={setOpen} />
         <div className="overflow-y-auto flex-1">
           <AdminNavbar user={auth.user?.name} setOpen={setOpen} open={open} />

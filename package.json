@@ -20,6 +20,7 @@
     "js-cookie": "^3.0.1",
     "moment": "^2.29.1",
     "next": "latest",
+    "popmotion": "^9.3.6",
     "react": "^17.0.2",
     "react-csv": "^2.0.3",
     "react-data-table-component": "^7.4.5",
