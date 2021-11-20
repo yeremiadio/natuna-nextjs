@@ -4,9 +4,9 @@ import Navbar from "../components/Navbars/Navbar";
 import MainLayout from "../layouts/mainLayout";
 
 export default function Home() {
-  return (
-    <>
-      <MainLayout>test</MainLayout>
-    </>
-  );
+  return <>test</>;
 }
+
+Home.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
+};

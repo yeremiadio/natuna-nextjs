@@ -7,6 +7,7 @@ import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AnimatePresence } from "framer-motion";
 import { themeProvider } from "../utils/theme";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps, router }) {
   const Layout = Component.layout || (({ children }) => <>{children}</>);
@@ -18,13 +19,16 @@ function MyApp({ Component, pageProps, router }) {
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
-          <Layout>
-            <ChakraProvider theme={themeProvider}>
-              <AnimatePresence exitBeforeEnter>
+          <Head>
+            <title>BUMDes Laut Sakti Daratan Bertuah</title>
+          </Head>
+          <ChakraProvider theme={themeProvider}>
+            <AnimatePresence exitBeforeEnter>
+              <Layout>
                 <Component {...pageProps} key={router.route} />
-              </AnimatePresence>
-            </ChakraProvider>
-          </Layout>
+              </Layout>
+            </AnimatePresence>
+          </ChakraProvider>
         </React.Fragment>
       </PersistGate>
     </Provider>

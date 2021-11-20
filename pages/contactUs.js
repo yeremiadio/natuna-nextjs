@@ -1,11 +1,7 @@
-import React from 'react'
+import MainLayout from "../layouts/mainLayout";
 
-const ContactUsPage = () => {
-    return (
-        <div>
-            
-        </div>
-    )
+export default function contactUs() {
+  return <div>Contact Us</div>;
 }
 
-export default ContactUsPage
+contactUs.layout = MainLayout;

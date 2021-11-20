@@ -11,10 +11,9 @@ import {
 } from "@heroicons/react/solid";
 import { Box } from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
-import { useMediaQuery } from "@chakra-ui/media-query";
+// import { useMediaQuery } from "@chakra-ui/media-query";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Select } from "@chakra-ui/select";
-import { currencyFormat } from "../../../config/currencyFormat";
 import { Modal } from "../../../components/Modals/Modal";
 import AddProductModal from "../../../components/Pages/Product/AddProductModal";
 import { useToast } from "@chakra-ui/toast";
@@ -26,6 +25,7 @@ import CustomSpinner from "../../../components/Spinners/CustomSpinner";
 import EmptyDataComponent from "../../../components/EmptyData/EmptyDataComponent";
 import { motion } from "framer-motion";
 import { fadeInUp, stagger } from "../../../utils/transitionProps";
+import Head from "next/head";
 export default function Product({ category }) {
   const router = useRouter();
   const [idProduct, setIdProduct] = useState(0);
@@ -63,7 +63,12 @@ export default function Product({ category }) {
   };
 
   return (
-    <Admin>
+    <>
+      {query?.search && (
+        <Head>
+          <title>{`Search result: ${query?.search} - BUMDes Laut Sakti Daratan Bertuah`}</title>
+        </Head>
+      )}
       <div className="bg-section">
         <Modal ref={addProductModalRef}>
           <AddProductModal
@@ -183,14 +188,18 @@ export default function Product({ category }) {
             ) : (
               <motion.div
                 variants={stagger}
-                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6"
+                className="grid grid-cols-1 mdgrid-cols-2 xl:grid-cols-3 gap-y-6"
               >
                 {products.data.map((item, i) => (
                   <motion.div variants={fadeInUp} key={i}>
                     <CardAdminProducts
                       description={item.description}
                       title={item.title}
-                      thumbnail={"/imgPlaceholder.jpg"}
+                      thumbnail={
+                        item.thumbnail !== null
+                          ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
+                          : "/imgPlaceholder.jpg"
+                      }
                       categoryName={item.category.category_name}
                       price={item.price}
                       slug={item.slug}
@@ -230,7 +239,7 @@ export default function Product({ category }) {
           </div>
         </div>
       </div>
-    </Admin>
+    </>
   );
 }
 
@@ -241,3 +250,5 @@ export async function getStaticProps() {
     props: { category }, // will be passed to the page component as props
   };
 }
+
+Product.layout = Admin;

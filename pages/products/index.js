@@ -1,9 +1,7 @@
 import MainLayout from "../../layouts/mainLayout";
 
 export default function products() {
-    return (
-        <MainLayout>
-            This is Product Catalog
-        </MainLayout>
-    );
+  return <>This is Product Catalog</>;
 }
+
+products.layout = MainLayout;

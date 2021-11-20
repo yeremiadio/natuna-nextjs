@@ -7,7 +7,7 @@ import { RESET_USER, RESET_ERRORS } from "../constants/types";
 import { motion } from "framer-motion";
 import Head from "next/head";
 
-function Admin({ children, title }) {
+function Admin({ children }) {
   const auth = useSelector((state) => state.auth);
   const errors = useSelector((state) => state.errors);
   const dispatch = useDispatch();
@@ -30,11 +30,7 @@ function Admin({ children, title }) {
   return (
     <>
       <Head>
-        <title>
-          {title
-            ? `${title} - BUMDes Laut Sakti Daratan Bertuah`
-            : "BUMDes Laut Sakti Daratan Bertuah"}
-        </title>
+        <title>BUMDes Laut Sakti Daratan Bertuah</title>
       </Head>
       <div className="flex min-h-screen">
         <AdminSidebar open={open} setOpen={setOpen} />

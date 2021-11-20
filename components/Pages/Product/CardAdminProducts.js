@@ -22,15 +22,13 @@ const CardAdminProducts = ({
       className="rounded-md hover:shadow-lg transition-all delay-75"
       overflow="hidden"
       m={{ lg: "2" }}
-      minHeight={{ sm: "sm", lg: "lg" }}
+      minHeight={{ sm: "md" }}
     >
-      <img
-        src={thumbnail}
-        alt=""
-        className="w-full h-auto lg:h-1/2 object-cover"
-      />
+      <img src={thumbnail} alt="" className="w-full h-52 object-cover" />
       <div className="p-4">
-        <h3 className="text-gray-800 text-3xl font-bold">{title}</h3>
+        <h3 className="text-gray-800 text-3xl font-bold line-clamp-2">
+          {title}
+        </h3>
         <p className="text-gray-600 text-base line-clamp-3">{description}</p>
         <div className="py-4 space-x-2">
           <Badge borderRadius="base" p="1" colorScheme="blue">

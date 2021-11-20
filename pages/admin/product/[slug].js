@@ -16,7 +16,8 @@ import { useToast } from "@chakra-ui/toast";
 import { useRouter } from "next/router";
 import { Select } from "@chakra-ui/select";
 import { FormErrorMessage } from "@chakra-ui/form-control";
-function DetailProduct({ product, category }) {
+import Head from "next/head";
+export default function DetailProduct({ product, category }) {
   const initialValues = {
     title: product.title || "",
     description: product.description || "",
@@ -68,7 +69,12 @@ function DetailProduct({ product, category }) {
       });
   };
   return (
-    <Admin title={"Admin Detail Product " + product.title}>
+    <>
+      {product?.title && (
+        <Head>
+          <title>{`${product?.title} - BUMDes Laut Sakti Daratan Bertuah`}</title>
+        </Head>
+      )}
       <div className="bg-section">
         <h3 className="font-bold text-xl text-gray-800">Detail</h3>
         <p className="font-base tracking-wide text-gray-400">
@@ -334,7 +340,7 @@ function DetailProduct({ product, category }) {
           </Formik>
         </Box>
       </div>
-    </Admin>
+    </>
   );
 }
 
@@ -364,4 +370,4 @@ export async function getStaticProps(context) {
   return { props: { product, category } };
 }
 
-export default DetailProduct;
+DetailProduct.layout = Admin;
