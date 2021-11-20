@@ -4,7 +4,7 @@ module.exports = (phase, { defaultConfig }) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
       env: {
-        baseUrl: "http://192.168.100.14:8000",
+        baseUrl: "http://192.168.0.10:8000",
       },
       trailingSlash: true,
       webpackDevMiddleware: (config) => {
@@ -15,14 +15,14 @@ module.exports = (phase, { defaultConfig }) => {
         return config;
       },
       images: {
-        domains: ["http://192.168.0.9:8000", "https://via.placeholder.com"],
+        domains: ["http://192.168.0.10:8000", "https://via.placeholder.com"],
       },
     };
   }
 
   return {
     env: {
-      baseUrl: "http://192.168.0.9:8000",
+      baseUrl: "http://192.168.0.10:8000",
     },
     trailingSlash: true,
     webpackDevMiddleware: (config) => {
@@ -33,7 +33,7 @@ module.exports = (phase, { defaultConfig }) => {
       return config;
     },
     images: {
-      domains: ["http://192.168.0.9:8000", "https://via.placeholder.com"],
+      domains: ["http://192.168.0.10:8000", "https://via.placeholder.com"],
     },
   };
 };

@@ -23,6 +23,7 @@ function DetailProduct({ product, category }) {
     price: product.price || "",
     thumbnail: product.thumbnail || "",
     category_id: product.category_id || "",
+    quantity: product.quantity || "",
     product_images: null,
   };
   const FormikRef = useRef();
@@ -67,234 +68,273 @@ function DetailProduct({ product, category }) {
       });
   };
   return (
-    <div className="bg-section">
-      <h3 className="font-bold text-xl text-gray-800">Detail</h3>
-      <p className="font-base tracking-wide text-gray-400">
-        Kelola item produk disini.
-      </p>
-      <Box className="mt-4">
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          innerRef={FormikRef}
-          onSubmit={onSubmit}
-        >
-          {({
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            setFieldValue,
-            touched,
-          }) => (
-            <Form>
-              <div>
-                <div className="mt-2">
-                  <FormControl
-                    id="title"
-                    isInvalid={errors?.title && touched.title}
-                  >
-                    <FormLabel>Nama Produk</FormLabel>
-                    <Field
-                      as={Input}
-                      focusBorderColor="blue.600"
-                      name="title"
-                    />
-                    {errors?.title && (
-                      <FormErrorMessage>{errors?.title}</FormErrorMessage>
-                    )}
-                  </FormControl>
-                </div>
-                <p className="text-red-500">{errors?.title}</p>
-                <div className="mt-2">
-                  <FormControl
-                    id="description"
-                    isInvalid={errors?.description && touched.description}
-                  >
-                    <FormLabel>Deskripsi</FormLabel>
-                    <Field
-                      as={Textarea}
-                      focusBorderColor="blue.600"
-                      name="description"
-                      rows="4"
-                    />
-                    {errors?.description && (
-                      <FormErrorMessage>{errors?.description}</FormErrorMessage>
-                    )}
-                  </FormControl>
-                </div>
-                <div className="w-full lg:w-1/6 mt-2">
-                  <FormControl
-                    id="price"
-                    isInvalid={errors?.price && touched.price}
-                  >
-                    <FormLabel>Price</FormLabel>
-                    <Field
-                      as={Input}
-                      focusBorderColor="blue.600"
-                      name="price"
-                      type="number"
-                    />
-                    {errors?.price ? (
-                      <FormErrorMessage>{errors?.price}</FormErrorMessage>
-                    ) : (
-                      <FormHelperText>Example: 4000</FormHelperText>
-                    )}
-                  </FormControl>
-                </div>
-                <div className="mt-2 w-full md:w-2/6">
-                  <FormControl
-                    isInvalid={errors?.category_id && touched.category_id}
-                  >
-                    <FormLabel>Kategori</FormLabel>
-                    <Select
-                      placeholder="Kategori"
-                      isInvalid={errors?.category_id}
-                      size="lg"
-                      variant="outline"
-                      focusBorderColor="blue.600"
-                      name="category_id"
-                      onChange={handleChange}
-                      value={values.category_id}
-                      onBlur={handleBlur}
+    <Admin title={"Admin Detail Product " + product.title}>
+      <div className="bg-section">
+        <h3 className="font-bold text-xl text-gray-800">Detail</h3>
+        <p className="font-base tracking-wide text-gray-400">
+          Kelola item produk disini.
+        </p>
+        <Box className="mt-4">
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            innerRef={FormikRef}
+            onSubmit={onSubmit}
+          >
+            {({
+              isSubmitting,
+              handleChange,
+              handleBlur,
+              values,
+              setFieldValue,
+              touched,
+            }) => (
+              <Form>
+                <div>
+                  <div className="mt-2">
+                    <FormControl
+                      id="title"
+                      isInvalid={errors?.title && touched.title}
                     >
-                      {category.map((item, i) => (
-                        <option key={i} value={item.id}>
-                          {item.category_name}
-                        </option>
-                      ))}
-                    </Select>
-                    {errors?.category_id && (
-                      <FormErrorMessage>{errors?.category_id}</FormErrorMessage>
-                    )}
-                  </FormControl>
-                </div>
-                <div className="mt-2">
-                  <FormControl
-                    id="thumbnail"
-                    isInvalid={errors?.thumbnail && touched.thumbnail}
-                  >
-                    <FormLabel>Thumbnail</FormLabel>
-                    <div className="flex flex-row w-full items-center gap-2">
-                      <Button
-                        variant="outline"
-                        leftIcon={<CameraIcon className="w-5 h-5" />}
-                        onClick={() => thumbnailRef.current.click()}
+                      <FormLabel>Nama Produk</FormLabel>
+                      <Field
+                        as={Input}
+                        focusBorderColor="blue.600"
+                        name="title"
+                      />
+                      {errors?.title ? (
+                        <FormErrorMessage>{errors?.title}</FormErrorMessage>
+                      ) : (
+                        <FormHelperText>Minimal 15 characters</FormHelperText>
+                      )}
+                    </FormControl>
+                  </div>
+                  <div className="mt-2">
+                    <FormControl
+                      id="description"
+                      isInvalid={errors?.description && touched.description}
+                    >
+                      <FormLabel>Deskripsi</FormLabel>
+                      <Field
+                        as={Textarea}
+                        focusBorderColor="blue.600"
+                        name="description"
+                        rows="8"
+                      />
+                      {errors?.description ? (
+                        <FormErrorMessage>
+                          {errors?.description}
+                        </FormErrorMessage>
+                      ) : (
+                        <FormHelperText>Minimal 15 characters</FormHelperText>
+                      )}
+                    </FormControl>
+                  </div>
+                  <div className="flex flex-col lg:flex-row gap-4">
+                    <div className="mt-2">
+                      <FormControl
+                        id="price"
+                        isInvalid={errors?.price && touched.price}
                       >
-                        Upload
-                        <input
-                          ref={thumbnailRef}
-                          type="file"
-                          name="thumbnail"
-                          hidden
-                          accept="image/*"
-                          onChange={(event) => {
-                            onChangeImage(event, "thumbnail");
-                          }}
+                        <FormLabel>Price</FormLabel>
+                        <Field
+                          as={Input}
+                          focusBorderColor="blue.600"
+                          name="price"
+                          type="number"
                         />
-                      </Button>
+                        {errors?.price ? (
+                          <FormErrorMessage>{errors?.price}</FormErrorMessage>
+                        ) : (
+                          <FormHelperText>Example: 4000</FormHelperText>
+                        )}
+                      </FormControl>
                     </div>
-                    {errors?.thumbnail && (
-                      <FormErrorMessage>{errors?.thumbnail}</FormErrorMessage>
-                    )}
-                  </FormControl>
-                </div>
-                <div className="mt-2">
-                  {values?.thumbnail &&
-                  typeof values?.thumbnail !== "object" ? (
-                    <Box className="w-full md:w-5/6">
-                      <img
-                        src={
-                          process.env.baseUrl +
-                          "/assets/images/thumbnail/products/" +
-                          values.thumbnail
-                        }
-                        alt=""
-                        className="w-full lg:w-3/12 lg:h-1/2 rounded-md shadow-md"
-                      />
-                    </Box>
-                  ) : (
-                    <Box>
-                      <p className="truncate w-1/4">
-                        Image Found: {values?.thumbnail?.name}
-                      </p>
-                    </Box>
-                  )}
-                </div>
-                <div className="mt-2">
-                  <FormLabel>Product Images</FormLabel>
-                  <Dropzone
-                    onDrop={(acceptedFiles) => {
-                      console.log(acceptedFiles);
-                      setFieldValue("product_images", acceptedFiles);
-                    }}
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <>
-                        <div
-                          {...getRootProps()}
-                          className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-96 p-4 flex justify-center items-center"
-                        >
-                          <input
-                            {...getInputProps()}
-                            name="product_images"
-                            // multiple
+                    <div className="mt-2">
+                      <FormControl
+                        id="quantity"
+                        isInvalid={errors?.quantity && touched.quantity}
+                      >
+                        <FormLabel>Quantity</FormLabel>
+                        <div className="w-2/6 lg:w-full">
+                          <Field
+                            as={Input}
+                            focusBorderColor="blue.600"
+                            name="quantity"
+                            type="number"
                           />
-                          <p>
-                            Drag 'n' drop some files here, or click to select
-                            files
-                          </p>
                         </div>
-                      </>
+                        {errors?.quantity ? (
+                          <FormErrorMessage>
+                            {errors?.quantity}
+                          </FormErrorMessage>
+                        ) : (
+                          <FormHelperText>Example: 2</FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
+                    <div className="mt-2">
+                      <FormControl
+                        isInvalid={errors?.category_id && touched.category_id}
+                      >
+                        <FormLabel>Kategori</FormLabel>
+                        <Select
+                          placeholder="Kategori"
+                          isInvalid={errors?.category_id}
+                          size="md"
+                          variant="outline"
+                          focusBorderColor="blue.600"
+                          name="category_id"
+                          onChange={handleChange}
+                          value={values.category_id}
+                          onBlur={handleBlur}
+                        >
+                          {category.map((item, i) => (
+                            <option key={i} value={item.id}>
+                              {item.category_name}
+                            </option>
+                          ))}
+                        </Select>
+                        {errors?.category_id && (
+                          <FormErrorMessage>
+                            {errors?.category_id}
+                          </FormErrorMessage>
+                        )}
+                      </FormControl>
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <FormControl
+                      id="thumbnail"
+                      isInvalid={errors?.thumbnail && touched.thumbnail}
+                    >
+                      <FormLabel>Thumbnail</FormLabel>
+                      <div className="flex flex-row w-full items-center gap-2">
+                        <Button
+                          variant="outline"
+                          leftIcon={<CameraIcon className="w-5 h-5" />}
+                          onClick={() => thumbnailRef.current.click()}
+                        >
+                          Upload
+                          <input
+                            ref={thumbnailRef}
+                            type="file"
+                            name="thumbnail"
+                            hidden
+                            accept="image/*"
+                            onChange={(event) => {
+                              onChangeImage(event, "thumbnail");
+                            }}
+                          />
+                        </Button>
+                      </div>
+                      {errors?.thumbnail && (
+                        <FormErrorMessage>{errors?.thumbnail}</FormErrorMessage>
+                      )}
+                    </FormControl>
+                  </div>
+                  <div className="mt-2">
+                    {values?.thumbnail ? (
+                      typeof values?.thumbnail !== "object" ? (
+                        <Box className="w-full md:w-5/6">
+                          <img
+                            src={
+                              process.env.baseUrl +
+                              "/assets/images/thumbnail/products/" +
+                              values.thumbnail
+                            }
+                            alt=""
+                            className="w-full lg:w-3/12 lg:h-1/2 rounded-md shadow-md"
+                          />
+                        </Box>
+                      ) : (
+                        <Box display="flex">
+                          <p className="truncate w-2/4">
+                            Image Found: {values?.thumbnail?.name} +{" "}
+                          </p>
+                          {values?.thumbnail.type}
+                        </Box>
+                      )
+                    ) : (
+                      ""
                     )}
-                  </Dropzone>
-                  {errors?.product_images && (
-                    <p className="text-red-500">{errors?.product_images}</p>
-                  )}
+                  </div>
+                  <div className="mt-2">
+                    <FormLabel>Product Images</FormLabel>
+                    <Dropzone
+                      onDrop={(acceptedFiles) => {
+                        console.log(acceptedFiles);
+                        setFieldValue("product_images", acceptedFiles);
+                      }}
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <>
+                          <div
+                            {...getRootProps()}
+                            className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-96 p-4 flex justify-center items-center"
+                          >
+                            <input
+                              {...getInputProps()}
+                              name="product_images"
+                              // multiple
+                            />
+                            <p>
+                              Drag 'n' drop some files here, or click to select
+                              files
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </Dropzone>
+                    {errors?.product_images && (
+                      <p className="text-red-500">{errors?.product_images}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="mt-2">
-                {values.product_images &&
-                  values.product_images.map((file, i) => (
-                    <li key={i} className="w-1/6 truncate">
-                      {`File: ${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
-                    </li>
-                  ))}
-              </div>
-              <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {productImages &&
-                  productImages.map((item, i) => (
-                    <Box key={i}>
-                      <img
-                        src={
-                          process.env.baseUrl +
-                          "/assets/images/products/" +
-                          item.image_name
-                        }
-                        alt=""
-                        className="w-full rounded-md shadow-md"
-                      />
-                    </Box>
-                  ))}
-                <p className="text-red-500">{errors?.product_images}</p>
-              </div>
-              <Button
-                disabled={isSubmitting}
-                size="md"
-                loadingText="Checking..."
-                isLoading={isSubmitting}
-                mt="4"
-                colorScheme="blue"
-                type="submit"
-                leftIcon={<PencilIcon className="w-4 h-4" />}
-              >
-                Update
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </Box>
-    </div>
+                <div className="mt-2">
+                  {values.product_images &&
+                    values.product_images.map((file, i) => (
+                      <li key={i} className="w-1/6 truncate">
+                        {`File: ${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
+                      </li>
+                    ))}
+                </div>
+                <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {productImages &&
+                    productImages.map((item, i) => (
+                      <Box key={i}>
+                        <img
+                          src={
+                            process.env.baseUrl +
+                            "/assets/images/products/" +
+                            item.image_name
+                          }
+                          alt=""
+                          className="w-full rounded-md shadow-md"
+                        />
+                      </Box>
+                    ))}
+                  <p className="text-red-500">{errors?.product_images}</p>
+                </div>
+                <Button
+                  disabled={isSubmitting}
+                  size="md"
+                  loadingText="Checking..."
+                  isLoading={isSubmitting}
+                  mt="4"
+                  colorScheme="blue"
+                  type="submit"
+                  leftIcon={<PencilIcon className="w-4 h-4" />}
+                >
+                  Update
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
+      </div>
+    </Admin>
   );
 }
 
@@ -325,5 +365,3 @@ export async function getStaticProps(context) {
 }
 
 export default DetailProduct;
-
-DetailProduct.layout = Admin;

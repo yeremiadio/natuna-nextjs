@@ -11,6 +11,7 @@ import { Input } from "@chakra-ui/input";
 import { useToast } from "@chakra-ui/toast";
 import { InputGroup, InputRightElement } from "@chakra-ui/react";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
+import Head from "next/head";
 
 const Register = () => {
   const initialValues = {
@@ -50,6 +51,9 @@ const Register = () => {
   };
   return (
     <>
+      <Head>
+        <title>Register - BUMDes Laut Sakti Daratan Bertuah</title>
+      </Head>
       <div className="bg-white h-screen">
         <div className="mx-4 flex flex-col justify-center items-center h-full">
           <Link href="/">

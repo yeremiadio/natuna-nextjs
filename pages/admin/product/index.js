@@ -63,172 +63,174 @@ export default function Product({ category }) {
   };
 
   return (
-    <div className="bg-section">
-      <Modal ref={addProductModalRef}>
-        <AddProductModal
-          parent={addProductModalRef}
-          category={category}
-          toast={toast}
-        />
-      </Modal>
-      <Modal ref={deleteProductModalRef}>
-        <DeleteProductModal
-          parent={deleteProductModalRef}
-          id={idProduct}
-          toast={toast}
-          title={titleProduct}
-        />
-      </Modal>
-      <Box display={{ lg: "flex" }} alignItems="center">
-        <div>
-          <h3 className="font-bold text-xl text-gray-800">Product</h3>
-          <p className="font-base tracking-wide text-gray-400">
-            Kelola semua produk kamu disini.
-          </p>
-        </div>
-        <Button
-          colorScheme="blue"
-          className="mt-2 ml-auto"
-          leftIcon={<PlusIcon className="w-4 h-4" />}
-          onClick={() => addProductModalRef.current.open()}
-        >
-          Tambah
-        </Button>
-      </Box>
-      <div>
-        <div className="py-4 bg-white sticky lg:block z-10 top-16 lg:top-auto">
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            innerRef={FormikRef}
+    <Admin>
+      <div className="bg-section">
+        <Modal ref={addProductModalRef}>
+          <AddProductModal
+            parent={addProductModalRef}
+            category={category}
+            toast={toast}
+          />
+        </Modal>
+        <Modal ref={deleteProductModalRef}>
+          <DeleteProductModal
+            parent={deleteProductModalRef}
+            id={idProduct}
+            toast={toast}
+            title={titleProduct}
+          />
+        </Modal>
+        <Box display={{ lg: "flex" }} alignItems="center">
+          <div>
+            <h3 className="font-bold text-xl text-gray-800">Product</h3>
+            <p className="font-base tracking-wide text-gray-400">
+              Kelola semua produk kamu disini.
+            </p>
+          </div>
+          <Button
+            colorScheme="blue"
+            className="mt-2 ml-auto"
+            leftIcon={<PlusIcon className="w-4 h-4" />}
+            onClick={() => addProductModalRef.current.open()}
           >
-            {({ values, handleChange, handleBlur }) => (
-              <Form>
-                {/* Search Input */}
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col w-full lg:w-2/6 mb-2">
-                    <Field as={InputGroup}>
-                      <InputRightElement
-                        pointerEvents="none"
-                        children={
-                          <SearchIcon className="text-gray-300 w-5 h-5 absolute top-3" />
-                        }
-                      />
-                      <Input
+            Tambah
+          </Button>
+        </Box>
+        <div>
+          <div className="py-4 bg-white sticky lg:block z-10 top-16 lg:top-auto">
+            <Formik
+              initialValues={initialValues}
+              onSubmit={onSubmit}
+              innerRef={FormikRef}
+            >
+              {({ values, handleChange, handleBlur }) => (
+                <Form>
+                  {/* Search Input */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col w-full lg:w-2/6 mb-2">
+                      <Field as={InputGroup}>
+                        <InputRightElement
+                          pointerEvents="none"
+                          children={
+                            <SearchIcon className="text-gray-300 w-5 h-5 absolute top-3" />
+                          }
+                        />
+                        <Input
+                          size="lg"
+                          variant="outline"
+                          focusBorderColor="blue.600"
+                          name="search"
+                          placeholder="Cari..."
+                        />
+                      </Field>
+                    </div>
+                    <Button
+                      color="green.500"
+                      size="md"
+                      variant="ghost"
+                      py="6"
+                      paddingX="6"
+                      className="bottom-1"
+                      type="submit"
+                    >
+                      Filter
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 lg:space-y-0 space-x-2 items-center mb-2">
+                    {/* Dropdown Input */}
+                    <div>
+                      <Select
+                        placeholder="Kategori"
                         size="lg"
                         variant="outline"
                         focusBorderColor="blue.600"
-                        name="search"
-                        placeholder="Cari..."
-                      />
-                    </Field>
+                        name="category"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        {category.map((item, i) => (
+                          <option key={i} value={item.category_slug}>
+                            {item.category_name}
+                          </option>
+                        ))}
+                      </Select>
+                    </div>
+                    <div>
+                      <Select
+                        placeholder="Urutkan"
+                        size="lg"
+                        variant="outline"
+                        focusBorderColor="blue.600"
+                        name="sort"
+                        onChange={handleChange}
+                        value={values.sort}
+                        onBlur={handleBlur}
+                      >
+                        <option value="asc">Teratas</option>
+                        <option value="desc">Terbawah</option>
+                      </Select>
+                    </div>
                   </div>
-                  <Button
-                    color="green.500"
-                    size="md"
-                    variant="ghost"
-                    py="6"
-                    paddingX="6"
-                    className="bottom-1"
-                    type="submit"
-                  >
-                    Filter
-                  </Button>
-                </div>
-                <div className="grid grid-cols-2 lg:grid-cols-3 lg:space-y-0 space-x-2 items-center mb-2">
-                  {/* Dropdown Input */}
-                  <div>
-                    <Select
-                      placeholder="Kategori"
-                      size="lg"
-                      variant="outline"
-                      focusBorderColor="blue.600"
-                      name="category"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      {category.map((item, i) => (
-                        <option key={i} value={item.category_slug}>
-                          {item.category_name}
-                        </option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div>
-                    <Select
-                      placeholder="Urutkan"
-                      size="lg"
-                      variant="outline"
-                      focusBorderColor="blue.600"
-                      name="sort"
-                      onChange={handleChange}
-                      value={values.sort}
-                      onBlur={handleBlur}
-                    >
-                      <option value="asc">Teratas</option>
-                      <option value="desc">Terbawah</option>
-                    </Select>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
 
-        {/* Products */}
-        <div>
-          {!products && !error ? (
-            <CustomSpinner />
-          ) : (
-            <motion.div
-              variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6"
+          {/* Products */}
+          <div>
+            {!products && !error ? (
+              <CustomSpinner />
+            ) : (
+              <motion.div
+                variants={stagger}
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-6"
+              >
+                {products.data.map((item, i) => (
+                  <motion.div variants={fadeInUp} key={i}>
+                    <CardAdminProducts
+                      description={item.description}
+                      title={item.title}
+                      thumbnail={"/imgPlaceholder.jpg"}
+                      categoryName={item.category.category_name}
+                      price={item.price}
+                      slug={item.slug}
+                      deleteProductItem={() => {
+                        onDeleteProduct(item);
+                        deleteProductModalRef.current.open();
+                      }}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+            {products?.data?.length === 0 && (
+              <motion.div
+                variants={fadeInUp}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <EmptyDataComponent />
+              </motion.div>
+            )}
+            <Box
+              display="flex"
+              className="mt-12 gap-4"
+              justifyContent="center"
+              alignItems="center"
             >
-              {products.data.map((item, i) => (
-                <motion.div variants={fadeInUp} key={i}>
-                  <CardAdminProducts
-                    description={item.description}
-                    title={item.title}
-                    thumbnail={"/imgPlaceholder.jpg"}
-                    categoryName={item.category.category_name}
-                    price={item.price}
-                    slug={item.slug}
-                    deleteProductItem={() => {
-                      onDeleteProduct(item);
-                      deleteProductModalRef.current.open();
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-          {products?.data?.length === 0 && (
-            <motion.div
-              variants={fadeInUp}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <EmptyDataComponent />
-            </motion.div>
-          )}
-          <Box
-            display="flex"
-            className="mt-12 gap-4"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <IconButton
-              icon={<ChevronLeftIcon className="w-5 h-5" />}
-              onClick={() => setPage((prev) => prev - 1)}
-            />
-            <IconButton
-              icon={<ChevronRightIcon className="w-5 h-5" />}
-              onClick={() => setPage((prev) => prev + 1)}
-            />
-          </Box>
+              <IconButton
+                icon={<ChevronLeftIcon className="w-5 h-5" />}
+                onClick={() => setPage((prev) => prev - 1)}
+              />
+              <IconButton
+                icon={<ChevronRightIcon className="w-5 h-5" />}
+                onClick={() => setPage((prev) => prev + 1)}
+              />
+            </Box>
+          </div>
         </div>
       </div>
-    </div>
+    </Admin>
   );
 }
 
@@ -239,5 +241,3 @@ export async function getStaticProps() {
     props: { category }, // will be passed to the page component as props
   };
 }
-
-Product.layout = Admin;

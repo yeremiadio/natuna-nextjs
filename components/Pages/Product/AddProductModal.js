@@ -1,7 +1,12 @@
 import { useState, useRef, useCallback } from "react";
 import Cookies from "js-cookie";
 import instance from "../../../utils/instance";
-import { FormControl, FormLabel } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
 import { Button } from "@chakra-ui/button";
@@ -20,6 +25,7 @@ function AddProductModal({ category, parent, toast }) {
     price: "",
     thumbnail: "",
     category_id: "",
+    quantity: "",
     product_images: "",
   };
   const FormikRef = useRef();
@@ -92,72 +98,111 @@ function AddProductModal({ category, parent, toast }) {
             isSubmitting,
             setFieldValue,
             values,
+            touched,
             handleChange,
             handleBlur,
           }) => (
             <Form>
               <div>
                 <div className="mt-2">
-                  <FormControl id="title">
+                  <FormControl
+                    id="title"
+                    isInvalid={errors?.title && touched.title}
+                  >
                     <FormLabel>Nama Produk</FormLabel>
                     <Field
                       as={Input}
-                      isInvalid={errors?.title}
                       focusBorderColor="blue.600"
                       name="title"
                     />
-                    <p className="text-red-500">{errors?.title}</p>
+                    <FormErrorMessage>{errors?.title}</FormErrorMessage>
                   </FormControl>
                 </div>
                 <div className="mt-2">
-                  <FormControl id="description">
+                  <FormControl
+                    id="description"
+                    isInvalid={errors?.description && touched.description}
+                  >
                     <FormLabel>Deskripsi</FormLabel>
                     <Field
                       as={Textarea}
-                      isInvalid={errors?.description}
                       focusBorderColor="blue.600"
                       name="description"
                       rows="4"
                     />
-                    <p className="text-red-500">{errors?.description}</p>
+                    <FormErrorMessage>{errors?.description}</FormErrorMessage>
                   </FormControl>
                 </div>
                 <div className="mt-2">
-                  <FormLabel>Kategori</FormLabel>
-                  <Select
-                    placeholder="Kategori"
-                    isInvalid={errors?.category_id}
-                    size="lg"
-                    variant="outline"
-                    focusBorderColor="blue.600"
-                    name="category_id"
-                    onChange={handleChange}
-                    value={values.category_id}
-                    onBlur={handleBlur}
+                  <FormControl
+                    id="category"
+                    isInvalid={errors?.category_id && touched.category_id}
                   >
-                    {category.map((item, i) => (
-                      <option key={i} value={item.id}>
-                        {item.category_name}
-                      </option>
-                    ))}
-                  </Select>
-                  <p className="text-red-500">{errors?.category_id}</p>
+                    <FormLabel>Kategori</FormLabel>
+                    <Select
+                      placeholder="Kategori"
+                      size="lg"
+                      variant="outline"
+                      focusBorderColor="blue.600"
+                      name="category_id"
+                      onChange={handleChange}
+                      value={values.category_id}
+                      onBlur={handleBlur}
+                    >
+                      {category.map((item, i) => (
+                        <option key={i} value={item.id}>
+                          {item.category_name}
+                        </option>
+                      ))}
+                    </Select>
+                    <FormErrorMessage>{errors?.category_id}</FormErrorMessage>
+                  </FormControl>
                 </div>
                 <div className="w-full lg:w-3/6 mt-2">
-                  <FormControl id="price">
+                  <FormControl
+                    id="price"
+                    isInvalid={errors?.price && touched.price}
+                  >
                     <FormLabel>Price</FormLabel>
                     <Field
                       as={Input}
-                      isInvalid={errors?.price}
                       focusBorderColor="blue.600"
                       name="price"
                       type="number"
                     />
-                    <p className="text-red-500">{errors?.price}</p>
+                    {errors?.price ? (
+                      <FormErrorMessage>{errors?.price}</FormErrorMessage>
+                    ) : (
+                      <FormHelperText>Example: 4500</FormHelperText>
+                    )}
                   </FormControl>
                 </div>
                 <div className="mt-2">
-                  <FormControl id="thumbnail">
+                  <FormControl
+                    id="quantity"
+                    isInvalid={errors?.quantity && touched.quantity}
+                  >
+                    <FormLabel>Quantity</FormLabel>
+                    <div className="w-1/5">
+                      <Field
+                        as={Input}
+                        focusBorderColor="blue.600"
+                        name="quantity"
+                        type="number"
+                      />
+                    </div>
+                    {errors?.quantity ? (
+                      <FormErrorMessage>{errors?.quantity}</FormErrorMessage>
+                    ) : (
+                      <FormHelperText>Example: 2</FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+                <div className="mt-2">
+                  <FormControl
+                    id="thumbnail"
+                    isInvalid={errors?.thumbnail && touched.thumbnail}
+                  >
                     <FormLabel>Thumbnail</FormLabel>
                     <div className="flex flex-row w-full items-center gap-2">
                       <Button
@@ -183,42 +228,53 @@ function AddProductModal({ category, parent, toast }) {
                         </Box>
                       )}
                     </div>
-                    <p className="text-red-500">{errors?.thumbnail}</p>
+                    {errors?.thumbnail && (
+                      <FormErrorMessage>{errors?.thumbnail}</FormErrorMessage>
+                    )}
                   </FormControl>
                 </div>
                 <div className="mt-2">
-                  <FormLabel>Product Images</FormLabel>
-                  <Dropzone
-                    onDrop={(acceptedFiles) => {
-                      console.log(acceptedFiles);
-                      setFieldValue("product_images", acceptedFiles);
-                    }}
+                  <FormControl
+                    id="product_images"
+                    isInvalid={errors?.product_images && touched.product_images}
                   >
-                    {({ getRootProps, getInputProps }) => (
-                      <>
-                        <div
-                          {...getRootProps()}
-                          className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-72 p-4 flex justify-center items-center"
-                        >
-                          <input
-                            {...getInputProps()}
-                            // multiple
-                          />
-                          <p>
-                            Drag 'n' drop some files here, or click to select
-                            files
-                          </p>
-                        </div>
-                      </>
+                    <FormLabel>Product Images</FormLabel>
+                    <Dropzone
+                      onDrop={(acceptedFiles) => {
+                        console.log(acceptedFiles);
+                        setFieldValue("product_images", acceptedFiles);
+                      }}
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <>
+                          <div
+                            {...getRootProps()}
+                            className="mt-2 cursor-pointer border-dashed border-4 border-gray-200 w-full h-72 p-4 flex justify-center items-center"
+                          >
+                            <input
+                              {...getInputProps()}
+                              // multiple
+                            />
+                            <p>
+                              Drag 'n' drop some files here, or click to select
+                              files
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </Dropzone>
+                    {errors?.product_images && (
+                      <FormErrorMessage>
+                        {errors?.product_images}
+                      </FormErrorMessage>
                     )}
-                  </Dropzone>
+                  </FormControl>
                   {values.product_images &&
                     values.product_images.map((file, i) => (
                       <li key={i}>
                         {`File:${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
                       </li>
                     ))}
-                  {errors?.product_images}
                 </div>
               </div>
               <Box className="flex justify-end gap-2">

@@ -11,6 +11,7 @@ import { Button } from "@chakra-ui/button";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
+import Head from "next/head";
 
 function Login() {
   const initialValues = {
@@ -53,6 +54,9 @@ function Login() {
   };
   return (
     <>
+      <Head>
+        <title>Login - BUMDes Laut Sakti Daratan Bertuah</title>
+      </Head>
       <div className="bg-white h-full">
         <Link href="/">
           <a className="lg:absolute lg:right-10 lg:top-6 flex flex-col justify-center items-center mt-20 lg:mt-0">

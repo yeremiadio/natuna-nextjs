@@ -5,8 +5,9 @@ import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminSidebar from "../components/Siderbars/AdminSidebar";
 import { RESET_USER, RESET_ERRORS } from "../constants/types";
 import { motion } from "framer-motion";
+import Head from "next/head";
 
-function Admin({ children }) {
+function Admin({ children, title }) {
   const auth = useSelector((state) => state.auth);
   const errors = useSelector((state) => state.errors);
   const dispatch = useDispatch();
@@ -28,6 +29,13 @@ function Admin({ children }) {
   }, [auth, errors]);
   return (
     <>
+      <Head>
+        <title>
+          {title
+            ? `${title} - BUMDes Laut Sakti Daratan Bertuah`
+            : "BUMDes Laut Sakti Daratan Bertuah"}
+        </title>
+      </Head>
       <div className="flex min-h-screen">
         <AdminSidebar open={open} setOpen={setOpen} />
         <div className="overflow-y-auto flex-1">

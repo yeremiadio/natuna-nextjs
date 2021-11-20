@@ -5,7 +5,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../store";
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { themeProvider } from "../utils/theme";
 
 function MyApp({ Component, pageProps, router }) {
@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps, router }) {
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
-          <title>Natuna</title>
           <Layout>
             <ChakraProvider theme={themeProvider}>
               <AnimatePresence exitBeforeEnter>
