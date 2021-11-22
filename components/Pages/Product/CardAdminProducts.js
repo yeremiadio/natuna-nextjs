@@ -5,7 +5,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import React from "react";
 import { currencyFormat } from "../../../config/currencyFormat";
-import Image from "next/image";
+// import Image from "next/image";
 const CardAdminProducts = ({
   deleteProductItem,
   thumbnail,

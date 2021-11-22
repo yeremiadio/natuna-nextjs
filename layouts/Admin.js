@@ -35,7 +35,7 @@ function Admin({ children }) {
       <div className="flex min-h-screen" style={{ background: "#f7fafc" }}>
         <AdminSidebar open={open} setOpen={setOpen} />
         <div className="overflow-y-auto flex-1">
-          <AdminNavbar user={auth.user?.name} setOpen={setOpen} open={open} />
+          <AdminNavbar user={auth.user} setOpen={setOpen} open={open} />
           <main className="wrapper">
             <motion.div
               initial="initial"

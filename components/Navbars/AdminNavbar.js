@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { connect, useDispatch, useSelector } from "react-redux";
+import UserDropdown from "../Dropdowns/UserDropdown";
 
 import { Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
@@ -37,43 +38,7 @@ const AdminNavbar = ({ setOpen, open, user }) => {
             <MenuIcon className="h-6 w-6" />
           </button>
         </div>
-        <Menu as="div" className="relative flex items-center">
-          <Menu.Button className="flex items-center">
-            <p className="inline mx-2 text-gray-600 font-medium text-sm tracking-wide">
-              {user || ""}
-            </p>
-            {/* <img
-              className="w-8 h-8 inline rounded-full"
-              src="/vercel.svg"
-              alt=""
-            /> */}
-            <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mx-1 md:mx-0 text-gray-600" />
-          </Menu.Button>
-          <Transition
-            enter="transition transform duration-100 ease-out"
-            enterFrom="opacity-0 scale-90"
-            enterTo="opacity-100 scale-100"
-            leave="transition transform duration-100 ease-in"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-90"
-          >
-            <Menu.Items className="origin-top-right mt-6 focus:outline-none absolute right-0 bg-white overflow-hidden rounded-md shadow-lg border w-48">
-              <Menu.Item>
-                <a className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                  My Profile
-                </a>
-              </Menu.Item>
-              <Menu.Item>
-                <a
-                  className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                  onClick={logOut}
-                >
-                  Logout
-                </a>
-              </Menu.Item>
-            </Menu.Items>
-          </Transition>
-        </Menu>
+        <UserDropdown user={user} />
       </div>
     </>
   );

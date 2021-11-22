@@ -108,10 +108,8 @@ export default function DetailProduct({ product, category }) {
                         focusBorderColor="blue.600"
                         name="title"
                       />
-                      {errors?.title ? (
+                      {errors?.title && (
                         <FormErrorMessage>{errors?.title}</FormErrorMessage>
-                      ) : (
-                        <FormHelperText>Minimal 15 characters</FormHelperText>
                       )}
                     </FormControl>
                   </div>

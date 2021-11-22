@@ -35,7 +35,7 @@ export const registerUser = (data, toast) => async (dispatch) => {
       dispatch(setIsFetching(false));
       toast({
         title: "Error",
-        description: error.response.data.message,
+        description: error?.response?.data?.message,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -120,7 +120,7 @@ export const logoutUser = (toast) => async (dispatch) => {
       dispatch(setIsFetching(false));
       toast({
         title: "Error",
-        description: error.response.data.message,
+        description: error?.response?.data?.message,
         status: "error",
         duration: 3000,
         isClosable: true,

@@ -8,6 +8,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { AnimatePresence } from "framer-motion";
 import { themeProvider } from "../utils/theme";
 import Head from "next/head";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function MyApp({ Component, pageProps, router }) {
   const Layout = Component.layout || (({ children }) => <>{children}</>);

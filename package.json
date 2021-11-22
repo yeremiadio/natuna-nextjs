@@ -28,10 +28,12 @@
     "react-dropzone": "^11.4.2",
     "react-lottie": "^1.2.3",
     "react-redux": "^7.2.6",
+    "react-slick": "^0.28.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-encrypt": "^3.0.1",
     "redux-thunk": "^2.4.0",
+    "slick-carousel": "^1.8.1",
     "swr": "^1.0.1"
   },
   "devDependencies": {
