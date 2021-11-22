@@ -39,7 +39,11 @@ const AdminSidebar = ({ setOpen, open }) => {
               <XIcon className="w-7 h-7 text-gray-400" />
             </button>
             <div className="py-4 px-6 mt-10 flex flex-col justify-center items-center">
-              <img src="/logo.jpeg" onClick={() => router.replace('/')} className="w-3/4 cursor-pointer object-cover" />
+              <img
+                src="/logo.jpeg"
+                onClick={() => router.replace("/")}
+                className="w-3/4 cursor-pointer object-cover"
+              />
             </div>
             <div className="mb-10 mt-8">
               <ul className="md:flex-col md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
@@ -113,9 +117,9 @@ const AdminSidebar = ({ setOpen, open }) => {
                   </Link>
                 </li>
               </ul>
-              <div className="m-4 absolute bottom-4">
-                <p className="text-gray-400 text-xs left-4">
-                  © 2021 Bumidesa. All rights reserved.
+              <div className="m-4 absolute bottom-2">
+                <p className="text-gray-400 text-xs leading-relaxed left-4">
+                  © 2021 BUMDes Laut Sakti Daratan Bertuah. All rights reserved.
                 </p>
               </div>
             </div>
@@ -137,7 +141,11 @@ const AdminSidebar = ({ setOpen, open }) => {
       {/* Desktop */}
       <div className="hidden w-64 bg-white border-r border-gray-200 md:block fixed h-full z-50">
         <div className="py-4 px-6 mt-4 flex flex-col justify-center items-center">
-          <img src="/logo.jpeg" onClick={() => router.replace('/')} className="w-2/4 object-cover cursor-pointer" />
+          <img
+            src="/logo.jpeg"
+            onClick={() => router.replace("/")}
+            className="w-2/4 object-cover cursor-pointer"
+          />
         </div>
         <div className="my-10">
           <ul className="md:flex-col md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
