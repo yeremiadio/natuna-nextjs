@@ -21,7 +21,7 @@ export default function Home({ products }) {
     "https://wallpapercave.com/wp/wp2445553.jpg",
     "https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
   ];
-    const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const settings = {
     dots: !isSmallestThan768,
     infinite: true,
@@ -35,15 +35,17 @@ export default function Home({ products }) {
       <div className="container mx-auto">
         <section className="my-12 lg:my-24 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="flex flex-col justify-center px-4 lg:px-16">
-            <h1 className="text-5xl lg:text-6xl font-bold mb-4">
-              Badan Usaha milik desa <b className="text-blue-500">pengadah </b>
-              Kabupaten Natuna.
+            <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-snug">
+              {/* Badan Usaha milik desa <b className="text-blue-500">pengadah </b>
+              Kabupaten Natuna. */}
+              Kami hadir memberi <span className="text-blue-500">solusi</span>,
+              layanan dan fasilitas bagi masyarakat desa
             </h1>
             <p className="text-gray-400 leading-relaxed">
-              Badan Usaha Milik Desa Laut Sakti Daratan Bertuah adalah sebuah
-              badan usaha yang didirikan Pemerintah Desa Pengadah, Kecamatan
-              Bunguran Timur Laut, Kabupaten Natuna-Kepulauan Riau. BUMDes saat
-              ini sudah masuk ke periode ke 3 yang di Pimpin oleh{" "}
+              Badan Usaha Milik Desa <b>Laut Sakti Daratan Bertuah</b> adalah
+              sebuah badan usaha yang didirikan Pemerintah Desa Pengadah,
+              Kecamatan Bunguran Timur Laut, Kabupaten Natuna-Kepulauan Riau.
+              BUMDes saat ini sudah masuk ke periode ke 3 yang di Pimpin oleh{" "}
               <b>W. Syamsul Bahari.</b>
             </p>
             <Box

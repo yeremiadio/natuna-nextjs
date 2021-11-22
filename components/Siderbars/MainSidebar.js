@@ -2,16 +2,84 @@ import React, { Fragment } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
+    ChatAltIcon,
   CubeIcon,
   HomeIcon,
+  IdentificationIcon,
   UserGroupIcon,
   XIcon,
 } from "@heroicons/react/solid";
 // import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
+import ActiveLink from "../ActiveLink";
 const MainSideBar = ({ setOpen, open }) => {
   const router = useRouter();
-
+  const navigations = [
+    {
+      href: "/",
+      name: "Home",
+      icon: (
+        <HomeIcon
+          style={{
+            width: 24,
+            color:
+              router.asPath === Object.keys("href") ||
+              router.pathname === Object.keys("href")
+                ? "text-white"
+                : "text-gray-600",
+          }}
+        />
+      ),
+    },
+    {
+      href: "/about",
+      name: "About",
+      icon: (
+        <IdentificationIcon
+          style={{
+            width: 24,
+            color:
+              router.asPath === Object.keys("href") ||
+              router.pathname === Object.keys("href")
+                ? "text-white"
+                : "text-gray-600",
+          }}
+        />
+      ),
+    },
+    {
+      href: "/products",
+      name: "Products",
+      icon: (
+        <CubeIcon
+          style={{
+            width: 24,
+            color:
+              router.asPath === Object.keys("href") ||
+              router.pathname === Object.keys("href")
+                ? "text-white"
+                : "text-gray-600",
+          }}
+        />
+      ),
+    },
+    {
+      href: "/contact",
+      name: "Contact Us",
+      icon: (
+        <ChatAltIcon
+          style={{
+            width: 24,
+            color:
+              router.asPath === Object.keys("href") ||
+              router.pathname === Object.keys("href")
+                ? "text-white"
+                : "text-gray-600",
+          }}
+        />
+      ),
+    },
+  ];
   return (
     <>
       {/* Mobile */}
@@ -38,14 +106,32 @@ const MainSideBar = ({ setOpen, open }) => {
             >
               <XIcon className="w-7 h-7 text-gray-400" />
             </button>
-            <div className="mb-10 mt-8">
-              <ul className="md:flex-col md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
-                <li
-                  className="items-center"
-                  onClick={() => setOpen(false)}
-                ></li>
+            <div className="mb-10 mt-20 flex flex-col h-screen justify-between">
+              <ul className="md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
+                {navigations.map((item, i) => (
+                  <li
+                    key={i}
+                    className="items-center"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Link href={item.href}>
+                      <span
+                        className={
+                          "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                          (router.asPath === item.href ||
+                          router.pathname === item.href
+                            ? "bg-blue-500 text-white font-medium"
+                            : "font-normal text-gray-600")
+                        }
+                      >
+                        {item.icon}
+                        <span>{item.name}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
               </ul>
-              <div className="m-4 absolute bottom-2">
+              <div className="mx-4 mb-8">
                 <p className="text-gray-400 text-xs leading-relaxed left-4">
                   © 2021 BUMDes Laut Sakti Daratan Bertuah. All rights reserved.
                 </p>
