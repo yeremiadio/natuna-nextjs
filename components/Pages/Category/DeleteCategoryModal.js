@@ -11,7 +11,7 @@ function DeleteCategoryModal({ parent, id, name, mutate, category, toast }) {
     setLoading(true);
     await sleep(1000);
     instance()
-      .delete(`api/admin/users/${id}/delete`, {
+      .delete(`api/admin/category/${id}/delete`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("access_token")}`,
         },

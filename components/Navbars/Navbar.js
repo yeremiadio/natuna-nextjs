@@ -1,46 +1,20 @@
 import React from "react";
 import Link from "next/link";
-import { Button, IconButton } from "@chakra-ui/button";
-import ActiveLink from "../ActiveLink";
+import { Button } from "@chakra-ui/button";
 import { useSelector } from "react-redux";
 import UserDropdown from "../Dropdowns/UserDropdown";
-import { Box } from "@chakra-ui/layout";
-import WhatsappIcon from "../SocialMediaIcons/WhatsappIcon";
-import { MailIcon, MenuIcon } from "@heroicons/react/solid";
+import { MenuIcon } from "@heroicons/react/solid";
+import { useRouter } from "next/router";
 
 const Navbar = ({ setOpen, open }) => {
-  const navigations = [
-    { href: "/", name: "Home" },
-    { href: "/about", name: "About" },
-    { href: "/products", name: "Products" },
-    { href: "/contact", name: "Contact Us" },
-  ];
+  const router = useRouter();
   const auth = useSelector((state) => state.auth);
   return (
     <>
-      <div className="hidden lg:flex sticky top-0 p-4 lg:px-12 items-center justify-between bg-blue-600">
+      <div className="hidden lg:flex sticky top-0 p-4 lg:px-12 items-center justify-center bg-blue-600">
         <span className="text-sm text-white">
           Jl. Ismail Mahdi, Telp : 0821-6961-1109
         </span>
-        <Box display="flex" className="gap-2 items-center">
-          <span className="text-sm text-white">Hubungi Kami:</span>
-          <IconButton
-            style={{ borderRadius: "3rem" }}
-            size="sm"
-            icon={<WhatsappIcon className="w-5 h-5" />}
-            variant="solid"
-          >
-            Call Now
-          </IconButton>
-          <IconButton
-            style={{ borderRadius: "3rem" }}
-            size="sm"
-            icon={<MailIcon className="w-5 h-5" />}
-            variant="solid"
-          >
-            Email
-          </IconButton>
-        </Box>
       </div>
       <header className="sticky top-0 z-40">
         <nav className="w-full bg-white border-b border-gray-200 p-4 lg:px-12">
@@ -66,11 +40,51 @@ const Navbar = ({ setOpen, open }) => {
             </div>
             <div className="hidden lg:contents">
               <ul className="flex gap-16 p-4">
-                {navigations.map((item, i) => (
-                  <li key={i}>
-                    <ActiveLink href={item.href} name={item.name} />
-                  </li>
-                ))}
+                <Link href="/">
+                  <a
+                    className={
+                      router.asPath === "/" || router.pathname === "/"
+                        ? "text-primary font-bold transition ease-in-out delay-75"
+                        : "text-secondary hover:text-primary font-medium transition ease-in-out delay-75"
+                    }
+                  >
+                    Home
+                  </a>
+                </Link>
+                <Link href="/about">
+                  <a
+                    className={
+                      router.asPath === "/about" || router.pathname === "/about"
+                        ? "text-primary font-bold transition ease-in-out delay-75"
+                        : "text-secondary hover:text-primary font-medium transition ease-in-out delay-75"
+                    }
+                  >
+                    About
+                  </a>
+                </Link>
+                <Link href="/products">
+                  <a
+                    className={
+                      router.pathname.indexOf("/products") !== -1
+                        ? "text-primary font-bold transition ease-in-out delay-75"
+                        : "text-secondary hover:text-primary font-medium transition ease-in-out delay-75"
+                    }
+                  >
+                    Products
+                  </a>
+                </Link>
+                <Link href="/contact">
+                  <a
+                    className={
+                      router.asPath === "/contact" ||
+                      router.pathname === "/contact"
+                        ? "text-primary font-bold transition ease-in-out delay-75"
+                        : "text-secondary hover:text-primary font-medium transition ease-in-out delay-75"
+                    }
+                  >
+                    Contact
+                  </a>
+                </Link>
               </ul>
             </div>
             <div className="hidden lg:flex gap-1">
@@ -78,15 +92,18 @@ const Navbar = ({ setOpen, open }) => {
                 <UserDropdown user={auth?.user} />
               ) : (
                 <>
-                  <Button variant="ghost">
-                    <Link href="login">
-                      <a>Login</a>
-                    </Link>
+                  <Button
+                    variant="ghost"
+                    onClick={() => router.replace("/login")}
+                  >
+                    Login
                   </Button>
-                  <Button colorScheme="blue" variant="solid">
-                    <Link href="register">
-                      <a>Register</a>
-                    </Link>
+                  <Button
+                    colorScheme="blue"
+                    variant="solid"
+                    onClick={() => router.replace("/register")}
+                  >
+                    Register
                   </Button>
                 </>
               )}
