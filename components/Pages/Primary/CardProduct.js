@@ -25,7 +25,7 @@ const CardProductHome = ({
         }
         alt=""
         onClick={() => router.push(`products/${slug}`)}
-        className="w-full h-80 object-cover rounded-lg"
+        className="w-full h-80 cursor-pointer object-cover rounded-lg"
       />
       <div className="p-4">
         <h3 className="text-primary text-xl lg:text-2xl font-bold line-clamp-2 mb-2">
