@@ -32,10 +32,8 @@ const Navbar = ({ setOpen, open }) => {
                 <div className="flex items-center cursor-pointer">
                   <img
                     src={
-                      auth?.user?.avatar
-                        ? process.env.baseUrl +
-                          "/assets/images/user/avatar/" +
-                          auth?.user?.avatar
+                      auth.user.avatar !== null
+                        ? `${process.env.baseUrl}/assets/images/user/avatar/${auth.user.avatar}`
                         : "/vercel.svg"
                     }
                     className="object-cover w-14 mr-3"

@@ -129,11 +129,9 @@ const MainSideBar = ({ setOpen, open }) => {
                       <>
                         <img
                           src={
-                            auth?.user?.avatar
-                              ? process.env.baseUrl +
-                                "/assets/images/user/avatar/" +
-                                auth?.user?.avatar
-                              : "/vercel.svg"
+                            auth.user.avatar !== null
+                            ? `${process.env.baseUrl}/assets/images/user/avatar/${auth.user.avatar}`
+                            : "/vercel.svg"
                           }
                           onClick={() => router.replace("/admin/dashboard")}
                           className="w-12 h-12 rounded-full object-cover focus:border-2 focus:border-blue-700"
