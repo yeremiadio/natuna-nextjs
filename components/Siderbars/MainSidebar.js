@@ -128,7 +128,13 @@ const MainSideBar = ({ setOpen, open }) => {
                     <div className="flex gap-4 mx-2">
                       <>
                         <img
-                          src="/TeamBumDesPics/ketua.jpeg"
+                          src={
+                            auth?.user?.avatar
+                              ? process.env.baseUrl +
+                                "/assets/images/user/avatar/" +
+                                auth?.user?.avatar
+                              : "/vercel.svg"
+                          }
                           onClick={() => router.replace("/admin/dashboard")}
                           className="w-12 h-12 rounded-full object-cover focus:border-2 focus:border-blue-700"
                         />

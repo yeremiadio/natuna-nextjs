@@ -25,10 +25,8 @@ export default function DetailProduct({ product }) {
               <div className="flex justify-center items-center w-full h-full">
                 <img
                   src={
-                    product.thumbnail
-                      ? process.env.baseUrl +
-                        "/assets/images/thumbnail/products/" +
-                        product.thumbnail
+                    product.thumbnail !== null
+                      ? `${process.env.baseUrl}/assets/images/thumbnail/products/${product.thumbnail}`
                       : "/imgPlaceholder.jpg"
                   }
                   className="rounded-lg w-10/12 object-cover"
