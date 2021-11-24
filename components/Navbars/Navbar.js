@@ -30,14 +30,7 @@ const Navbar = ({ setOpen, open }) => {
             <div>
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
-                  <img
-                    src={
-                      auth.user.avatar !== null
-                        ? `${process.env.baseUrl}/assets/images/user/avatar/${auth.user.avatar}`
-                        : "/vercel.svg"
-                    }
-                    className="object-cover w-14 mr-3"
-                  />
+                  <img src="/logo.jpeg" className="object-cover w-14 mr-3" />
                   <div className="text-sm hidden sm:flex flex-col">
                     <p className="mb-0 font-semibold">BUMDes</p> Laut Sakti
                     Daratan Bertuah
