@@ -6,24 +6,22 @@ import { Box } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-// import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
 import { PaperAirplaneIcon, CameraIcon } from "@heroicons/react/solid";
-// import { useMediaQuery } from "@chakra-ui/media-query";
 import { Select } from "@chakra-ui/select";
-// import Dropzone from "react-dropzone";
 import CustomSpinner from "../../../components/Spinners/CustomSpinner";
 import useSWR from "swr";
 import { fetchWithToken } from "../../../utils/fetcher";
 import { FormErrorMessage } from "@chakra-ui/form-control";
 
-function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
-  console.log(indexData);
+function AddUserModal({ parent, users, mutate, toast }) {
   const initialValues = {
-    name: user?.name || "",
-    email: user?.email || "",
-    avatar: user?.avatar || "",
-    role_id: user?.role.id || "",
+    name: "",
+    email: "",
+    avatar: "",
+    password: "",
+    role_id: "",
+    password_confirmation: "",
   };
   const { data: roles, error } = useSWR("api/roles", fetchWithToken);
   const FormikRef = useRef();
@@ -33,17 +31,16 @@ function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
     if (!files.length) return;
     FormikRef.current.setFieldValue(index, files[0]);
   };
-  // const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const [errors, setErrors] = useState({});
   const onSubmit = useCallback(
     async (values) => {
+      values.password_confirmation = values.password;
       const formData = jsonToFormData(values);
-      formData.append("_method", "put");
       for (let pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
       }
       await instance()
-        .post(`api/admin/users/${user.id}/update`, formData, {
+        .post(`api/admin/users/create`, formData, {
           headers: {
             Authorization: `Bearer ${Cookies.get("access_token")}`,
           },
@@ -57,10 +54,7 @@ function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
             isClosable: true,
           });
           parent.current.close();
-          // window.location.reload();
-          let newArr = [...users];
-          newArr[indexData] = res.data.data;
-          mutate(newArr, false);
+          mutate([...users, res.data.data], false);
         })
         .catch((err) => {
           toast({
@@ -81,7 +75,7 @@ function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
 
   return (
     <div className="p-4">
-      <h3 className="font-bold text-xl text-primary">Edit User</h3>
+      <h3 className="font-bold text-xl text-primary">Tambah User</h3>
       <p className="font-base tracking-wide text-secondary">
         Lengkapi datanya disini.
       </p>
@@ -118,6 +112,19 @@ function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
                       type="email"
                     />
                     <p className="text-red-500">{errors?.email}</p>
+                  </FormControl>
+                </div>
+                <div className="mt-2">
+                  <FormControl id="password">
+                    <FormLabel>Password</FormLabel>
+                    <Field
+                      as={Input}
+                      isInvalid={errors?.password}
+                      focusBorderColor="blue.600"
+                      name="password"
+                      type="password"
+                    />
+                    <p className="text-red-500">{errors?.password}</p>
                   </FormControl>
                 </div>
                 {!roles && !error ? (
@@ -232,4 +239,4 @@ function UpdateUserModal({ parent, user, indexData, users, mutate, toast }) {
   );
 }
 
-export default UpdateUserModal;
+export default AddUserModal;

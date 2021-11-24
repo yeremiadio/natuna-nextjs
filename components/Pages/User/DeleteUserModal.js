@@ -5,9 +5,9 @@ import instance from "../../../utils/instance";
 import { sleep } from "../../../config/sleepAsync";
 import { useState, useCallback } from "react";
 
-function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
+function DeleteUserModal({ parent, id, userName, mutate, users, toast }) {
   const [isLoading, setLoading] = useState(false);
-
+  console.log(users);
   const deleteUser = useCallback(async () => {
     setLoading(true);
     await sleep(1000);
@@ -27,7 +27,7 @@ function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
         });
         setLoading(false);
         parent.current.close();
-        setUsers(users.filter((item) => item.id !== id));
+        mutate([...users.filter((item) => item.id !== id)], false);
       })
       .catch((err) => {
         toast({

@@ -13,13 +13,23 @@ import { Modal } from "../../../components/Modals/Modal";
 import ActionsButtonTable from "../../../components/Actions/ActionsButtonTable";
 import UpdateUserModal from "../../../components/Pages/User/UpdateUserModal";
 import { CSVLink } from "react-csv";
-import instance from "../../../utils/instance";
+import useSWR from "swr";
+import AddUserModal from "../../../components/Pages/User/AddUserModal";
+import { PlusIcon } from "@heroicons/react/solid";
 
-const index = ({ data }) => {
-  const [users, setUsers] = useState(data);
+const index = () => {
+  const {
+    data: users,
+    mutate,
+    error,
+  } = useSWR([`api/users`], (url) => fetchWithToken(url), {
+    revalidateOnFocus: false,
+  });
   const updateUserModalRef = useRef();
   const deleteUserModalRef = useRef();
+  const addUserModalRef = useRef();
   const exportCSVRef = useRef();
+  const [selectedIndexData, setIndexData] = useState(0);
   const [selectedData, setSelectedData] = useState();
   const toast = useToast();
 
@@ -51,9 +61,10 @@ const index = ({ data }) => {
     },
     {
       name: "Actions",
-      selector: (row) => (
+      selector: (row, index) => (
         <ActionsButtonTable
           row={row}
+          onClick={() => setIndexData(index)}
           updateParent={updateUserModalRef}
           setData={setSelectedData}
           deleteParent={deleteUserModalRef}
@@ -88,28 +99,51 @@ const index = ({ data }) => {
   };
   return (
     <>
+      <Modal ref={addUserModalRef}>
+        <AddUserModal
+          parent={addUserModalRef}
+          toast={toast}
+          mutate={mutate}
+          users={users}
+        />
+      </Modal>
       <Modal ref={deleteUserModalRef}>
         <DeleteUserModal
           id={selectedData?.id}
           userName={selectedData?.name}
           parent={deleteUserModalRef}
           toast={toast}
-          setUsers={setUsers}
+          mutate={mutate}
           users={users}
         />
       </Modal>
       <Modal ref={updateUserModalRef}>
         <UpdateUserModal
           user={selectedData}
+          mutate={mutate}
+          users={users}
+          indexData={selectedIndexData}
           parent={updateUserModalRef}
           toast={toast}
         />
       </Modal>
       <div className="bg-section">
-        <h3 className="font-bold text-xl text-primary">User</h3>
-        <p className="font-base tracking-wide text-secondary">
-          Lihat List Pengguna disini.
-        </p>
+        <div className="flex items-center">
+          <div>
+            <h3 className="font-bold text-xl text-primary">User</h3>
+            <p className="font-base tracking-wide text-secondary">
+              Kelola semua pengguna kamu disini.
+            </p>
+          </div>
+          <Button
+            colorScheme="blue"
+            className="mt-2 ml-auto"
+            leftIcon={<PlusIcon className="w-4 h-4" />}
+            onClick={() => addUserModalRef.current.open()}
+          >
+            Tambah
+          </Button>
+        </div>
         {!users ? (
           <CustomSpinner />
         ) : (
@@ -129,28 +163,6 @@ const index = ({ data }) => {
     </>
   );
 };
-
-export async function getServerSideProps(context) {
-  let status = 0;
-  let data = null;
-  const cookie = context?.req.cookies["access_token"];
-  await instance()
-    .get("api/users", {
-      headers: {
-        Authorization: "Bearer " + cookie,
-      },
-    })
-    .then((response) => (data = response.data.data))
-    .catch((err) => (status = err.response.status));
-
-  if (status === 500)
-    return {
-      props: {},
-    };
-  return {
-    props: { data },
-  };
-}
 
 export default index;
 

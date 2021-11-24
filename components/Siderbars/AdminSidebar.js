@@ -177,7 +177,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
-                    (router.pathname.indexOf("/product") !== -1
+                    (router.pathname.indexOf("/products") !== -1
                       ? "bg-blue-600 text-white font-medium"
                       : "font-normal text-secondary")
                   }
@@ -186,21 +186,21 @@ const AdminSidebar = ({ setOpen, open }) => {
                     style={{
                       width: 24,
                       color:
-                        router.pathname.indexOf("/product") !== -1
+                        router.pathname.indexOf("/products") !== -1
                           ? "text-white"
                           : "text-secondary",
                     }}
                   />
-                  <span>Product</span>
+                  <span>Products</span>
                 </span>
               </Link>
             </li>
             <li className="items-center">
-              <Link href="/admin/user" as="/admin/user">
+              <Link href="/admin/users" as="/admin/users">
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
-                    (router.pathname.indexOf("/user") !== -1
+                    (router.pathname.indexOf("/users") !== -1
                       ? "bg-blue-600 text-white font-medium"
                       : "font-normal text-secondary")
                   }
@@ -209,12 +209,12 @@ const AdminSidebar = ({ setOpen, open }) => {
                     style={{
                       width: 24,
                       color:
-                        router.pathname.indexOf("/user") !== -1
+                        router.pathname.indexOf("/users") !== -1
                           ? "text-white"
                           : "text-secondary",
                     }}
                   />
-                  <span>User</span>
+                  <span>Users</span>
                 </span>
               </Link>
             </li>

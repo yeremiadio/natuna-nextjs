@@ -9,9 +9,15 @@ import {
 import React, { Fragment, useState } from "react";
 import { Box } from "@chakra-ui/layout";
 
-const ActionsButtonTable = ({ updateParent, row, setData, deleteParent }) => {
+const ActionsButtonTable = ({
+  updateParent,
+  row,
+  onClick,
+  setData,
+  deleteParent,
+}) => {
   return (
-    <Box display="flex" className="gap-1">
+    <Box display="flex" className="gap-1" onClick={onClick}>
       <IconButton
         icon={<PencilIcon className="w-5 h-5" />}
         style={{ borderRadius: "2rem" }}
