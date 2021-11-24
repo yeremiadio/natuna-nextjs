@@ -3,6 +3,7 @@ import { Button } from "@chakra-ui/button";
 import { Tag, TagLabel } from "@chakra-ui/tag";
 import { ShoppingCartIcon } from "@heroicons/react/solid";
 import { currencyFormat } from "../../../config/currencyFormat";
+import { useRouter } from "next/router";
 
 const CardProductHome = ({
   thumbnail,
@@ -10,8 +11,10 @@ const CardProductHome = ({
   description,
   category,
   price,
+  slug,
 }) => {
   let message = `Halo kak, saya mau pesan ${title}`;
+  const router = useRouter();
   return (
     <div className="hover:shadow-lg transition-all delay-75 border border-gray-200 rounded-lg">
       <img
@@ -21,6 +24,7 @@ const CardProductHome = ({
             : "/imgPlaceholder.jpg"
         }
         alt=""
+        onClick={() => router.push(`products/${slug}`)}
         className="w-full h-80 object-cover rounded-lg"
       />
       <div className="p-4">

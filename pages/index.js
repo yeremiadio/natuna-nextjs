@@ -153,6 +153,7 @@ export default function Home() {
                 <CardProductHome
                   key={i}
                   title={item.title}
+                  slug={item.slug}
                   description={item.description}
                   price={item.price}
                   thumbnail={item.thumbnail}
