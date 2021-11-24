@@ -4,8 +4,9 @@ import Cookies from "js-cookie";
 import instance from "../../../utils/instance";
 import { sleep } from "../../../config/sleepAsync";
 import { useState, useCallback } from "react";
+import { data } from "autoprefixer";
 
-function DeleteProductModal({ parent, id, title, toast }) {
+function DeleteProductModal({ parent, products, mutate, id, title, toast }) {
   const [isLoading, setLoading] = useState(false);
   const deleteProduct = useCallback(async () => {
     setLoading(true);
@@ -26,12 +27,12 @@ function DeleteProductModal({ parent, id, title, toast }) {
         });
         setLoading(false);
         parent.current.close();
-        window.location.reload();
+        mutate({ ...products, ...products.filter((item) => item.id !== id) });
       })
       .catch((err) => {
         toast({
           title: "Error",
-          description: err.response.data.message,
+          description: "Error",
           status: "error",
           duration: 3000,
           isClosable: true,

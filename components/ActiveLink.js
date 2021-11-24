@@ -3,8 +3,6 @@ import Link from "next/link";
 
 function ActiveLink({ name, href }) {
   const router = useRouter();
-  console.log(router.asPath);
-  console.log(router.pathname);
   return (
     <Link href={href}>
       <a

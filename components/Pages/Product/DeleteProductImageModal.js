@@ -5,14 +5,20 @@ import instance from "../../../utils/instance";
 import { sleep } from "../../../config/sleepAsync";
 import { useState, useCallback } from "react";
 
-function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
+function DeleteProductImageModal({
+  parent,
+  id,
+  setProductImages,
+  productImages,
+  title,
+  toast,
+}) {
   const [isLoading, setLoading] = useState(false);
-
-  const deleteUser = useCallback(async () => {
+  const deleteProductImage = useCallback(async () => {
     setLoading(true);
     await sleep(1000);
     instance()
-      .delete(`api/admin/users/${id}/delete`, {
+      .delete(`api/admin/products/images/${id}/delete`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("access_token")}`,
         },
@@ -27,7 +33,7 @@ function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
         });
         setLoading(false);
         parent.current.close();
-        setUsers(users.filter((item) => item.id !== id));
+        setProductImages(productImages.filter((item) => item.id !== id));
       })
       .catch((err) => {
         toast({
@@ -53,9 +59,9 @@ function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
             Delete Confirmation
           </h3>
           <p className="text-sm text-secondary">
-            Are you sure you want to delete this user? This user name{" "}
-            <b>{userName}</b> will be permanently removed. This action cannot be
-            undone.
+            Are you sure you want to delete this image? This image{" "}
+            {title} will be permanently removed. This action cannot
+            be undone.
           </p>
         </div>
       </div>
@@ -67,7 +73,7 @@ function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
           colorScheme="red"
           isLoading={isLoading}
           loadingText="Deleting..."
-          onClick={deleteUser}
+          onClick={deleteProductImage}
         >
           Delete
         </Button>
@@ -76,4 +82,4 @@ function DeleteUserModal({ parent, id, userName, setUsers, users, toast }) {
   );
 }
 
-export default DeleteUserModal;
+export default DeleteProductImageModal;

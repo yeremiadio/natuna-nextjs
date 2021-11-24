@@ -61,7 +61,7 @@ export default function about() {
         </p>
       </section>
       <section className="my-20 mt-20 px-4 lg:px-16">
-        <h3 className="font-bold text-3xl mb-4">
+        <h3 className="font-bold text-primary text-3xl mb-4">
           Team BUMDes Laut Sakti Daratan Bertuah
         </h3>
         <div>

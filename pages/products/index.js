@@ -46,8 +46,8 @@ export default function products() {
   return (
     <>
       <div className="container mx-auto">
-        <section className="bg-gray-100 h-32 relative w-full">
-          <div className="absolute top-3/4 left-1/2 transform translate-y-1 -translate-x-1/2 w-full lg:w-1/2 px-4 h-full">
+        <section className="bg-blue-900 h-32 relative w-full">
+          <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 w-full lg:w-1/2 px-4 h-full">
             <Formik
               initialValues={initialValues}
               onSubmit={onSubmit}
@@ -56,17 +56,20 @@ export default function products() {
               {({ values, handleChange, handleBlur }) => (
                 <Form>
                   <div>
-                    <Field as={InputGroup} className="bg-white">
+                    <Field
+                      as={InputGroup}
+                      className="bg-white p-5 rounded-md"
+                      style={{ boxShadow: "0px 8px 20px rgb(0 0 0 / 6%)" }}
+                    >
                       <InputRightElement
                         pointerEvents="none"
                         children={
-                          <SearchIcon className="text-gray-300 w-5 h-5 absolute top-3" />
+                          <SearchIcon className="text-gray-400 w-6 h-6 absolute top-1/2 transform -translate-x-4" />
                         }
                       />
                       <Input
                         size="lg"
-                        variant="outline"
-                        focusBorderColor="blue.600"
+                        variant="unstyled"
                         name="search"
                         placeholder="Cari produk..."
                       />
@@ -84,23 +87,31 @@ export default function products() {
             ) : (
               <motion.div
                 variants={stagger}
-                className="grid grid-cols-1 lg:grid-cols-3 gap-y-6"
+                className="grid grid-cols-1 lg:grid-cols-4 gap-y-6"
               >
                 {products?.data?.map((item, i) => (
                   <motion.div variants={fadeInUp} key={i}>
-                    <CardProductHome
-                      key={i}
-                      title={item.title}
-                      description={item.description}
-                      price={item.price}
-                      thumbnail={item.thumbnail}
-                      category={item.category.category_name}
-                    />
+                    <div className="transition-all delay-75 cursor-pointer border border-gray-100 rounded-md">
+                      <img
+                        src={
+                          item.thumbnail !== null
+                            ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
+                            : "/imgPlaceholder.jpg"
+                        }
+                        alt=""
+                        className="w-full h-80 object-cover rounded-lg"
+                      />
+                      <div className="p-4">
+                        <h3 className="text-primary text-xl font-bold line-clamp-2 mb-2">
+                          {item.title}
+                        </h3>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
             )}
-            {products?.data?.length === 0 || error && (
+            {products?.data?.length === 0 && (
               <motion.div
                 variants={fadeInUp}
                 whileHover={{ scale: 1.05 }}

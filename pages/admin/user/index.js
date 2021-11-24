@@ -3,25 +3,26 @@ import Admin from "../../../layouts/Admin";
 import DataTable from "react-data-table-component";
 import { Button, IconButton } from "@chakra-ui/button";
 // import { DotsVerticalIcon } from "@heroicons/react/solid";
-import useSWR from "swr";
 import { fetchWithToken } from "../../../utils/fetcher";
 import CustomSpinner from "../../../components/Spinners/CustomSpinner";
 import moment from "moment";
-import { useRef, useMemo, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/toast";
 import DeleteUserModal from "../../../components/Pages/User/DeleteUserModal";
 import { Modal } from "../../../components/Modals/Modal";
 import ActionsButtonTable from "../../../components/Actions/ActionsButtonTable";
 import UpdateUserModal from "../../../components/Pages/User/UpdateUserModal";
 import { CSVLink } from "react-csv";
+import instance from "../../../utils/instance";
 
-const index = () => {
-  const { data: users, error } = useSWR("/api/users", fetchWithToken);
+const index = ({ data }) => {
+  const [users, setUsers] = useState(data);
   const updateUserModalRef = useRef();
   const deleteUserModalRef = useRef();
   const exportCSVRef = useRef();
   const [selectedData, setSelectedData] = useState();
   const toast = useToast();
+
   const columns = [
     {
       name: "Name",
@@ -93,6 +94,8 @@ const index = () => {
           userName={selectedData?.name}
           parent={deleteUserModalRef}
           toast={toast}
+          setUsers={setUsers}
+          users={users}
         />
       </Modal>
       <Modal ref={updateUserModalRef}>
@@ -107,7 +110,7 @@ const index = () => {
         <p className="font-base tracking-wide text-secondary">
           Lihat List Pengguna disini.
         </p>
-        {!users && !error ? (
+        {!users ? (
           <CustomSpinner />
         ) : (
           <div className="mt-4">
@@ -126,6 +129,28 @@ const index = () => {
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  let status = 0;
+  let data = null;
+  const cookie = context?.req.cookies["access_token"];
+  await instance()
+    .get("api/users", {
+      headers: {
+        Authorization: "Bearer " + cookie,
+      },
+    })
+    .then((response) => (data = response.data.data))
+    .catch((err) => (status = err.response.status));
+
+  if (status === 500)
+    return {
+      props: {},
+    };
+  return {
+    props: { data },
+  };
+}
 
 export default index;
 

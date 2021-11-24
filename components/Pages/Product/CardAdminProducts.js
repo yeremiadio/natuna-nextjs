@@ -25,19 +25,14 @@ const CardAdminProducts = ({
       m={{ lg: "2" }}
       minHeight={{ sm: "md" }}
     >
-      {/* <Image
-        layout="responsive"
-        src={thumbnail}
-        objectFit="cover"
-        height={60}
-        width="100%"
-      /> */}
       <img src={thumbnail} alt="" className="w-full h-52 object-cover" />
       <div className="p-4">
-        <h3 className="text-primary text-3xl font-bold line-clamp-2">
+        <h3 className="text-primary text-3xl font-bold line-clamp-2 mb-2">
           {title}
         </h3>
-        <p className="text-secondary text-base line-clamp-3">{description}</p>
+        <p className="text-secondary text-base line-clamp-3 leading-loose">
+          {description}
+        </p>
         <div className="py-4 space-x-2 flex items-center">
           <Tag colorScheme="green" style={{ borderRadius: "3rem" }} p="2">
             <TagLabel>{categoryName}</TagLabel>
@@ -53,7 +48,7 @@ const CardAdminProducts = ({
             bgColor="blue.500"
             _hover={{ bgColor: "blue.600" }}
             icon={<PencilIcon className="w-5 h-5" />}
-            onClick={() => router.push(`product/${slug}`)}
+            onClick={() => router.push(`products/${slug}`)}
           />
           <IconButton
             aria-label="Delete"

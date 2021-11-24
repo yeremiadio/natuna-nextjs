@@ -2,7 +2,12 @@ import Cookies from "js-cookie";
 import Admin from "../../../layouts/Admin";
 import instance from "../../../utils/instance";
 import Image from "next/image";
-import { FormControl, FormLabel, FormHelperText } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  IconButton,
+} from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
 import { Button } from "@chakra-ui/button";
@@ -10,13 +15,20 @@ import { Input } from "@chakra-ui/input";
 import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
 import { useRef, useState } from "react";
-import { CameraIcon, PencilIcon } from "@heroicons/react/solid";
+import {
+  ArrowLeftIcon,
+  CameraIcon,
+  PencilIcon,
+  XIcon,
+} from "@heroicons/react/solid";
 import Dropzone from "react-dropzone";
 import { useToast } from "@chakra-ui/toast";
 import { useRouter } from "next/router";
 import { Select } from "@chakra-ui/select";
 import { FormErrorMessage } from "@chakra-ui/form-control";
 import Head from "next/head";
+import DeleteProductImageModal from "../../../components/Pages/Product/DeleteProductImageModal";
+import { Modal } from "../../../components/Modals/Modal";
 export default function DetailProduct({ product, category }) {
   const initialValues = {
     title: product.title || "",
@@ -24,19 +36,27 @@ export default function DetailProduct({ product, category }) {
     price: product.price || "",
     thumbnail: product.thumbnail || "",
     category_id: product.category_id || "",
-    quantity: product.quantity || "",
     product_images: null,
   };
   const FormikRef = useRef();
   const thumbnailRef = useRef();
   const [errors, setErrors] = useState();
   const router = useRouter();
+  const [deleteIdImage, setDeleteIdImage] = useState();
+  const [productImageName, setProductImageName] = useState();
   const toast = useToast();
-  const [productImages] = useState(product.product_images);
+  const deleteImageModalRef = useRef();
+  const [productImages, setProductImages] = useState(product.product_images);
   const onChangeImage = (e, index) => {
     let files = e.target.files || e.dataTransfer.files;
     if (!files.length) return;
     FormikRef.current.setFieldValue(index, files[0]);
+  };
+  const deleteProductImage = (e, item) => {
+    e.preventDefault();
+    deleteImageModalRef.current.open();
+    setDeleteIdImage(item.id);
+    setProductImageName(item.image_name);
   };
   const onSubmit = async (values) => {
     const formData = jsonToFormData(values);
@@ -58,8 +78,7 @@ export default function DetailProduct({ product, category }) {
           duration: 3000,
           isClosable: true,
         });
-        // parent.current.close();
-        router.replace("/admin/product");
+        router.replace("/admin/products");
       })
       .catch((err) => {
         setErrors(err.response.data.data);
@@ -75,6 +94,26 @@ export default function DetailProduct({ product, category }) {
           <title>{`${product?.title} - BUMDes Laut Sakti Daratan Bertuah`}</title>
         </Head>
       )}
+      <Modal ref={deleteImageModalRef}>
+        <DeleteProductImageModal
+          parent={deleteImageModalRef}
+          id={deleteIdImage}
+          title={productImageName}
+          setProductImages={setProductImages}
+          productImages={productImages}
+          toast={toast}
+        />
+      </Modal>
+      <div
+        className="flex cursor-pointer items-center mb-4"
+        onClick={() => router.back()}
+      >
+        <IconButton
+          variant="unstyled"
+          icon={<ArrowLeftIcon className="w-5 h-5" />}
+        />
+        <span className="text-base text-primary">Back</span>
+      </div>
       <div className="bg-section">
         <h3 className="font-bold text-xl text-primary">Detail</h3>
         <p className="font-base tracking-wide text-secondary">
@@ -97,7 +136,7 @@ export default function DetailProduct({ product, category }) {
             }) => (
               <Form>
                 <div>
-                  <div className="mt-2">
+                  <div className="my-2 lg:my-4">
                     <FormControl
                       id="title"
                       isInvalid={errors?.title && touched.title}
@@ -113,7 +152,7 @@ export default function DetailProduct({ product, category }) {
                       )}
                     </FormControl>
                   </div>
-                  <div className="mt-2">
+                  <div className="my-2 lg:my-4">
                     <FormControl
                       id="description"
                       isInvalid={errors?.description && touched.description}
@@ -134,8 +173,8 @@ export default function DetailProduct({ product, category }) {
                       )}
                     </FormControl>
                   </div>
-                  <div className="flex flex-col lg:flex-row gap-4">
-                    <div className="mt-2">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="my-2 lg:my-4">
                       <FormControl
                         id="price"
                         isInvalid={errors?.price && touched.price}
@@ -154,30 +193,7 @@ export default function DetailProduct({ product, category }) {
                         )}
                       </FormControl>
                     </div>
-                    <div className="mt-2">
-                      <FormControl
-                        id="quantity"
-                        isInvalid={errors?.quantity && touched.quantity}
-                      >
-                        <FormLabel>Quantity</FormLabel>
-                        <div className="w-2/6 lg:w-full">
-                          <Field
-                            as={Input}
-                            focusBorderColor="blue.600"
-                            name="quantity"
-                            type="number"
-                          />
-                        </div>
-                        {errors?.quantity ? (
-                          <FormErrorMessage>
-                            {errors?.quantity}
-                          </FormErrorMessage>
-                        ) : (
-                          <FormHelperText>Example: 2</FormHelperText>
-                        )}
-                      </FormControl>
-                    </div>
-                    <div className="mt-2">
+                    <div className="my-2 lg:my-4">
                       <FormControl
                         isInvalid={errors?.category_id && touched.category_id}
                       >
@@ -191,6 +207,7 @@ export default function DetailProduct({ product, category }) {
                           name="category_id"
                           onChange={handleChange}
                           value={values.category_id}
+                          className="w-3/4"
                           onBlur={handleBlur}
                         >
                           {category.map((item, i) => (
@@ -208,7 +225,7 @@ export default function DetailProduct({ product, category }) {
                     </div>
                   </div>
 
-                  <div className="mt-2">
+                  <div className="my-2 lg:my-4">
                     <FormControl
                       id="thumbnail"
                       isInvalid={errors?.thumbnail && touched.thumbnail}
@@ -238,10 +255,10 @@ export default function DetailProduct({ product, category }) {
                       )}
                     </FormControl>
                   </div>
-                  <div className="mt-2">
+                  <div className="my-2 lg:my-4">
                     {values?.thumbnail ? (
                       typeof values?.thumbnail !== "object" ? (
-                        <Box className="w-full md:w-5/6">
+                        <Box className="w-full lg:w-80 rounded-md p-4 border border-gray-200">
                           <img
                             src={
                               process.env.baseUrl +
@@ -249,7 +266,7 @@ export default function DetailProduct({ product, category }) {
                               values.thumbnail
                             }
                             alt=""
-                            className="w-full lg:w-3/12 lg:h-1/2 rounded-md shadow-md"
+                            className="w-full object-cover"
                           />
                         </Box>
                       ) : (
@@ -264,11 +281,10 @@ export default function DetailProduct({ product, category }) {
                       ""
                     )}
                   </div>
-                  <div className="mt-2">
+                  <div className="my-2 lg:my-4">
                     <FormLabel>Product Images</FormLabel>
                     <Dropzone
                       onDrop={(acceptedFiles) => {
-                        console.log(acceptedFiles);
                         setFieldValue("product_images", acceptedFiles);
                       }}
                     >
@@ -283,7 +299,7 @@ export default function DetailProduct({ product, category }) {
                               name="product_images"
                               // multiple
                             />
-                            <p>
+                            <p className="text-center">
                               Drag 'n' drop some files here, or click to select
                               files
                             </p>
@@ -296,28 +312,38 @@ export default function DetailProduct({ product, category }) {
                     )}
                   </div>
                 </div>
-                <div className="mt-2">
+                <div className="my-2 lg:my-4">
                   {values.product_images &&
                     values.product_images.map((file, i) => (
-                      <li key={i} className="w-1/6 truncate">
+                      <li key={i} className="w-3/6 lg:w-1/6 truncate">
                         {`File: ${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
                       </li>
                     ))}
                 </div>
-                <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className={"mt-4 flex flex-col lg:flex-row gap-4"}>
                   {productImages &&
                     productImages.map((item, i) => (
-                      <Box key={i}>
-                        <img
-                          src={
+                      <div
+                        key={i}
+                        className="group relative bg-no-repeat bg-cover border-gray-200 border w-full lg:w-60 h-40 rounded-md p-3"
+                        style={{
+                          backgroundImage: `url(${
                             process.env.baseUrl +
                             "/assets/images/products/" +
                             item.image_name
-                          }
-                          alt=""
-                          className="w-full rounded-md shadow-md"
-                        />
-                      </Box>
+                          })`,
+                        }}
+                      >
+                        <div className="flex w-full">
+                          <IconButton
+                            size="sm"
+                            style={{ borderRadius: "3rem" }}
+                            icon={<XIcon className="w-4 h-4" />}
+                            className="ml-auto group-hover:visible invisible"
+                            onClick={(e) => deleteProductImage(e, item)}
+                          />
+                        </div>
+                      </div>
                     ))}
                   <p className="text-red-500">{errors?.product_images}</p>
                 </div>

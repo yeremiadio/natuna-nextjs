@@ -17,15 +17,15 @@ import { CameraIcon, PaperAirplaneIcon } from "@heroicons/react/solid";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import { Select } from "@chakra-ui/select";
 import Dropzone from "react-dropzone";
+import { fetchWithToken } from "../../../utils/fetcher";
 
-function AddProductModal({ category, parent, toast }) {
+function AddProductModal({ category, products, parent, mutate, toast }) {
   const initialValues = {
     title: "",
     description: "",
     price: "",
     thumbnail: "",
     category_id: "",
-    quantity: "",
     product_images: "",
   };
   const FormikRef = useRef();
@@ -59,7 +59,7 @@ function AddProductModal({ category, parent, toast }) {
             isClosable: true,
           });
           parent.current.close();
-          window.location.reload();
+          mutate({ ...products, ...res.data.data });
         })
         .catch((err) => {
           toast({
@@ -174,27 +174,6 @@ function AddProductModal({ category, parent, toast }) {
                       <FormErrorMessage>{errors?.price}</FormErrorMessage>
                     ) : (
                       <FormHelperText>Example: 4500</FormHelperText>
-                    )}
-                  </FormControl>
-                </div>
-                <div className="mt-2">
-                  <FormControl
-                    id="quantity"
-                    isInvalid={errors?.quantity && touched.quantity}
-                  >
-                    <FormLabel>Quantity</FormLabel>
-                    <div className="w-1/5">
-                      <Field
-                        as={Input}
-                        focusBorderColor="blue.600"
-                        name="quantity"
-                        type="number"
-                      />
-                    </div>
-                    {errors?.quantity ? (
-                      <FormErrorMessage>{errors?.quantity}</FormErrorMessage>
-                    ) : (
-                      <FormHelperText>Example: 2</FormHelperText>
                     )}
                   </FormControl>
                 </div>

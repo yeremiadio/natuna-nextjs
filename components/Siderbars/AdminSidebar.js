@@ -71,7 +71,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                   </Link>
                 </li>
                 <li className="items-center" onClick={() => setOpen(false)}>
-                  <Link href="/admin/product">
+                  <Link href="/admin/products">
                     <span
                       className={
                         "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
@@ -173,7 +173,7 @@ const AdminSidebar = ({ setOpen, open }) => {
               </Link>
             </li>
             <li className="items-center">
-              <Link href="/admin/product" as="/admin/product">
+              <Link href="/admin/products" as="/admin/products">
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
