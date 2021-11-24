@@ -136,7 +136,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                               : "text-secondary",
                         }}
                       />
-                      <span>User</span>
+                      <span>Users</span>
                     </span>
                   </Link>
                 </li>
@@ -261,7 +261,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                           : "text-secondary",
                     }}
                   />
-                  <span>User</span>
+                  <span>Users</span>
                 </span>
               </Link>
             </li>

@@ -22,9 +22,9 @@ import EmptyDataComponent from "../components/EmptyData/EmptyDataComponent";
 export default function Home() {
   const { data: products, error } = useSWR("/api/products", fetcher);
   const images = [
-    "https://images.unsplash.com/photo-1530878902700-5ad4f9e4c318?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dmlsbGFnZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-    "https://wallpapercave.com/wp/wp2445553.jpg",
-    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
+    "https://lh5.googleusercontent.com/p/AF1QipOUYuZUEuqGFMcwmYusQTaOU8VzP2NhQhMBAFRd=w416-h240-k-no",
+    "https://akcdn.detik.net.id/visual/2019/06/13/dde38c21-b134-42d5-922e-9a356bcc9120_169.jpeg?w=650",
+    "https://cdn0-production-images-kly.akamaized.net/Q2R7_eDBQqJliROSdf1drvD17pc=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3012594/original/067550000_1578124790-74984218_2650911304976538_4434425318810552659_n__1_.jpg",
   ];
   const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const settings = {
@@ -37,8 +37,8 @@ export default function Home() {
   };
   return (
     <>
-      <div className="container mx-auto">
-        <section className="my-12 lg:my-24 grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div>
+        <section className="my-12 lg:my-24 grid grid-cols-1 lg:grid-cols-2 gap-4 container mx-auto">
           <div className="flex flex-col justify-center px-4 lg:px-16">
             <h1 className="text-4xl text-primary lg:text-6xl font-bold mb-4 leading-snug">
               {/* Badan Usaha milik desa <b className="text-blue-500">pengadah </b>
@@ -90,46 +90,49 @@ export default function Home() {
           </div>
         </section>
         <section className="my-32 px-4 py-24 lg:px-16 bg-blue-900">
-          <h3 className="text-4xl font-bold mb-12 text-center text-white">
-            Layanan Kami
-          </h3>
-          <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8">
-            <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
-              <img src="imgPlaceholder.jpg" className="object-cover" />
-              <div className="p-4">
-                <h5 className="text-primary font-bold text-lg mb-2">
-                  Produk Barang
-                </h5>
-                <p className="text-secondary text-sm md:text-base tracking-wide leading-loose lg:leading-loose">
-                  BUMDes Laut Sakti Daratan Bertuah melayani penjualan produk
-                  berupa barang untuk seluruh warga, baik itu untuk kantor
-                  pemerintahan maupun swasta. Produk - produk yang ditawarkan
-                  antara lain seperti aneka <b>keripik dan kue</b>.
-                </p>
-                <Link href="/products">
-                  <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
-                    See Details
-                  </a>
-                </Link>
+          <div className="container mx-auto">
+            <h3 className="text-4xl font-bold mb-12 text-center text-white">
+              Layanan Kami
+            </h3>
+            <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8">
+              <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
+                <img src="imgPlaceholder.jpg" className="object-cover" />
+                <div className="p-4">
+                  <h5 className="text-primary font-bold text-lg mb-2">
+                    Produk Barang
+                  </h5>
+                  <p className="text-secondary text-sm md:text-base tracking-wide leading-loose lg:leading-loose">
+                    BUMDes Laut Sakti Daratan Bertuah melayani penjualan produk
+                    berupa barang untuk seluruh warga, baik itu untuk kantor
+                    pemerintahan maupun swasta. Produk - produk yang ditawarkan
+                    antara lain seperti aneka <b>keripik dan kue</b>.
+                  </p>
+                  <Link href="/products">
+                    <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
+                      See Details
+                    </a>
+                  </Link>
+                </div>
               </div>
-            </div>
-            <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
-              <img src="imgPlaceholder.jpg" />
-              <div className="p-4">
-                <h5 className="text-primary font-bold text-lg mb-2">
-                  Produk Jasa
-                </h5>
-                <p className="text-secondary tracking-wide text-sm md:text-base leading-loose lg:leading-loose">
-                  BUMDes Laut Sakti Daratan Bertuah juga melayani produk berupa
-                  jasa untuk seluruh warga, baik itu untuk kantor pemerintahan
-                  maupun swasta seperti <b>Pengolahan Air Bersih</b>, Warung dan
-                  sarana prasarana lainnya yang memadai.
-                </p>
-                <Link href="/products">
-                  <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
-                    See Details
-                  </a>
-                </Link>
+              <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
+                <img src="imgPlaceholder.jpg" />
+                <div className="p-4">
+                  <h5 className="text-primary font-bold text-lg mb-2">
+                    Produk Jasa
+                  </h5>
+                  <p className="text-secondary tracking-wide text-sm md:text-base leading-loose lg:leading-loose">
+                    BUMDes Laut Sakti Daratan Bertuah juga melayani produk
+                    berupa jasa untuk seluruh warga, baik itu untuk kantor
+                    pemerintahan maupun swasta seperti{" "}
+                    <b>Pengolahan Air Bersih</b>, Warung dan sarana prasarana
+                    lainnya yang memadai.
+                  </p>
+                  <Link href="/products">
+                    <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
+                      See Details
+                    </a>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

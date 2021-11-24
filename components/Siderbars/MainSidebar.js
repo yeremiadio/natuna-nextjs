@@ -70,8 +70,7 @@ const MainSideBar = ({ setOpen, open }) => {
           style={{
             width: 24,
             color:
-              router.asPath === Object.keys("href") ||
-              router.pathname === Object.keys("href")
+              router.pathname.indexOf("/products") == -1
                 ? "text-white"
                 : "text-secondary",
           }}
@@ -148,28 +147,102 @@ const MainSideBar = ({ setOpen, open }) => {
                     </div>
                   </li>
                 )}
-                {navigations.map((item, i) => (
-                  <li
-                    key={i}
-                    className="items-center"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link href={item.href}>
-                      <span
-                        className={
-                          "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
-                          (router.asPath === item.href ||
-                          router.pathname === item.href
-                            ? "bg-blue-500 text-white font-medium"
-                            : "font-normal text-secondary")
-                        }
-                      >
-                        {item.icon}
-                        <span>{item.name}</span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
+                <li className="items-center" onClick={() => setOpen(false)}>
+                  <Link href="/">
+                    <span
+                      className={
+                        "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                        (router.asPath === "/" || router.pathname === "/"
+                          ? "bg-blue-500 text-white font-medium"
+                          : "font-normal text-secondary")
+                      }
+                    >
+                      <HomeIcon
+                        style={{
+                          width: 24,
+                          color:
+                            router.asPath === "/" || router.pathname === "/"
+                              ? "text-white"
+                              : "text-secondary",
+                        }}
+                      />
+                      <span>Home</span>
+                    </span>
+                  </Link>
+                </li>
+                <li className="items-center" onClick={() => setOpen(false)}>
+                  <Link href="/about">
+                    <span
+                      className={
+                        "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                        (router.asPath === "/about" ||
+                        router.pathname === "/about"
+                          ? "bg-blue-500 text-white font-medium"
+                          : "font-normal text-secondary")
+                      }
+                    >
+                      <IdentificationIcon
+                        style={{
+                          width: 24,
+                          color:
+                            router.asPath === "/about" ||
+                            router.pathname === "/about"
+                              ? "text-white"
+                              : "text-secondary",
+                        }}
+                      />
+                      <span>About</span>
+                    </span>
+                  </Link>
+                </li>
+                <li className="items-center" onClick={() => setOpen(false)}>
+                  <Link href="/products">
+                    <span
+                      className={
+                        "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                        (router.pathname.indexOf("/products") !== -1
+                          ? "bg-blue-500 text-white font-medium"
+                          : "font-normal text-secondary")
+                      }
+                    >
+                      <CubeIcon
+                        style={{
+                          width: 24,
+                          color:
+                            router.pathname.indexOf("/products") !== -1
+                              ? "text-white"
+                              : "text-secondary",
+                        }}
+                      />
+                      <span>Products</span>
+                    </span>
+                  </Link>
+                </li>
+                <li className="items-center" onClick={() => setOpen(false)}>
+                  <Link href="/contact">
+                    <span
+                      className={
+                        "flex w-full my-1 transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                        (router.asPath === "/contact" ||
+                        router.pathname === "/contact"
+                          ? "bg-blue-500 text-white font-medium"
+                          : "font-normal text-secondary")
+                      }
+                    >
+                      <ChatAltIcon
+                        style={{
+                          width: 24,
+                          color:
+                            router.asPath === "/contact" ||
+                            router.pathname === "/contact"
+                              ? "text-white"
+                              : "text-secondary",
+                        }}
+                      />
+                      <span>Contact Us</span>
+                    </span>
+                  </Link>
+                </li>
                 {auth.isAuthenticated === false && (
                   <li className="items-center py-4">
                     <div className="mx-2">

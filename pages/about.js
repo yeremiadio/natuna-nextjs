@@ -3,15 +3,15 @@ import MainLayout from "../layouts/mainLayout";
 // import { Box } from "@chakra-ui/react";
 export default function about() {
   return (
-    <div className="container mx-auto">
+    <div>
       <section className="bg-banner-section bg-gray-700 bg-blend-overlay bg-no-repeat bg-cover h-40 bg-center lg:h-60 w-full">
-        <div className="flex justify-center items-center h-full">
+        <div className="container mx-auto flex justify-center items-center h-full">
           <h3 className="font-semibold text-2xl lg:text-3xl text-white shadow-lg">
             About
           </h3>
         </div>
       </section>
-      <section className="mb-20 mt-20 px-4 lg:px-16">
+      <section className="mb-20 mt-20 px-4 lg:px-16 container mx-auto ">
         <h3 className="font-bold text-primary text-3xl mb-4">
           Sejarah Singkat
         </h3>
@@ -28,7 +28,7 @@ export default function about() {
           pendamping desa.
         </p>
       </section>
-      <section className="my-20 mt-20 px-4 lg:px-16">
+      <section className="my-20 mt-20 px-4 lg:px-16 container mx-auto ">
         <h3 className="font-bold text-primary text-3xl mb-4">
           Nama dan Makna Logo
         </h3>
@@ -46,7 +46,7 @@ export default function about() {
           />
         </div>
       </section>
-      <section className="my-20 mt-20 px-4 lg:px-16">
+      <section className="my-20 mt-20 px-4 lg:px-16 container mx-auto ">
         <h3 className="font-bold text-primary text-3xl mb-4">
           Skema kerja Unit dan Mitra
         </h3>
@@ -60,7 +60,7 @@ export default function about() {
           kelompok, lembaga pemerintah, lembaga swasta dll.
         </p>
       </section>
-      <section className="my-20 mt-20 px-4 lg:px-16">
+      <section className="my-20 mt-20 px-4 lg:px-16 container mx-auto ">
         <h3 className="font-bold text-primary text-3xl mb-4">
           Team BUMDes Laut Sakti Daratan Bertuah
         </h3>
@@ -118,7 +118,7 @@ export default function about() {
         </div>
       </section>
       <section className="my-20 mt-20 px-4 lg:px-16 bg-blue-900">
-        <div className="flex flex-col justify-center items-center px-4 py-28">
+        <div className="flex flex-col justify-center items-center px-4 py-28 container mx-auto ">
           <h3 className="text-lg leading-loose lg:text-3xl font-medium lg:leading-loose lg:tracking-wide text-white text-center">
             <b>
               {" "}

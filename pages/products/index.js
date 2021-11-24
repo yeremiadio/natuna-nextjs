@@ -17,6 +17,8 @@ import CustomSpinner from "../../components/Spinners/CustomSpinner";
 import MainLayout from "../../layouts/mainLayout";
 import { fetcherwithParams } from "../../utils/fetcher";
 import { fadeInUp, stagger } from "../../utils/transitionProps";
+import Link from "next/link";
+import ActiveLink from "../../components/ActiveLink";
 
 export default function products() {
   const { query } = useRouter();
@@ -45,68 +47,74 @@ export default function products() {
   };
   return (
     <>
-      <div className="container mx-auto">
+      <div>
         <section className="bg-blue-900 h-32 relative w-full">
-          <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 w-full lg:w-1/2 px-4 h-full">
-            <Formik
-              initialValues={initialValues}
-              onSubmit={onSubmit}
-              innerRef={FormikRef}
-            >
-              {({ values, handleChange, handleBlur }) => (
-                <Form>
-                  <div>
-                    <Field
-                      as={InputGroup}
-                      className="bg-white p-5 rounded-md"
-                      style={{ boxShadow: "0px 8px 20px rgb(0 0 0 / 6%)" }}
-                    >
-                      <InputRightElement
-                        pointerEvents="none"
-                        children={
-                          <SearchIcon className="text-gray-400 w-6 h-6 absolute top-1/2 transform -translate-x-4" />
-                        }
-                      />
-                      <Input
-                        size="lg"
-                        variant="unstyled"
-                        name="search"
-                        placeholder="Cari produk..."
-                      />
-                    </Field>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+          <div className="container mx-auto">
+            <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 w-full lg:w-1/2 px-4 h-full">
+              <Formik
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+                innerRef={FormikRef}
+              >
+                {({ values, handleChange, handleBlur }) => (
+                  <Form>
+                    <div>
+                      <Field
+                        as={InputGroup}
+                        className="bg-white p-5 rounded-md"
+                        style={{ boxShadow: "0px 8px 20px rgb(0 0 0 / 6%)" }}
+                      >
+                        <InputRightElement
+                          pointerEvents="none"
+                          children={
+                            <SearchIcon className="text-gray-400 w-6 h-6 absolute top-1/2 transform -translate-x-4" />
+                          }
+                        />
+                        <Input
+                          size="lg"
+                          variant="unstyled"
+                          name="search"
+                          placeholder="Cari produk..."
+                        />
+                      </Field>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </div>
         </section>
         <section className="my-40 px-4 lg:px-16">
-          <div>
+          <div className="container mx-auto">
             {!products && !error ? (
               <CustomSpinner />
             ) : (
               <motion.div
                 variants={stagger}
-                className="grid grid-cols-1 lg:grid-cols-4 gap-y-6"
+                className="grid grid-cols-1 lg:grid-cols-3 gap-6"
               >
                 {products?.data?.map((item, i) => (
                   <motion.div variants={fadeInUp} key={i}>
-                    <div className="transition-all delay-75 cursor-pointer border border-gray-100 rounded-md">
-                      <img
-                        src={
-                          item.thumbnail !== null
-                            ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
-                            : "/imgPlaceholder.jpg"
-                        }
-                        alt=""
-                        className="w-full h-80 object-cover rounded-lg"
-                      />
-                      <div className="p-4">
-                        <h3 className="text-primary text-xl font-bold line-clamp-2 mb-2">
-                          {item.title}
-                        </h3>
-                      </div>
-                    </div>
+                    <Link href={`products/${item.slug}`}>
+                      <a>
+                        <div className="transition-all delay-75 cursor-pointer border border-gray-100 rounded-md">
+                          <img
+                            src={
+                              item.thumbnail !== null
+                                ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
+                                : "/imgPlaceholder.jpg"
+                            }
+                            alt=""
+                            className="w-full h-80 object-cover rounded-lg"
+                          />
+                          <div className="p-4">
+                            <h3 className="text-primary text-xl font-bold line-clamp-2 mb-2">
+                              {item.title}
+                            </h3>
+                          </div>
+                        </div>
+                      </a>
+                    </Link>
                   </motion.div>
                 ))}
               </motion.div>

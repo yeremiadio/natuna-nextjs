@@ -124,7 +124,7 @@ const index = () => {
         />
       </Modal>
       <div className="bg-section">
-        <div className="flex items-center">
+        <div className="flex flex-col md:flex-row w-full items-center">
           <div>
             <h3 className="font-bold text-xl text-primary">Kategori</h3>
             <p className="font-base tracking-wide text-secondary">
