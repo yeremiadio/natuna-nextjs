@@ -211,7 +211,7 @@ export default function Product() {
                         title={item.title}
                         thumbnail={
                           item.thumbnail !== null
-                            ? `http://192.168.0.10:8000/assets/images/thumbnail/products/${item.thumbnail}`
+                            ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
                             : "/imgPlaceholder.jpg"
                         }
                         categoryName={item.category.category_name}
