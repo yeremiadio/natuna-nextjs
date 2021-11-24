@@ -27,16 +27,24 @@ const UserDropdown = ({ user }) => {
   return (
     <Menu as="div" className="relative flex items-center">
       <Menu.Button className="flex items-center">
+        <img
+          className="w-8 h-8 object-cover inline rounded-full"
+          src={
+            user?.avatar
+              ? process.env.baseUrl +
+                "/assets/images/user/avatar/" +
+                user?.avatar
+              : "/vercel.svg"
+          }
+          alt=""
+        />
         <p className="inline mx-2 text-secondary font-medium text-sm tracking-wide">
           {user?.name || ""}
         </p>
-        <img
-          className="w-8 h-8 inline rounded-full"
-          src={user?.avatar ? user?.avatar : "/vercel.svg"}
-          alt=""
-        />
-        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mx-1 md:mx-0 text-secondary" />
+
+        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mr-4 text-secondary" />
       </Menu.Button>
+
       <Transition
         enter="transition transform duration-100 ease-out"
         enterFrom="opacity-0 scale-90"
@@ -45,7 +53,7 @@ const UserDropdown = ({ user }) => {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-90"
       >
-        <Menu.Items className="origin-top-right mt-6 focus:outline-none absolute right-0 bg-white overflow-hidden rounded-md shadow-lg border w-48">
+        <Menu.Items className="origin-top-right mt-6 focus:outline-none absolute right-2 bg-white overflow-hidden rounded-md shadow-lg border w-48">
           <Menu.Item>
             <Link href="/admin/dashboard">
               <a className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">

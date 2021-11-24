@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import {
   CubeIcon,
   HomeIcon,
+  PuzzleIcon,
   UserGroupIcon,
   XIcon,
 } from "@heroicons/react/solid";
@@ -94,11 +95,34 @@ const AdminSidebar = ({ setOpen, open }) => {
                   </Link>
                 </li>
                 <li className="items-center" onClick={() => setOpen(false)}>
-                  <Link href="/admin/user">
+                  <Link href="/admin/category">
                     <span
                       className={
                         "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
-                        (router.pathname.indexOf("/user") !== -1
+                        (router.pathname.indexOf("/category") !== -1
+                          ? "bg-blue-600 text-white font-medium"
+                          : "font-normal text-secondary")
+                      }
+                    >
+                      <PuzzleIcon
+                        style={{
+                          width: 24,
+                          color:
+                            router.pathname.indexOf("/category") !== -1
+                              ? "text-white"
+                              : "text-secondary",
+                        }}
+                      />
+                      <span>Category</span>
+                    </span>
+                  </Link>
+                </li>
+                <li className="items-center" onClick={() => setOpen(false)}>
+                  <Link href="/admin/users">
+                    <span
+                      className={
+                        "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                        (router.pathname.indexOf("/users") !== -1
                           ? "bg-blue-600 text-white font-medium"
                           : "font-normal text-secondary")
                       }
@@ -107,7 +131,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                         style={{
                           width: 24,
                           color:
-                            router.pathname.indexOf("/user") !== -1
+                            router.pathname.indexOf("/users") !== -1
                               ? "text-white"
                               : "text-secondary",
                         }}
@@ -195,8 +219,31 @@ const AdminSidebar = ({ setOpen, open }) => {
                 </span>
               </Link>
             </li>
-            <li className="items-center">
-              <Link href="/admin/users" as="/admin/users">
+            <li className="items-center" onClick={() => setOpen(false)}>
+              <Link href="/admin/category">
+                <span
+                  className={
+                    "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
+                    (router.pathname.indexOf("/category") !== -1
+                      ? "bg-blue-600 text-white font-medium"
+                      : "font-normal text-secondary")
+                  }
+                >
+                  <PuzzleIcon
+                    style={{
+                      width: 24,
+                      color:
+                        router.pathname.indexOf("/category") !== -1
+                          ? "text-white"
+                          : "text-secondary",
+                    }}
+                  />
+                  <span>Category</span>
+                </span>
+              </Link>
+            </li>
+            <li className="items-center" onClick={() => setOpen(false)}>
+              <Link href="/admin/users">
                 <span
                   className={
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
@@ -214,7 +261,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                           : "text-secondary",
                     }}
                   />
-                  <span>Users</span>
+                  <span>User</span>
                 </span>
               </Link>
             </li>

@@ -16,36 +16,29 @@ import { CSVLink } from "react-csv";
 import useSWR from "swr";
 import AddUserModal from "../../../components/Pages/User/AddUserModal";
 import { PlusIcon } from "@heroicons/react/solid";
+import AddCategoryModal from "../../../components/Pages/Category/AddCategoryModal";
+import UpdateCategoryModal from "../../../components/Pages/Category/UpdateCategoryModal";
+import DeleteCategoryModal from "../../../components/Pages/Category/DeleteCategoryModal";
 
 const index = () => {
   const {
-    data: users,
+    data: category,
     mutate,
     error,
-  } = useSWR([`api/users`], (url) => fetchWithToken(url), {
+  } = useSWR([`api/category`], (url) => fetchWithToken(url), {
     revalidateOnFocus: false,
   });
-  const updateUserModalRef = useRef();
-  const deleteUserModalRef = useRef();
-  const addUserModalRef = useRef();
+  const updateCategoryModalRef = useRef();
+  const deleteCategoryModalRef = useRef();
+  const addCategoryModalRef = useRef();
   const [selectedIndexData, setIndexData] = useState(0);
   const [selectedData, setSelectedData] = useState();
   const toast = useToast();
 
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Role",
-      selector: (row) => row.role.role_name,
+      name: "Kategori Produk",
+      selector: (row) => row.category_name,
       sortable: true,
     },
     {
@@ -64,9 +57,9 @@ const index = () => {
         <ActionsButtonTable
           row={row}
           onClick={() => setIndexData(index)}
-          updateParent={updateUserModalRef}
+          updateParent={updateCategoryModalRef}
           setData={setSelectedData}
-          deleteParent={deleteUserModalRef}
+          deleteParent={deleteCategoryModalRef}
         />
       ),
     },
@@ -74,23 +67,27 @@ const index = () => {
 
   const headers = [
     {
-      label: "Nama",
-      key: "name",
+      label: "Kategori Produk",
+      key: "category_name",
     },
     {
-      label: "Email",
-      key: "email",
+      label: "Slug",
+      key: "category_slug",
     },
     {
-      label: "Role",
-      key: "role.role_name",
+      label: "Tanggal Dibuat",
+      key: "created_at",
+    },
+    {
+      label: "Tanggal Update",
+      key: "updated_at",
     },
   ];
 
   const exportCSVProps = {
     filename: "export.csv",
     headers: headers,
-    data: users,
+    data: category,
   };
 
   const handleChangeSelectRows = ({ selectedRows }) => {
@@ -98,52 +95,52 @@ const index = () => {
   };
   return (
     <>
-      <Modal ref={addUserModalRef}>
-        <AddUserModal
-          parent={addUserModalRef}
+      <Modal ref={addCategoryModalRef}>
+        <AddCategoryModal
+          parent={addCategoryModalRef}
           toast={toast}
           mutate={mutate}
-          users={users}
+          category={category}
         />
       </Modal>
-      <Modal ref={deleteUserModalRef}>
-        <DeleteUserModal
-          id={selectedData?.id}
-          userName={selectedData?.name}
-          parent={deleteUserModalRef}
-          toast={toast}
+      <Modal ref={updateCategoryModalRef}>
+        <UpdateCategoryModal
+          selectedData={selectedData}
           mutate={mutate}
-          users={users}
-        />
-      </Modal>
-      <Modal ref={updateUserModalRef}>
-        <UpdateUserModal
-          user={selectedData}
-          mutate={mutate}
-          users={users}
+          category={category}
           indexData={selectedIndexData}
-          parent={updateUserModalRef}
+          parent={updateCategoryModalRef}
           toast={toast}
+        />
+      </Modal>
+      <Modal ref={deleteCategoryModalRef}>
+        <DeleteCategoryModal
+          id={selectedData?.id}
+          name={selectedData?.category_name}
+          parent={deleteCategoryModalRef}
+          toast={toast}
+          mutate={mutate}
+          category={category}
         />
       </Modal>
       <div className="bg-section">
         <div className="flex items-center">
           <div>
-            <h3 className="font-bold text-xl text-primary">User</h3>
+            <h3 className="font-bold text-xl text-primary">Kategori</h3>
             <p className="font-base tracking-wide text-secondary">
-              Kelola semua pengguna kamu disini.
+              Kelola semua kategori produk kamu disini.
             </p>
           </div>
           <Button
             colorScheme="blue"
             className="mt-2 ml-auto"
             leftIcon={<PlusIcon className="w-4 h-4" />}
-            onClick={() => addUserModalRef.current.open()}
+            onClick={() => addCategoryModalRef.current.open()}
           >
             Tambah
           </Button>
         </div>
-        {!users ? (
+        {!category ? (
           <CustomSpinner />
         ) : (
           <div className="mt-4">
@@ -152,7 +149,7 @@ const index = () => {
             </CSVLink>
             <DataTable
               columns={columns}
-              data={users}
+              data={category}
               pagination
               onSelectedRowsChange={handleChangeSelectRows}
             />
