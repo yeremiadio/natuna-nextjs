@@ -73,10 +73,10 @@ function Login() {
             {/* Card */}
             <div className="p-4 rounded w-full border border-gray-100 sm:w-8/12">
               <div className="text-center">
-                <h3 className="text-gray-800 text-lg font-bold tracking-wide">
+                <h3 className="text-primary text-lg font-bold tracking-wide">
                   Login
                 </h3>
-                <p className="text-gray-500 text-base">
+                <p className="text-secondary text-base">
                   Silahkan masukkan kredensial anda.
                 </p>
               </div>
@@ -146,9 +146,9 @@ function Login() {
                                 onClick={() => setShowPassword(!showPassword)}
                               >
                                 {showPassword ? (
-                                  <EyeIcon className="w-5 h-5 text-gray-500" />
+                                  <EyeIcon className="w-5 h-5 text-secondary" />
                                 ) : (
-                                  <EyeOffIcon className="w-5 h-5 text-gray-500" />
+                                  <EyeOffIcon className="w-5 h-5 text-secondary" />
                                 )}
                               </button>
                             </InputRightElement>
@@ -170,7 +170,7 @@ function Login() {
                           </Transition>
                         )}
                         <div className="my-4 text-right">
-                          <span className="text-gray-500">
+                          <span className="text-secondary">
                             Belum memiliki akun? Klik{" "}
                           </span>
                           <Link href="/register">

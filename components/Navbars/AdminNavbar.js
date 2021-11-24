@@ -33,7 +33,7 @@ const AdminNavbar = ({ setOpen, open, user }) => {
         <div className="flex items-center flex-1">
           <button
             onClick={() => setOpen(!open)}
-            className="mr-3 md:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full text-gray-600"
+            className="mr-3 md:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full text-secondary"
           >
             <MenuIcon className="h-6 w-6" />
           </button>

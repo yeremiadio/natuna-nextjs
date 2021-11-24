@@ -10,8 +10,8 @@ function ActiveLink({ name, href }) {
       <a
         className={
           router.asPath === href || router.pathname === href
-            ? "text-gray-800 font-medium transition ease-in-out delay-75"
-            : "text-gray-400 hover:text-gray-800 font-medium transition ease-in-out delay-75"
+            ? "text-primary font-bold transition ease-in-out delay-75"
+            : "text-secondary hover:text-primary font-medium transition ease-in-out delay-75"
         }
       >
         {name}

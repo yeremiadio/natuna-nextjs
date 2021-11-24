@@ -9,13 +9,18 @@ import {
   ArrowRightIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/solid";
+import CustomSpinner from "../components/Spinners/CustomSpinner";
 import Slider from "react-slick";
-import instance from "../utils/instance";
-import { currencyFormat } from "../config/currencyFormat";
-import { Tag, TagLabel } from "@chakra-ui/tag";
 import Link from "next/link";
 import { useMediaQuery } from "@chakra-ui/media-query";
-export default function Home({ products }) {
+import CardProductHome from "../components/Pages/Primary/CardProduct";
+import { fetcher } from "../utils/fetcher";
+import useSWR from "swr";
+import { fadeInUp } from "../utils/transitionProps";
+import { motion } from "framer-motion";
+import EmptyDataComponent from "../components/EmptyData/EmptyDataComponent";
+export default function Home() {
+  const { data: products, error } = useSWR("/api/products", fetcher);
   const images = [
     "https://images.unsplash.com/photo-1530878902700-5ad4f9e4c318?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dmlsbGFnZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
     "https://wallpapercave.com/wp/wp2445553.jpg",
@@ -35,13 +40,13 @@ export default function Home({ products }) {
       <div className="container mx-auto">
         <section className="my-12 lg:my-24 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="flex flex-col justify-center px-4 lg:px-16">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-snug">
+            <h1 className="text-4xl text-primary lg:text-6xl font-bold mb-4 leading-snug">
               {/* Badan Usaha milik desa <b className="text-blue-500">pengadah </b>
               Kabupaten Natuna. */}
               Kami hadir memberi <span className="text-blue-500">solusi</span>,
               layanan dan fasilitas bagi masyarakat desa
             </h1>
-            <p className="text-gray-400 leading-relaxed">
+            <p className="text-secondary leading-loose">
               Badan Usaha Milik Desa <b>Laut Sakti Daratan Bertuah</b> adalah
               sebuah badan usaha yang didirikan Pemerintah Desa Pengadah,
               Kecamatan Bunguran Timur Laut, Kabupaten Natuna-Kepulauan Riau.
@@ -63,7 +68,7 @@ export default function Home({ products }) {
               <Button
                 size="md"
                 leftIcon={<ShoppingCartIcon className="w-5 h-5" />}
-                className="p-6"
+                className="p-6 text-primary"
               >
                 Beli Produk Kami
               </Button>
@@ -74,14 +79,17 @@ export default function Home({ products }) {
               {images.map((item, i) => (
                 <div key={i} className="h-96">
                   <div className="flex justify-center items-center w-full h-full">
-                    <img src={item} className="rounded-lg w-10/12" />
+                    <img
+                      src={item}
+                      className="rounded-lg w-10/12 object-cover"
+                    />
                   </div>
                 </div>
               ))}
             </Slider>
           </div>
         </section>
-        <section className="my-32 px-4 py-24 lg:px-16 bg-blue-600">
+        <section className="my-32 px-4 py-24 lg:px-16 bg-blue-900">
           <h3 className="text-4xl font-bold mb-12 text-center text-white">
             Layanan Kami
           </h3>
@@ -89,10 +97,10 @@ export default function Home({ products }) {
             <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
               <img src="imgPlaceholder.jpg" className="object-cover" />
               <div className="p-4">
-                <h5 className="text-gray-700 font-semibold text-lg mb-2">
+                <h5 className="text-primary font-bold text-lg mb-2">
                   Produk Barang
                 </h5>
-                <p className="text-gray-500 text-sm md:text-base tracking-wide leading-relaxed">
+                <p className="text-secondary text-sm md:text-base tracking-wide leading-loose lg:leading-loose">
                   BUMDes Laut Sakti Daratan Bertuah melayani penjualan produk
                   berupa barang untuk seluruh warga, baik itu untuk kantor
                   pemerintahan maupun swasta. Produk - produk yang ditawarkan
@@ -108,15 +116,14 @@ export default function Home({ products }) {
             <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
               <img src="imgPlaceholder.jpg" />
               <div className="p-4">
-                <h5 className="text-gray-700 font-semibold text-lg mb-2">
+                <h5 className="text-primary font-bold text-lg mb-2">
                   Produk Jasa
                 </h5>
-                <p className="text-gray-500 tracking-wide text-sm md:text-base leading-relaxed">
+                <p className="text-secondary tracking-wide text-sm md:text-base leading-loose lg:leading-loose">
                   BUMDes Laut Sakti Daratan Bertuah juga melayani produk berupa
-                  jasa berupa untuk seluruh warga, baik itu untuk kantor
-                  pemerintahan maupun swasta seperti{" "}
-                  <b>Pengolahan Air Bersih</b>, Warung dan sarana prasarana
-                  lainnya yang memadai.
+                  jasa untuk seluruh warga, baik itu untuk kantor pemerintahan
+                  maupun swasta seperti <b>Pengolahan Air Bersih</b>, Warung dan
+                  sarana prasarana lainnya yang memadai.
                 </p>
                 <Link href="/products">
                   <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
@@ -128,71 +135,39 @@ export default function Home({ products }) {
           </div>
         </section>
         <section className="my-32 px-4 lg:px-16">
-          <h3 className="text-4xl font-bold mb-12 text-gray-800">
+          <h3 className="text-4xl font-bold mb-12 text-primary">
             Produk Unggulan
           </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {products?.data?.map((item, i) => (
-              <div
-                key={i}
-                className="hover:shadow-lg transition-all delay-75 border border-gray-200 rounded-lg"
-              >
-                <img
-                  src={
-                    item.thumbnail !== null
-                      ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
-                      : "/imgPlaceholder.jpg"
-                  }
-                  alt=""
-                  className="w-full h-80 object-cover rounded-lg"
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 border border-black">
+            {!products && !error ? (
+              <CustomSpinner />
+            ) : (
+              products?.data?.map((item, i) => (
+                <CardProductHome
+                  key={i}
+                  title={item.title}
+                  description={item.description}
+                  price={item.price}
+                  thumbnail={item.thumbnail}
+                  category={item.category.category_name}
                 />
-                <div className="p-4">
-                  <h3 className="text-gray-800 text-xl lg:text-2xl font-bold line-clamp-2 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 text-base line-clamp-3 my-2">
-                    {item.description}
-                  </p>
-                  <div className="py-4 space-x-2 flex items-center">
-                    <Tag
-                      colorScheme="green"
-                      style={{ borderRadius: "3rem" }}
-                      p="2"
-                    >
-                      <TagLabel>{item.category.category_name}</TagLabel>
-                    </Tag>
-                    <span className="text-blue-600 font-bold">
-                      {currencyFormat(item.price)}
-                    </span>
-                  </div>
-                  <Button
-                    size="md"
-                    leftIcon={<ShoppingCartIcon className="w-5 h-5" />}
-                    colorScheme="blue"
-                    className="p-6"
-                    isFullWidth
-                  >
-                    Beli Sekarang
-                  </Button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
+            {products?.data?.length === 0 ||
+              (error && (
+                <motion.div
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <EmptyDataComponent />
+                </motion.div>
+              ))}
           </div>
         </section>
       </div>
     </>
   );
 }
-
-export const getStaticProps = async () => {
-  const resProducts = await instance().get("api/products");
-  const products = resProducts.data.data;
-
-  return {
-    props: {
-      products: products,
-    },
-  };
-};
 
 Home.layout = MainLayout;

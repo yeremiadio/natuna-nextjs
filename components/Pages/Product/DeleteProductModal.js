@@ -51,7 +51,7 @@ function DeleteProductModal({ parent, id, title, toast }) {
           <h3 className="text-lg leading-6 font-medium text-gray-900">
             Delete Confirmation
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-secondary">
             Are you sure you want to delete this product? This product name{" "}
             <b>{title}</b> will be permanently removed. This action cannot be
             undone.

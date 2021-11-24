@@ -103,8 +103,8 @@ const index = () => {
         />
       </Modal>
       <div className="bg-section">
-        <h3 className="font-bold text-xl text-gray-800">User</h3>
-        <p className="font-base tracking-wide text-gray-400">
+        <h3 className="font-bold text-xl text-primary">User</h3>
+        <p className="font-base tracking-wide text-secondary">
           Lihat List Pengguna disini.
         </p>
         {!users && !error ? (

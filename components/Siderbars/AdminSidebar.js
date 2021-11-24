@@ -36,7 +36,7 @@ const AdminSidebar = ({ setOpen, open }) => {
               className="hover:ring-2 hover:ring-gray-300 flex absolute top-2 right-2 justify-center items-center w-10 h-10 rounded-full"
               type="button"
             >
-              <XIcon className="w-7 h-7 text-gray-400" />
+              <XIcon className="w-7 h-7 text-secondary" />
             </button>
             <div className="py-4 px-6 mt-10 flex flex-col justify-center items-center">
               <img
@@ -54,7 +54,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                         "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                         (router.pathname.indexOf("/dashboard") !== -1
                           ? "bg-blue-600 text-white font-medium"
-                          : "font-normal text-gray-600")
+                          : "font-normal text-secondary")
                       }
                     >
                       <HomeIcon
@@ -63,7 +63,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                           color:
                             router.pathname.indexOf("/dashboard") !== -1
                               ? "text-white"
-                              : "text-gray-600",
+                              : "text-secondary",
                         }}
                       />
                       <span>Dashboard</span>
@@ -77,7 +77,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                         "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                         (router.pathname.indexOf("/product") !== -1
                           ? "bg-blue-600 text-white font-medium"
-                          : "font-normal text-gray-600")
+                          : "font-normal text-secondary")
                       }
                     >
                       <CubeIcon
@@ -86,7 +86,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                           color:
                             router.pathname.indexOf("/product") !== -1
                               ? "text-white"
-                              : "text-gray-600",
+                              : "text-secondary",
                         }}
                       />
                       <span>Product</span>
@@ -100,7 +100,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                         "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                         (router.pathname.indexOf("/user") !== -1
                           ? "bg-blue-600 text-white font-medium"
-                          : "font-normal text-gray-600")
+                          : "font-normal text-secondary")
                       }
                     >
                       <UserGroupIcon
@@ -109,7 +109,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                           color:
                             router.pathname.indexOf("/user") !== -1
                               ? "text-white"
-                              : "text-gray-600",
+                              : "text-secondary",
                         }}
                       />
                       <span>User</span>
@@ -117,11 +117,11 @@ const AdminSidebar = ({ setOpen, open }) => {
                   </Link>
                 </li>
               </ul>
-              <div className="m-4 absolute bottom-2">
-                <p className="text-gray-400 text-xs leading-relaxed left-4">
+              {/* <div className="m-4 absolute bottom-2">
+                <p className="text-secondary text-xs leading-relaxed left-4">
                   © 2021 BUMDes Laut Sakti Daratan Bertuah. All rights reserved.
                 </p>
-              </div>
+              </div> */}
             </div>
           </Transition.Child>
           <Transition.Child
@@ -156,7 +156,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                     (router.pathname.indexOf("/dashboard") !== -1
                       ? "bg-blue-600 text-white font-medium"
-                      : "font-normal text-gray-600")
+                      : "font-normal text-secondary")
                   }
                 >
                   <HomeIcon
@@ -165,7 +165,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                       color:
                         router.pathname.indexOf("/dashboard") !== -1
                           ? "text-white"
-                          : "text-gray-600",
+                          : "text-secondary",
                     }}
                   />
                   <span>Dashboard</span>
@@ -179,7 +179,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                     (router.pathname.indexOf("/product") !== -1
                       ? "bg-blue-600 text-white font-medium"
-                      : "font-normal text-gray-600")
+                      : "font-normal text-secondary")
                   }
                 >
                   <CubeIcon
@@ -188,7 +188,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                       color:
                         router.pathname.indexOf("/product") !== -1
                           ? "text-white"
-                          : "text-gray-600",
+                          : "text-secondary",
                     }}
                   />
                   <span>Product</span>
@@ -202,7 +202,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                     "flex w-full transition-all delay-75 items-center space-x-3 py-3 px-4 rounded cursor-pointer " +
                     (router.pathname.indexOf("/user") !== -1
                       ? "bg-blue-600 text-white font-medium"
-                      : "font-normal text-gray-600")
+                      : "font-normal text-secondary")
                   }
                 >
                   <UserGroupIcon
@@ -211,7 +211,7 @@ const AdminSidebar = ({ setOpen, open }) => {
                       color:
                         router.pathname.indexOf("/user") !== -1
                           ? "text-white"
-                          : "text-gray-600",
+                          : "text-secondary",
                     }}
                   />
                   <span>User</span>

@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
-    ChatAltIcon,
+  ChatAltIcon,
   CubeIcon,
   HomeIcon,
   IdentificationIcon,
@@ -11,9 +11,24 @@ import {
 } from "@heroicons/react/solid";
 // import Image from "next/image";
 import { Transition, Dialog } from "@headlessui/react";
-import ActiveLink from "../ActiveLink";
+// import ActiveLink from "../ActiveLink";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@chakra-ui/button";
+import { useToast } from "@chakra-ui/toast";
+import { logoutUser } from "../../actions/auth/authAction";
+import { Box } from "@chakra-ui/layout";
+// import { logOut } from "../../utils/auth";
 const MainSideBar = ({ setOpen, open }) => {
+  const auth = useSelector((state) => state.auth);
+  const toast = useToast();
+  const dispatch = useDispatch();
   const router = useRouter();
+  const logOut = useCallback(async () => {
+    if (window !== undefined || errors.entries.status === 401) {
+      dispatch(logoutUser(toast));
+      router.replace("/");
+    }
+  });
   const navigations = [
     {
       href: "/",
@@ -26,7 +41,7 @@ const MainSideBar = ({ setOpen, open }) => {
               router.asPath === Object.keys("href") ||
               router.pathname === Object.keys("href")
                 ? "text-white"
-                : "text-gray-600",
+                : "text-secondary",
           }}
         />
       ),
@@ -42,7 +57,7 @@ const MainSideBar = ({ setOpen, open }) => {
               router.asPath === Object.keys("href") ||
               router.pathname === Object.keys("href")
                 ? "text-white"
-                : "text-gray-600",
+                : "text-secondary",
           }}
         />
       ),
@@ -58,7 +73,7 @@ const MainSideBar = ({ setOpen, open }) => {
               router.asPath === Object.keys("href") ||
               router.pathname === Object.keys("href")
                 ? "text-white"
-                : "text-gray-600",
+                : "text-secondary",
           }}
         />
       ),
@@ -74,7 +89,7 @@ const MainSideBar = ({ setOpen, open }) => {
               router.asPath === Object.keys("href") ||
               router.pathname === Object.keys("href")
                 ? "text-white"
-                : "text-gray-600",
+                : "text-secondary",
           }}
         />
       ),
@@ -87,7 +102,7 @@ const MainSideBar = ({ setOpen, open }) => {
         <Dialog
           as="div"
           onClose={() => setOpen(false)}
-          className="fixed inset-0 z-40 md:hidden"
+          className="fixed inset-0 z-40 lg:hidden"
         >
           <Transition.Child
             enter="transition ease-in-out duration-300 transform"
@@ -97,17 +112,42 @@ const MainSideBar = ({ setOpen, open }) => {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
             as="div"
-            className="flex z-10 relative flex-col w-72 float-right bg-white shadow-boxShadow-siderbar-main h-screen md:hidden"
+            className="flex z-10 relative flex-col w-72 float-right bg-white shadow-boxShadow-siderbar-main h-screen lg:hidden"
           >
             <button
               onClick={() => setOpen(false)}
               className="hover:ring-2 hover:ring-gray-300 flex absolute top-6 right-7 justify-center items-center w-10 h-10 rounded-full"
               type="button"
             >
-              <XIcon className="w-7 h-7 text-gray-400" />
+              <XIcon className="w-7 h-7 text-secondary" />
             </button>
+
             <div className="mb-10 mt-20 flex flex-col h-screen justify-between">
               <ul className="md:min-w-screen flex flex-col list-none pt-2 mx-4 space-y-1">
+                {auth.isAuthenticated && (
+                  <li className="items-center py-4">
+                    <div className="flex gap-4 mx-2">
+                      <>
+                        <img
+                          src="/TeamBumDesPics/ketua.jpeg"
+                          onClick={() => router.replace("/admin/dashboard")}
+                          className="w-12 h-12 rounded-full object-cover focus:border-2 focus:border-blue-700"
+                        />
+                        <div className="flex flex-col">
+                          <h3 className="text-primary">
+                            Hello, {auth.user.name}
+                          </h3>
+                          <a
+                            onClick={logOut}
+                            className="text-primary font-bold"
+                          >
+                            Logout
+                          </a>
+                        </div>
+                      </>
+                    </div>
+                  </li>
+                )}
                 {navigations.map((item, i) => (
                   <li
                     key={i}
@@ -121,7 +161,7 @@ const MainSideBar = ({ setOpen, open }) => {
                           (router.asPath === item.href ||
                           router.pathname === item.href
                             ? "bg-blue-500 text-white font-medium"
-                            : "font-normal text-gray-600")
+                            : "font-normal text-secondary")
                         }
                       >
                         {item.icon}
@@ -130,12 +170,32 @@ const MainSideBar = ({ setOpen, open }) => {
                     </Link>
                   </li>
                 ))}
+                {auth.isAuthenticated === false && (
+                  <li className="items-center py-4">
+                    <div className="mx-2">
+                      <Box display="flex" className="w-full gap-2 flex-col">
+                        <Button
+                          onClick={() => setOpen(false)}
+                          colorScheme="blue"
+                          variant="outline"
+                        >
+                          <Link href="/login">
+                            <a>Login</a>
+                          </Link>
+                        </Button>
+                        <Button
+                          onClick={() => setOpen(false)}
+                          colorScheme="gray"
+                        >
+                          <Link href="/register">
+                            <a>Register</a>
+                          </Link>
+                        </Button>
+                      </Box>
+                    </div>
+                  </li>
+                )}
               </ul>
-              <div className="mx-4 mb-8">
-                <p className="text-gray-400 text-xs leading-relaxed left-4">
-                  © 2021 BUMDes Laut Sakti Daratan Bertuah. All rights reserved.
-                </p>
-              </div>
             </div>
           </Transition.Child>
           <Transition.Child

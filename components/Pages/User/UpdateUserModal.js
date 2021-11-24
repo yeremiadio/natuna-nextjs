@@ -68,8 +68,8 @@ function UpdateUserModal({ parent, user, toast }) {
 
   return (
     <div className="p-4">
-      <h3 className="font-bold text-xl text-gray-800">Edit User</h3>
-      <p className="font-base tracking-wide text-gray-400">
+      <h3 className="font-bold text-xl text-primary">Edit User</h3>
+      <p className="font-base tracking-wide text-secondary">
         Lengkapi datanya disini.
       </p>
       <Box className="mt-4">

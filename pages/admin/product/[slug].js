@@ -76,8 +76,8 @@ export default function DetailProduct({ product, category }) {
         </Head>
       )}
       <div className="bg-section">
-        <h3 className="font-bold text-xl text-gray-800">Detail</h3>
-        <p className="font-base tracking-wide text-gray-400">
+        <h3 className="font-bold text-xl text-primary">Detail</h3>
+        <p className="font-base tracking-wide text-secondary">
           Kelola item produk disini.
         </p>
         <Box className="mt-4">

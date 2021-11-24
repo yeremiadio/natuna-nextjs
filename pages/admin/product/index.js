@@ -87,8 +87,8 @@ export default function Product({ category }) {
         </Modal>
         <Box display={{ lg: "flex" }} alignItems="center">
           <div>
-            <h3 className="font-bold text-xl text-gray-800">Product</h3>
-            <p className="font-base tracking-wide text-gray-400">
+            <h3 className="font-bold text-xl text-primary">Product</h3>
+            <p className="font-base tracking-wide text-secondary">
               Kelola semua produk kamu disini.
             </p>
           </div>

@@ -52,7 +52,7 @@ function DeleteUserModal({ parent, id, userName, toast }) {
           <h3 className="text-lg leading-6 font-medium text-gray-900">
             Delete Confirmation
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-secondary">
             Are you sure you want to delete this user? This user name{" "}
             <b>{userName}</b> will be permanently removed. This action cannot be
             undone.

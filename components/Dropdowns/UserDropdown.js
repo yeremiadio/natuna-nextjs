@@ -27,15 +27,15 @@ const UserDropdown = ({ user }) => {
   return (
     <Menu as="div" className="relative flex items-center">
       <Menu.Button className="flex items-center">
-        <p className="inline mx-2 text-gray-600 font-medium text-sm tracking-wide">
-          {user.name || ""}
+        <p className="inline mx-2 text-secondary font-medium text-sm tracking-wide">
+          {user?.name || ""}
         </p>
         <img
           className="w-8 h-8 inline rounded-full"
-          src={user.avatar ? user.avatar : "/vercel.svg"}
+          src={user?.avatar ? user?.avatar : "/vercel.svg"}
           alt=""
         />
-        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mx-1 md:mx-0 text-gray-600" />
+        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mx-1 md:mx-0 text-secondary" />
       </Menu.Button>
       <Transition
         enter="transition transform duration-100 ease-out"

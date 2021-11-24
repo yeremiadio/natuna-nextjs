@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Button } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
 import ActiveLink from "../ActiveLink";
 import { useSelector } from "react-redux";
 import UserDropdown from "../Dropdowns/UserDropdown";
@@ -22,16 +22,24 @@ const Navbar = ({ setOpen, open }) => {
         <span className="text-sm text-white">
           Jl. Ismail Mahdi, Telp : 0821-6961-1109
         </span>
-        <Box display="flex" className="gap-2">
-          <Button
-            leftIcon={<WhatsappIcon className="w-6 h-6" />}
+        <Box display="flex" className="gap-2 items-center">
+          <span className="text-sm text-white">Hubungi Kami:</span>
+          <IconButton
+            style={{ borderRadius: "3rem" }}
+            size="sm"
+            icon={<WhatsappIcon className="w-5 h-5" />}
             variant="solid"
           >
             Call Now
-          </Button>
-          <Button leftIcon={<MailIcon className="w-6 h-6" />} variant="solid">
+          </IconButton>
+          <IconButton
+            style={{ borderRadius: "3rem" }}
+            size="sm"
+            icon={<MailIcon className="w-5 h-5" />}
+            variant="solid"
+          >
             Email
-          </Button>
+          </IconButton>
         </Box>
       </div>
       <header className="sticky top-0 z-40">
@@ -40,7 +48,7 @@ const Navbar = ({ setOpen, open }) => {
             <div className="contents">
               <button
                 onClick={() => setOpen(!open)}
-                className="mr-3 lg:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full text-gray-600"
+                className="mr-3 lg:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full text-secondary"
               >
                 <MenuIcon className="h-6 w-6" />
               </button>
@@ -66,8 +74,8 @@ const Navbar = ({ setOpen, open }) => {
               </ul>
             </div>
             <div className="hidden lg:flex gap-1">
-              {auth.isAuthenticated ? (
-                <UserDropdown user={auth.user} />
+              {auth?.isAuthenticated ? (
+                <UserDropdown user={auth?.user} />
               ) : (
                 <>
                   <Button variant="ghost">
