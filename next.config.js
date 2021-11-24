@@ -22,7 +22,7 @@ module.exports = (phase, { defaultConfig }) => {
 
   return {
     env: {
-      baseUrl: "http://192.168.0.10:8000",
+      baseUrl: "https://natuna-api.herokuapp.com",
     },
     trailingSlash: true,
     webpackDevMiddleware: (config) => {
