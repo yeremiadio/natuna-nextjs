@@ -11,6 +11,7 @@ const CardProductHome = ({
   category,
   price,
 }) => {
+  let message = `Halo kak, saya mau pesan ${title}`;
   return (
     <div className="hover:shadow-lg transition-all delay-75 border border-gray-200 rounded-lg">
       <img
@@ -43,6 +44,12 @@ const CardProductHome = ({
           colorScheme="blue"
           className="p-6"
           isFullWidth
+          onClick={() =>
+            window.open(
+              `https://wa.me/6282169611109?text=${encodeURIComponent(message)}`,
+              "__blank"
+            )
+          }
         >
           Beli Sekarang
         </Button>

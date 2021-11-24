@@ -19,7 +19,9 @@ import useSWR from "swr";
 import { fadeInUp } from "../utils/transitionProps";
 import { motion } from "framer-motion";
 import EmptyDataComponent from "../components/EmptyData/EmptyDataComponent";
+import { useRouter } from "next/router";
 export default function Home() {
+  const router = useRouter();
   const { data: products, error } = useSWR("/api/products", fetcher);
   const images = [
     "https://lh5.googleusercontent.com/p/AF1QipOUYuZUEuqGFMcwmYusQTaOU8VzP2NhQhMBAFRd=w416-h240-k-no",
@@ -60,6 +62,7 @@ export default function Home() {
               <Button
                 size="md"
                 rightIcon={<ArrowRightIcon className="w-5 h-5" />}
+                onClick={() => router.push("/about")}
                 colorScheme="blue"
                 className="p-6 lg:hover:transition-all lg:hover:delay-100 hover:px-8"
               >
@@ -69,6 +72,7 @@ export default function Home() {
                 size="md"
                 leftIcon={<ShoppingCartIcon className="w-5 h-5" />}
                 className="p-6 text-primary"
+                onClick={() => router.push("/products")}
               >
                 Beli Produk Kami
               </Button>

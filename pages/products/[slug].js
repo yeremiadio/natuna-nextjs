@@ -38,10 +38,10 @@ export default function DetailProduct({ product }) {
             variants={fadeInUp}
             className="flex flex-col justify-center w-auto px-4 lg:px-16"
           >
-            <h3 className="text-primary text-3xl font-bold line-clamp-2 mb-2">
+            <h3 className="text-primary text-3xl font-bold mb-2">
               {product.title}
             </h3>
-            <p className="text-secondary text-base line-clamp-3 leading-loose">
+            <p className="text-secondary text-base leading-loose">
               {product.description}
             </p>
             <div className="py-4 space-x-2 flex items-center">
