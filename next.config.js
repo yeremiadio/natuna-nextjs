@@ -4,7 +4,7 @@ module.exports = (phase, { defaultConfig }) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
       env: {
-        baseUrl: "http://192.168.0.10:8000",
+        baseUrl: process.env.LOCAL_API_URL,
       },
       trailingSlash: true,
       webpackDevMiddleware: (config) => {
@@ -22,7 +22,7 @@ module.exports = (phase, { defaultConfig }) => {
 
   return {
     env: {
-      baseUrl: "https://natuna-api.herokuapp.com",
+      baseUrl: process.env.API_URL,
     },
     trailingSlash: true,
     webpackDevMiddleware: (config) => {
