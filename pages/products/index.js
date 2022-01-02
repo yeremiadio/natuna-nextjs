@@ -102,7 +102,7 @@ export default function products() {
                             src={
                               item.thumbnail !== null
                                 ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
-                                : "/imgPlaceholder.jpg"
+                                : "../imgPlaceholder.jpg"
                             }
                             alt=""
                             className="w-full h-80 object-cover rounded-lg"

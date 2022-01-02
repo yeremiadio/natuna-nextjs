@@ -27,7 +27,7 @@ export default function DetailProduct({ product }) {
                   src={
                     product.thumbnail !== null
                       ? `${process.env.baseUrl}/assets/images/thumbnail/products/${product.thumbnail}`
-                      : "/imgPlaceholder.jpg"
+                      : "../imgPlaceholder.jpg"
                   }
                   className="rounded-lg w-10/12 object-cover"
                 />
