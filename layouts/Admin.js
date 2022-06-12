@@ -15,7 +15,7 @@ function Admin({ children }) {
   const router = useRouter();
   useEffect(() => {
     const ac = new AbortController();
-    if (!auth.isAuthenticated || errors.entries.status === 401) {
+    if (!auth.isAuthenticated || errors?.entries?.status === 401) {
       dispatch({
         type: RESET_USER,
       });

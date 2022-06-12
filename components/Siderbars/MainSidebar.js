@@ -24,7 +24,7 @@ const MainSideBar = ({ setOpen, open }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const logOut = useCallback(async () => {
-    if (window !== undefined || errors.entries.status === 401) {
+    if (window !== undefined || errors?.entries?.status === 401) {
       dispatch(logoutUser(toast));
       router.replace("/");
     }

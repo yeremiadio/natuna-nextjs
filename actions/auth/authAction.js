@@ -115,7 +115,6 @@ export const logoutUser = (toast) => async (dispatch) => {
         duration: 3000,
         isClosable: true,
       });
-      console.log(response);
     })
     .catch((error) => {
       dispatch(setIsFetching(false));

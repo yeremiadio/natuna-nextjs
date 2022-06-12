@@ -1,16 +1,9 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-
 import { Menu, Transition } from "@headlessui/react";
-// import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronDownIcon,
-  MenuAlt1Icon,
-  MenuAlt2Icon,
-  MenuIcon,
-} from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { logoutUser } from "../../actions/auth/authAction";
 import { useToast } from "@chakra-ui/toast";
 
@@ -19,7 +12,7 @@ const UserDropdown = ({ user }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const logOut = useCallback(async () => {
-    if (window !== undefined || errors.entries.status === 401) {
+    if (window !== undefined || errors?.entries?.status === 401) {
       dispatch(logoutUser(toast));
       router.replace("/");
     }
@@ -42,7 +35,7 @@ const UserDropdown = ({ user }) => {
           {user?.name || ""}
         </p>
 
-        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mr-4 text-secondary" />
+        <ChevronDownIcon className="inline h-4 w-4 mt-0.5 mr-4 text-secondary transition-all delay-75" />
       </Menu.Button>
 
       <Transition

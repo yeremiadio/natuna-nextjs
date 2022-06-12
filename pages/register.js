@@ -205,8 +205,8 @@ const Register = () => {
                       </div>
                       <Button
                         colorScheme="blue"
-                        isLoading={auth.isFetching}
-                        loadingText="Checking"
+                        // isLoading={auth.isFetching}
+                        // loadingText="Checking"
                         isFullWidth={isSmallestThan768 && true}
                         type="submit"
                         size="md"

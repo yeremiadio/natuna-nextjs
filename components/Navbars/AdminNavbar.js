@@ -21,7 +21,7 @@ const AdminNavbar = ({ setOpen, open, user }) => {
   const toast = createStandaloneToast();
 
   const logOut = () => {
-    if (window !== undefined || errors.entries.status === 401) {
+    if (window !== undefined || errors?.entries?.status === 401) {
       dispatch(logoutUser(toast));
       router.replace("/login");
     }

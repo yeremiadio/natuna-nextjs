@@ -181,8 +181,8 @@ function Login() {
                         </div>
                         <Button
                           colorScheme="blue"
-                          isLoading={auth.isFetching}
-                          loadingText="Checking"
+                          // isLoading={auth.isFetching}
+                          // loadingText="Checking"
                           px="6"
                           isFullWidth={isSmallestThan768 && true}
                           type="submit"
