@@ -14,7 +14,7 @@ import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeftIcon,
   CameraIcon,
@@ -29,24 +29,38 @@ import { FormErrorMessage } from "@chakra-ui/form-control";
 import Head from "next/head";
 import DeleteProductImageModal from "../../../components/Pages/Product/DeleteProductImageModal";
 import { Modal } from "../../../components/Modals/Modal";
-export default function DetailProduct({ product, category }) {
+import { fetchWithToken } from "../../../utils/fetcher";
+import useSWR from "swr";
+export default function DetailProduct() {
+  const router = useRouter();
+  const { query } = router;
+  const { slug } = query;
+  const { data: product, error: errorProduct } = useSWR(
+    slug ? [`api/products/${slug}`] : null,
+    (url) => fetchWithToken(url)
+  );
+
+  const { data: category } = useSWR([`api/category`], (url) =>
+    fetchWithToken(url)
+  );
   const initialValues = {
-    title: product.title || "",
-    description: product.description || "",
-    price: product.price || "",
-    thumbnail: product.thumbnail || "",
-    category_id: product.category_id || "",
-    product_images: null,
+    title: product?.title || "",
+    description: product?.description || "",
+    price: product?.price || "",
+    thumbnail: product?.thumbnail || "",
+    category_id: product?.category_id || "",
+    product_images: product?.product_images || null,
   };
   const FormikRef = useRef();
   const thumbnailRef = useRef();
   const [errors, setErrors] = useState();
-  const router = useRouter();
   const [deleteIdImage, setDeleteIdImage] = useState();
   const [productImageName, setProductImageName] = useState();
   const toast = useToast();
   const deleteImageModalRef = useRef();
-  const [productImages, setProductImages] = useState(product.product_images);
+  const [productImages, setProductImages] = useState(
+    product?.product_images ?? []
+  );
   const onChangeImage = (e, index) => {
     let files = e.target.files || e.dataTransfer.files;
     if (!files.length) return;
@@ -58,6 +72,25 @@ export default function DetailProduct({ product, category }) {
     setDeleteIdImage(item.id);
     setProductImageName(item.image_name);
   };
+
+  useEffect(() => {
+    const ac = new AbortController();
+    if (errorProduct) {
+      toast({
+        title: "Error",
+        description: "Error! Please Try Again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      router.replace("/admin/products");
+    } else {
+      return () => {
+        ac.abort();
+      };
+    }
+  }, [errorProduct]);
+
   const onSubmit = async (values) => {
     const formData = jsonToFormData(values);
     formData.append("_method", "put");
@@ -65,7 +98,7 @@ export default function DetailProduct({ product, category }) {
       console.log(pair[0] + ", " + pair[1]);
     }
     await instance()
-      .post("api/admin/products/" + product.slug + "/update", formData, {
+      .post("api/admin/products/" + product?.id + "/update", formData, {
         headers: {
           Authorization: `Bearer ${Cookies.get("access_token")}`,
         },
@@ -100,7 +133,7 @@ export default function DetailProduct({ product, category }) {
           id={deleteIdImage}
           title={productImageName}
           setProductImages={setProductImages}
-          productImages={productImages}
+          productImages={initialValues.product_images}
           toast={toast}
         />
       </Modal>
@@ -210,7 +243,7 @@ export default function DetailProduct({ product, category }) {
                           className="w-3/4"
                           onBlur={handleBlur}
                         >
-                          {category.map((item, i) => (
+                          {category?.map((item, i) => (
                             <option key={i} value={item.id}>
                               {item.category_name}
                             </option>
@@ -316,13 +349,14 @@ export default function DetailProduct({ product, category }) {
                   {values.product_images &&
                     values.product_images.map((file, i) => (
                       <li key={i} className="w-3/6 lg:w-1/6 truncate">
-                        {`File: ${file.name} Type:${file.type} Size:${file.size} bytes`}{" "}
+                        {`File: ${file.path ? file.path : file.image_name}`}{" "}
                       </li>
                     ))}
                 </div>
                 <div className={"mt-4 flex flex-col lg:flex-row gap-4"}>
-                  {productImages &&
-                    productImages.map((item, i) => (
+                  {/* {JSON.stringify(productImages)} */}
+                  {values.product_images &&
+                    values.product_images.map((item, i) => (
                       <div
                         key={i}
                         className="group relative bg-no-repeat bg-cover border-gray-200 border w-full lg:w-60 h-40 rounded-md p-3"
@@ -368,30 +402,30 @@ export default function DetailProduct({ product, category }) {
   );
 }
 
-export async function getStaticPaths() {
-  const res = await instance().get(`api/products`);
-  const data = await res.data.data.data;
+// export async function getStaticPaths() {
+//   const res = await instance().get(`api/products`);
+//   const data = await res.data.data.data;
 
-  const paths = data.map((item) => {
-    return {
-      params: { slug: item.slug.toString() },
-    };
-  });
+//   const paths = data.map((item) => {
+//     return {
+//       params: { slug: item.slug.toString() },
+//     };
+//   });
 
-  return {
-    paths,
-    fallback: false,
-  };
-}
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps(context) {
-  const slug = context.params.slug;
-  const res = await instance().get(`api/products/${slug}`);
-  const product = await res.data.data;
-  const resCategory = await instance().get("api/category");
-  const category = resCategory.data.data;
+// export async function getStaticProps(context) {
+//   const slug = context.params.slug;
+//   const res = await instance().get(`api/products/${slug}`);
+//   const product = await res.data.data;
+//   const resCategory = await instance().get("api/category");
+//   const category = resCategory.data.data;
 
-  return { props: { product, category } };
-}
+//   return { props: { product, category } };
+// }
 
 DetailProduct.layout = Admin;

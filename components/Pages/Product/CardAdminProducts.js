@@ -2,6 +2,7 @@ import { IconButton } from "@chakra-ui/button";
 import { Badge, Box } from "@chakra-ui/layout";
 import { Tag, TagLabel } from "@chakra-ui/tag";
 import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { currencyFormat } from "../../../config/currencyFormat";
@@ -15,7 +16,6 @@ const CardAdminProducts = ({
   categoryName,
   slug,
 }) => {
-  const router = useRouter();
   return (
     <Box
       maxW="sm"
@@ -42,14 +42,15 @@ const CardAdminProducts = ({
           </span>
         </div>
         <div className="block space-x-2">
-          <IconButton
-            aria-label="Update"
-            color="white"
-            bgColor="blue.500"
-            _hover={{ bgColor: "blue.600" }}
-            icon={<PencilIcon className="w-5 h-5" />}
-            onClick={() => router.push(`products/${slug}`)}
-          />
+          <Link href={`products/${slug}`}>
+            <IconButton
+              aria-label="Update"
+              color="white"
+              bgColor="blue.500"
+              _hover={{ bgColor: "blue.600" }}
+              icon={<PencilIcon className="w-5 h-5" />}
+            />
+          </Link>
           <IconButton
             aria-label="Delete"
             onClick={deleteProductItem}

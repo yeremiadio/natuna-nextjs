@@ -34,15 +34,6 @@ function DeleteProductImageModal({
         setLoading(false);
         parent.current.close();
         setProductImages(productImages.filter((item) => item.id !== id));
-      })
-      .catch((err) => {
-        toast({
-          title: "Error",
-          description: err.response.data.message,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
       });
   }, []);
   return (
@@ -59,9 +50,8 @@ function DeleteProductImageModal({
             Delete Confirmation
           </h3>
           <p className="text-sm text-secondary">
-            Are you sure you want to delete this image? This image{" "}
-            {title} will be permanently removed. This action cannot
-            be undone.
+            Are you sure you want to delete this image? This image {title} will
+            be permanently removed. This action cannot be undone.
           </p>
         </div>
       </div>

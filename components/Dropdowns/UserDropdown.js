@@ -54,13 +54,13 @@ const UserDropdown = ({ user }) => {
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             <Link href="/admin/profile">
               <a className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
                 My Profile
               </a>
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item>
             <a
               className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"

@@ -59,7 +59,7 @@ function AddUserModal({ parent, users, mutate, toast }) {
         .catch((err) => {
           toast({
             title: "Error",
-            description: err.response.data.message,
+            description: err?.response?.data?.message,
             status: "error",
             duration: 3000,
             isClosable: true,

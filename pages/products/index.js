@@ -56,7 +56,7 @@ export default function products() {
                 onSubmit={onSubmit}
                 innerRef={FormikRef}
               >
-                {({ values, handleChange, handleBlur }) => (
+                {({ values, handleChange, handleBlur, setSubmitting }) => (
                   <Form>
                     <div>
                       <Field
