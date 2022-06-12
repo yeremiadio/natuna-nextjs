@@ -50,7 +50,7 @@ function Login() {
     };
   }, [errors]);
   const onSubmit = async (values) => {
-    dispatch(loginUser(values, toast));
+    dispatch(loginUser(values, toast, router));
   };
   return (
     <>

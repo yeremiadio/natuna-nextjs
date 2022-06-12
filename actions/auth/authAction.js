@@ -47,7 +47,7 @@ export const registerUser = (data, toast) => async (dispatch) => {
     });
 };
 
-export const loginUser = (data, toast) => async (dispatch) => {
+export const loginUser = (data, toast, router) => async (dispatch) => {
   dispatch(setIsFetching(true));
   await instance()
     .get("sanctum/csrf-cookie")
@@ -61,6 +61,7 @@ export const loginUser = (data, toast) => async (dispatch) => {
             type: SET_USER,
             payload: res.data.user,
           });
+          router.push("/admin/dashboard");
           dispatch(setIsFetching(false));
           toast({
             title: "Success",
