@@ -221,6 +221,11 @@ export default function Home() {
                 className="bg-cover h-32 lg:h-20 xl:h-28"
               />
               <img
+                src={"images/logoUb.png"}
+                alt=""
+                className="bg-cover h-32 lg:h-20 xl:h-28"
+              />
+              <img
                 src={"images/logoKampusMerdeka.png"}
                 alt=""
                 className="bg-cover h-32 lg:h-20 xl:h-28"
