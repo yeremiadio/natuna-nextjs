@@ -14,10 +14,8 @@ import { Input } from "@chakra-ui/input";
 import { Textarea } from "@chakra-ui/textarea";
 import { jsonToFormData } from "../../../config/jsonToFormData";
 import { CameraIcon, PaperAirplaneIcon } from "@heroicons/react/solid";
-import { useMediaQuery } from "@chakra-ui/media-query";
 import { Select } from "@chakra-ui/select";
 import Dropzone from "react-dropzone";
-import { fetchWithToken } from "../../../utils/fetcher";
 
 function AddProductModal({ category, products, parent, mutate, toast }) {
   const initialValues = {
@@ -27,6 +25,7 @@ function AddProductModal({ category, products, parent, mutate, toast }) {
     thumbnail: "",
     category_id: "",
     product_images: "",
+    unit: "",
   };
   const FormikRef = useRef();
   const thumbnailRef = useRef();
@@ -36,14 +35,11 @@ function AddProductModal({ category, products, parent, mutate, toast }) {
     if (!files.length) return;
     FormikRef.current.setFieldValue(index, files[0]);
   };
-  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
 
   const onSubmit = useCallback(
     async (values) => {
       const formData = jsonToFormData(values);
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+
       await instance()
         .post("api/admin/products/create", formData, {
           headers: {
@@ -78,9 +74,6 @@ function AddProductModal({ category, products, parent, mutate, toast }) {
     [errors]
   );
 
-  // const onSubmit = async (values) => {
-
-  // };
   return (
     <div className="p-4">
       <h3 className="font-bold text-xl text-primary">Tambah Produk</h3>
@@ -163,7 +156,7 @@ function AddProductModal({ category, products, parent, mutate, toast }) {
                     id="price"
                     isInvalid={errors?.price && touched.price}
                   >
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>Harga</FormLabel>
                     <Field
                       as={Input}
                       focusBorderColor="blue.600"
@@ -174,6 +167,25 @@ function AddProductModal({ category, products, parent, mutate, toast }) {
                       <FormErrorMessage>{errors?.price}</FormErrorMessage>
                     ) : (
                       <FormHelperText>Example: 4500</FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+                <div className="w-full lg:w-1/6 mt-2">
+                  <FormControl
+                    id="unit"
+                    isInvalid={errors?.price && touched.price}
+                  >
+                    <FormLabel>Satuan</FormLabel>
+                    <Field
+                      as={Input}
+                      focusBorderColor="blue.600"
+                      name="unit"
+                      type="text"
+                    />
+                    {errors?.unit ? (
+                      <FormErrorMessage>{errors?.unit}</FormErrorMessage>
+                    ) : (
+                      <FormHelperText>Example: kg</FormHelperText>
                     )}
                   </FormControl>
                 </div>

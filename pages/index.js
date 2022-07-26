@@ -1,6 +1,3 @@
-// import { motion } from "framer-motion";
-// import Head from "next/head";
-// import Navbar from "../components/Navbars/Navbar";
 import { Button, IconButton } from "@chakra-ui/button";
 import { Box } from "@chakra-ui/layout";
 import MainLayout from "../layouts/mainLayout";
@@ -24,9 +21,9 @@ export default function Home() {
   const router = useRouter();
   const { data: products, error } = useSWR("/api/products", fetcher);
   const images = [
-    "https://lh5.googleusercontent.com/p/AF1QipOUYuZUEuqGFMcwmYusQTaOU8VzP2NhQhMBAFRd=w416-h240-k-no",
-    "https://akcdn.detik.net.id/visual/2019/06/13/dde38c21-b134-42d5-922e-9a356bcc9120_169.jpeg?w=650",
-    "https://cdn0-production-images-kly.akamaized.net/Q2R7_eDBQqJliROSdf1drvD17pc=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3012594/original/067550000_1578124790-74984218_2650911304976538_4434425318810552659_n__1_.jpg",
+    "https://res.cloudinary.com/bumdesnatuna/image/upload/v1658832303/mangrovepointofinterestjembatan_yva80b.jpg",
+    "https://res.cloudinary.com/bumdesnatuna/image/upload/v1658832302/tanjungdatukgeositeyangbiasanyadidatenginwisatawan_xj7ena.jpg",
+    "https://res.cloudinary.com/bumdesnatuna/image/upload/v1658832302/tanjungdatukbawahkanan2_vrdupg.jpg",
   ];
   const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
   const settings = {
@@ -99,8 +96,12 @@ export default function Home() {
               Layanan Kami
             </h3>
             <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:gap-8">
-              <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
-                <img src="imgPlaceholder.jpg" className="object-cover" />
+              <div className="bg-white max-h-[540px] md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
+                <img
+                  src="images/opakubigambarsemangka.jpg"
+                  className="max-h-48 w-full object-cover"
+                  alt=""
+                />
                 <div className="p-4">
                   <h5 className="text-primary font-bold text-lg mb-2">
                     Produk Barang
@@ -118,8 +119,12 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="bg-white md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
-                <img src="imgPlaceholder.jpg" />
+              <div className="bg-white max-h-[540px] md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
+                <img
+                  src="images/saputanganbatik.jpg"
+                  alt=""
+                  className="max-h-48 w-full object-cover"
+                />
                 <div className="p-4">
                   <h5 className="text-primary font-bold text-lg mb-2">
                     Produk Jasa
@@ -130,6 +135,30 @@ export default function Home() {
                     pemerintahan maupun swasta seperti{" "}
                     <b>Pengolahan Air Bersih</b>, Warung dan sarana prasarana
                     lainnya yang memadai.
+                  </p>
+                  <Link href="/products">
+                    <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
+                      See Details
+                    </a>
+                  </Link>
+                </div>
+              </div>
+              <div className="bg-white max-h-[540px] md:w-2/4 lg:w-1/4 shadow-md rounded-lg overflow-hidden transition-all delay-100 ease-in-out hover:-translate-y-2">
+                <img
+                  src="/images/tanjungdatukbawah(kiri).jpg"
+                  className="max-h-48 w-full object-cover"
+                  alt=""
+                />
+                <div className="p-4">
+                  <h5 className="text-primary font-bold text-lg mb-2">
+                    Objek Wisata
+                  </h5>
+                  <p className="text-secondary tracking-wide text-sm md:text-base leading-loose lg:leading-loose">
+                    Desa pengadah memiliki beberapa objek wisata yang dapat
+                    dinikmati. Lokasi wisata desa pengadah tersebar di beberapa
+                    wilayah mulai dari dataran tinggi hingga daerah pesisir.
+                    Beberapa diantaranya adalah wisata mangrove dan tanjung
+                    datuk.
                   </p>
                   <Link href="/products">
                     <a className="font-semibold text-blue-600 hover:text-blue-900 transition-all ease-in-out delay-100 float-right py-4">
@@ -149,17 +178,19 @@ export default function Home() {
             {!products && !error ? (
               <CustomSpinner />
             ) : (
-              products?.data?.map((item, i) => (
-                <CardProductHome
-                  key={i}
-                  title={item.title}
-                  slug={item.slug}
-                  description={item.description}
-                  price={item.price}
-                  thumbnail={item.thumbnail}
-                  category={item.category.category_name}
-                />
-              ))
+              products?.data
+                ?.slice(0, 3)
+                .map((item, i) => (
+                  <CardProductHome
+                    key={i}
+                    title={item.title}
+                    slug={item.slug}
+                    description={item.description}
+                    price={item.price}
+                    thumbnail={item.thumbnail}
+                    category={item.category.category_name}
+                  />
+                ))
             )}
           </div>
           {products?.data?.length === 0 ||
@@ -172,6 +203,40 @@ export default function Home() {
                 <EmptyDataComponent />
               </motion.div>
             ))}
+        </section>
+        <section className="my-32 px-4 lg:px-16">
+          <h3 className="text-4xl text-center font-bold mb-12 text-primary">
+            Supported by
+          </h3>
+          <div className="container mx-auto">
+            <div className="flex flex-col flex-wrap lg:flex-row gap-8 justify-between items-center">
+              <img
+                src={"images/logoBumn.png"}
+                alt=""
+                className="bg-cover h-40 lg:h-20 xl:h-40"
+              />
+              <img
+                src={"images/logoNatunaInstansi.png"}
+                alt=""
+                className="bg-cover h-32 lg:h-20 xl:h-28"
+              />
+              <img
+                src={"images/logoKampusMerdeka.png"}
+                alt=""
+                className="bg-cover h-32 lg:h-20 xl:h-28"
+              />
+              <img
+                src={"images/logoTelkomselIndonesia.png"}
+                alt=""
+                className="bg-cover h-32 lg:h-20 xl:h-40"
+              />
+              <img
+                src={"images/logoInnovillage.png"}
+                alt=""
+                className="bg-cover h-16 lg:h-32 xl:h-24"
+              />
+            </div>
+          </div>
         </section>
       </div>
     </>

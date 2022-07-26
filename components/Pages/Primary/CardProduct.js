@@ -20,7 +20,7 @@ const CardProductHome = ({
       <img
         src={
           thumbnail !== null
-            ? `${process.env.baseUrl}/assets/images/thumbnail/products/${thumbnail}`
+            ? thumbnail
             : "/imgPlaceholder.jpg"
         }
         alt=""
@@ -31,7 +31,7 @@ const CardProductHome = ({
         <h3 className="text-primary text-xl lg:text-2xl font-bold line-clamp-2 mb-2">
           {title}
         </h3>
-        <p className="text-secondary leading-loose text-base line-clamp-3 my-2">
+        <p className="text-secondary leading-loose text-base line-clamp-2 my-2">
           {description}
         </p>
         <div className="py-4 space-x-2 flex items-center">
@@ -50,7 +50,7 @@ const CardProductHome = ({
           isFullWidth
           onClick={() =>
             window.open(
-              `https://wa.me/6282169611109?text=${encodeURIComponent(message)}`,
+              `https://wa.me/6281254218870?text=${encodeURIComponent(message)}`,
               "__blank"
             )
           }

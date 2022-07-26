@@ -101,7 +101,7 @@ export default function products() {
                           <img
                             src={
                               item.thumbnail !== null
-                                ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
+                                ? item.thumbnail
                                 : "../imgPlaceholder.jpg"
                             }
                             alt=""

@@ -1,8 +1,6 @@
 import Admin from "../../../layouts/Admin";
-import router, { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import instance from "../../../utils/instance";
-import { Field, Form, Formik } from "formik";
+import { useRouter } from "next/router";
+import { useMemo, useRef, useState } from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -11,7 +9,6 @@ import {
 } from "@heroicons/react/solid";
 import { Box } from "@chakra-ui/layout";
 import { Button, IconButton } from "@chakra-ui/button";
-// import { useMediaQuery } from "@chakra-ui/media-query";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Select } from "@chakra-ui/select";
 import { Modal } from "../../../components/Modals/Modal";
@@ -59,6 +56,21 @@ export default function Product() {
     setIdProduct(item.id);
     setTitleProduct(item.title);
   };
+
+  const productData = useMemo(() => {
+    if (!products) return;
+    const retVal = [];
+    products.data?.forEach((item) => retVal.push(item));
+    if (searchText) {
+      return retVal.filter((item) =>
+        String(item.title.toLocaleLowerCase()).includes(
+          searchText.toLocaleLowerCase()
+        )
+      );
+    } else {
+      return retVal;
+    }
+  }, [products, searchText]);
 
   return (
     <>
@@ -194,36 +206,26 @@ export default function Product() {
                 variants={stagger}
                 className="grid grid-cols-1 mdgrid-cols-2 xl:grid-cols-3 gap-y-6"
               >
-                {products?.data
-                  ?.filter((item) => {
-                    if (
-                      searchText.length > 0 &&
-                      !item.title.toLowerCase().includes(searchText)
-                    )
-                      return false;
-
-                    return true;
-                  })
-                  .map((item, i) => (
-                    <motion.div variants={fadeInUp} key={i}>
-                      <CardAdminProducts
-                        description={item.description}
-                        title={item.title}
-                        thumbnail={
-                          item.thumbnail !== null
-                            ? `${process.env.baseUrl}/assets/images/thumbnail/products/${item.thumbnail}`
-                            : "/imgPlaceholder.jpg"
-                        }
-                        categoryName={item.category.category_name}
-                        price={item.price}
-                        slug={item.slug}
-                        deleteProductItem={() => {
-                          onDeleteProduct(item);
-                          deleteProductModalRef.current.open();
-                        }}
-                      />
-                    </motion.div>
-                  ))}
+                {productData.map((item, i) => (
+                  <motion.div variants={fadeInUp} key={i}>
+                    <CardAdminProducts
+                      description={item.description}
+                      title={item.title}
+                      thumbnail={
+                        item.thumbnail !== null
+                          ? item.thumbnail
+                          : "/imgPlaceholder.jpg"
+                      }
+                      categoryName={item.category.category_name}
+                      price={item.price}
+                      slug={item.slug}
+                      deleteProductItem={() => {
+                        onDeleteProduct(item);
+                        deleteProductModalRef.current.open();
+                      }}
+                    />
+                  </motion.div>
+                ))}
               </motion.div>
             )}
             {products?.data?.length === 0 && (

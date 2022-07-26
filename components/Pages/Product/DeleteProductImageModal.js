@@ -12,6 +12,8 @@ function DeleteProductImageModal({
   productImages,
   title,
   toast,
+  slug,
+  mutate,
 }) {
   const [isLoading, setLoading] = useState(false);
   const deleteProductImage = useCallback(async () => {
@@ -34,6 +36,7 @@ function DeleteProductImageModal({
         setLoading(false);
         parent.current.close();
         setProductImages(productImages.filter((item) => item.id !== id));
+        mutate(`api/products/${slug}`);
       });
   }, []);
   return (

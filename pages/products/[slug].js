@@ -12,6 +12,9 @@ import { fetchWithToken } from "../../utils/fetcher";
 import useSWR from "swr";
 import { useToast } from "@chakra-ui/toast";
 import CustomSpinner from "../../components/Spinners/CustomSpinner";
+import Slider from "react-slick";
+import { useMemo } from "react";
+import { useMediaQuery } from "@chakra-ui/react";
 
 export default function DetailProduct() {
   const router = useRouter();
@@ -40,8 +43,25 @@ export default function DetailProduct() {
       };
     }
   }, [errorProduct]);
-
   let message = `Halo kak, saya mau pesan ${product?.title}`;
+
+  const productImagesMemo = useMemo(() => {
+    if (!product) return;
+    const newArr = [];
+    newArr.push(product.thumbnail);
+    product.product_images.forEach((item) => newArr.push(item.image_name));
+    return newArr;
+  }, [product]);
+
+  const [isSmallestThan768] = useMediaQuery("(max-width: 768px)");
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+  };
   return !product ? (
     <CustomSpinner />
   ) : (
@@ -54,16 +74,44 @@ export default function DetailProduct() {
           variants={fadeInUp}
           className="flex flex-col justify-center items-center w-full lg:px-12"
         >
-          <div className="h-96">
+          <div className="h-96 w-96">
             <div className="flex justify-center items-center w-full h-full border border-gray-200">
-              <img
+              <Slider {...settings} className="w-10/12 xl:w-full">
+                {productImagesMemo.map((item, i) => (
+                  <div key={item} className="h-96">
+                    <div className="flex justify-center items-center w-full h-full">
+                      <img
+                        src={item}
+                        className="rounded-lg w-10/12 object-cover"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+              {/* <Slider {...settings}>
+                {productImagesMemo.map((item, i) => (
+                  <img
+                    src={item}
+                    alt=""
+                    key={item}
+                    className="rounded-lg w-full object-cover h-full"
+                  />
+                ))}
+              </Slider> */}
+              {/* <img
+                src={productImagesMemo[0]}
+                alt=""
+                key={productImagesMemo[0]}
+                className="rounded-lg w-full object-cover h-full"
+              /> */}
+              {/* <img
                 src={
                   product?.thumbnail !== null
-                    ? `${process.env.baseUrl}/assets/images/thumbnail/products/${product?.thumbnail}`
+                    ? product?.thumbnail
                     : "../imgPlaceholder.jpg"
                 }
                 className="rounded-lg w-full object-cover h-full"
-              />
+              /> */}
             </div>
           </div>
         </motion.div>
@@ -92,7 +140,7 @@ export default function DetailProduct() {
             className="p-6"
             onClick={() =>
               window.open(
-                `https://wa.me/6282169611109?text=${encodeURIComponent(
+                `https://wa.me/6281254218870?text=${encodeURIComponent(
                   message
                 )}`,
                 "__blank"

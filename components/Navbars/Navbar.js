@@ -13,7 +13,7 @@ const Navbar = ({ setOpen, open }) => {
     <>
       <div className="hidden lg:flex sticky top-0 p-4 lg:px-12 items-center justify-center bg-blue-600">
         <span className="text-sm text-white">
-          Jl. Ismail Mahdi, Telp : 0821-6961-1109
+          Jl. Ismail Mahdi, Telp : 0812-5421-8870
         </span>
       </div>
       <header className="sticky top-0 z-40">

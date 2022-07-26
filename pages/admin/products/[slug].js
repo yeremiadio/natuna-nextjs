@@ -35,9 +35,12 @@ export default function DetailProduct() {
   const router = useRouter();
   const { query } = router;
   const { slug } = query;
-  const { data: product, error: errorProduct } = useSWR(
-    slug ? [`api/products/${slug}`] : null,
-    (url) => fetchWithToken(url)
+  const {
+    data: product,
+    error: errorProduct,
+    mutate,
+  } = useSWR(slug ? [`api/products/${slug}`] : null, (url) =>
+    fetchWithToken(url)
   );
 
   const { data: category } = useSWR([`api/category`], (url) =>
@@ -49,6 +52,7 @@ export default function DetailProduct() {
     price: product?.price || "",
     thumbnail: product?.thumbnail || "",
     category_id: product?.category_id || "",
+    unit: product?.unit || "",
     product_images: product?.product_images || null,
   };
   const FormikRef = useRef();
@@ -94,9 +98,6 @@ export default function DetailProduct() {
   const onSubmit = async (values) => {
     const formData = jsonToFormData(values);
     formData.append("_method", "put");
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
     await instance()
       .post("api/admin/products/" + product?.id + "/update", formData, {
         headers: {
@@ -135,6 +136,8 @@ export default function DetailProduct() {
           setProductImages={setProductImages}
           productImages={initialValues.product_images}
           toast={toast}
+          slug={slug}
+          mutate={mutate}
         />
       </Modal>
       <div
@@ -206,13 +209,13 @@ export default function DetailProduct() {
                       )}
                     </FormControl>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div className="my-2 lg:my-4">
                       <FormControl
                         id="price"
                         isInvalid={errors?.price && touched.price}
                       >
-                        <FormLabel>Price</FormLabel>
+                        <FormLabel>Harga</FormLabel>
                         <Field
                           as={Input}
                           focusBorderColor="blue.600"
@@ -256,6 +259,25 @@ export default function DetailProduct() {
                         )}
                       </FormControl>
                     </div>
+                    <div className="my-2 lg:my-4">
+                      <FormControl
+                        id="unit"
+                        isInvalid={errors?.unit && touched.unit}
+                      >
+                        <FormLabel>Satuan</FormLabel>
+                        <Field
+                          as={Input}
+                          focusBorderColor="blue.600"
+                          name="unit"
+                          type="text"
+                        />
+                        {errors?.unit ? (
+                          <FormErrorMessage>{errors?.unit}</FormErrorMessage>
+                        ) : (
+                          <FormHelperText>Example: kg</FormHelperText>
+                        )}
+                      </FormControl>
+                    </div>
                   </div>
 
                   <div className="my-2 lg:my-4">
@@ -293,11 +315,7 @@ export default function DetailProduct() {
                       typeof values?.thumbnail !== "object" ? (
                         <Box className="w-full lg:w-80 rounded-md p-4 border border-gray-200">
                           <img
-                            src={
-                              process.env.baseUrl +
-                              "/assets/images/thumbnail/products/" +
-                              values.thumbnail
-                            }
+                            src={values.thumbnail}
                             alt=""
                             className="w-full object-cover"
                           />
@@ -361,11 +379,7 @@ export default function DetailProduct() {
                         key={i}
                         className="group relative bg-no-repeat bg-cover border-gray-200 border w-full lg:w-60 h-40 rounded-md p-3"
                         style={{
-                          backgroundImage: `url(${
-                            process.env.baseUrl +
-                            "/assets/images/products/" +
-                            item.image_name
-                          })`,
+                          backgroundImage: `url(${item.image_name})`,
                         }}
                       >
                         <div className="flex w-full">

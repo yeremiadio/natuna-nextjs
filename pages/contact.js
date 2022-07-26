@@ -40,7 +40,7 @@ export default function ContactUs() {
               Alamat: Jl. Ismail Mahdi
             </p>
             <p className="text-secondary text-sm lg:text-base line-clamp-3 leading-loose">
-              Telp : 0821-6961-1109
+              Telp : 0812-5421-8870
             </p>
             <p className="text-secondary text-sm lg:text-base line-clamp-3 leading-loose">
               Email:{" "}
@@ -55,7 +55,7 @@ export default function ContactUs() {
               className="p-6 mt-4"
               onClick={() =>
                 window.open(
-                  `https://wa.me/6282169611109?text=${encodeURIComponent(
+                  `https://wa.me/6281254218870?text=${encodeURIComponent(
                     message
                   )}`,
                   "__blank"
