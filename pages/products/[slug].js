@@ -140,7 +140,7 @@ export default function DetailProduct() {
             className="p-6"
             onClick={() =>
               window.open(
-                `https://wa.me/6281254218870?text=${encodeURIComponent(
+                `https://wa.me/6287897164147?text=${encodeURIComponent(
                   message
                 )}`,
                 "__blank"

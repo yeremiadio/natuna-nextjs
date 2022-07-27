@@ -50,7 +50,7 @@ const CardProductHome = ({
           isFullWidth
           onClick={() =>
             window.open(
-              `https://wa.me/6281254218870?text=${encodeURIComponent(message)}`,
+              `https://wa.me/6287897164147?text=${encodeURIComponent(message)}`,
               "__blank"
             )
           }
