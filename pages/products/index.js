@@ -56,9 +56,9 @@ export default function products() {
                 onSubmit={onSubmit}
                 innerRef={FormikRef}
               >
-                {({ values, handleChange, handleBlur, setSubmitting }) => (
+                {() => (
                   <Form>
-                    <div>
+                    <div className="container mx-auto">
                       <Field
                         as={InputGroup}
                         className="bg-white p-5 rounded-md"

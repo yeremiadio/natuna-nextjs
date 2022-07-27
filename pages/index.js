@@ -171,38 +171,40 @@ export default function Home() {
           </div>
         </section>
         <section className="my-32 px-4 lg:px-16">
-          <h3 className="text-4xl font-bold mb-12 text-primary">
-            Produk Unggulan
-          </h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {!products && !error ? (
-              <CustomSpinner />
-            ) : (
-              products?.data
-                ?.slice(0, 3)
-                .map((item, i) => (
-                  <CardProductHome
-                    key={i}
-                    title={item.title}
-                    slug={item.slug}
-                    description={item.description}
-                    price={item.price}
-                    thumbnail={item.thumbnail}
-                    category={item.category.category_name}
-                  />
-                ))
-            )}
+          <div className="container mx-auto">
+            <h3 className="text-4xl font-bold mb-12 text-primary">
+              Produk Unggulan
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {!products && !error ? (
+                <CustomSpinner />
+              ) : (
+                products?.data
+                  ?.slice(0, 3)
+                  .map((item, i) => (
+                    <CardProductHome
+                      key={i}
+                      title={item.title}
+                      slug={item.slug}
+                      description={item.description}
+                      price={item.price}
+                      thumbnail={item.thumbnail}
+                      category={item.category.category_name}
+                    />
+                  ))
+              )}
+            </div>
+            {products?.data?.length === 0 ||
+              (error && (
+                <motion.div
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <EmptyDataComponent />
+                </motion.div>
+              ))}
           </div>
-          {products?.data?.length === 0 ||
-            (error && (
-              <motion.div
-                variants={fadeInUp}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <EmptyDataComponent />
-              </motion.div>
-            ))}
         </section>
         <section className="my-32 px-4 lg:px-16">
           <h3 className="text-4xl text-center font-bold mb-12 text-primary">
